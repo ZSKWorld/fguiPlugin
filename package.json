@@ -1,0 +1,18 @@
+{
+	"name": "com.fairygui.plugin.chefinspectorts",
+	"displayName": "ZSK",
+	"description": "",
+	"version": "0.0.1",
+	"author": {
+		"name": "name"
+	},
+	"icon": "icon.png",
+	"main": "js/Main.js",
+	"onDestroy": "onDestroy",
+	"dependencies": {
+		"typescript": "^4.5.4"
+	},
+	"devDependencies": {
+		"@types/node": "^17.0.8"
+	}
+}

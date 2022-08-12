@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "CommonJS",
+    "sourceMap": false,
+    "outDir": "./js",
+    "experimentalDecorators": true,
+  },
+  "exclude": [
+    "./node_modules/**/*"
+  ]
+}

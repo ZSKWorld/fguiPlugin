@@ -1,0 +1,97 @@
+{
+    "Layabox": {
+        "enable": true,
+        "configFiles": [
+            "Layabox"
+        ]
+    },
+    "Unity": {
+        "enable": true,
+        "configFiles": [
+        ]
+    },
+    "Flash": {
+        "enable": false,
+        "configFiles": [
+            "Flash"
+        ]
+    },
+    "Starling": {
+        "enable": false,
+        "configFiles": [
+            "Starling"
+        ]
+    },
+    "Egret": {
+        "enable": false,
+        "configFiles": [
+            "Egret"
+        ]
+    },
+    "Haxe": {
+        "enable": false,
+        "configFiles": [
+            "Haxe"
+        ]
+    },
+    "PIXI": {
+        "enable": false,
+        "configFiles": [
+            "PIXI"
+        ]
+    },
+    "Cocos2dx": {
+        "enable": false,
+        "configFiles": [
+            "Cocos2dx"
+        ]
+    },
+    "CryEngine": {
+        "enable": false,
+        "configFiles": [
+            "CryEngine"
+        ]
+    },
+    "Vision": {
+        "enable": false,
+        "configFiles": [
+            "Vision"
+        ]
+    },
+    "MonoGame": {
+        "enable": false,
+        "configFiles": [
+            "MonoGame"
+        ]
+    },
+    "CocosCreator": {
+        "enable": false,
+        "configFiles": [
+            "CocosCreator"
+        ]
+    },
+    "LibGDX": {
+        "enable": false,
+        "configFiles": [
+            "LibGDX"
+        ]
+    },
+    "Unreal": {
+        "enable": false,
+        "configFiles": [
+            "Unreal"
+        ]
+    },
+    "Corona": {
+        "enable": false,
+        "configFiles": [
+            "Corona"
+        ]
+    },
+    "ThreeJS": {
+        "enable": false,
+        "configFiles": [
+            "ThreeJS"
+        ]
+    }
+}
