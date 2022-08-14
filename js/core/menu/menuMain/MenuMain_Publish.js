@@ -40,6 +40,12 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
                 })
             };
         }
+        else {
+            this.menuData = {
+                text: "未配置的发布平台",
+                isSubMenu: true,
+            };
+        }
     }
     OnCreate() {
         const list = csharp_1.FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;

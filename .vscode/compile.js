@@ -7,9 +7,10 @@ const args = process.argv.splice(2);
 const exportPathes = [
     "E:/study/IT/Projects/Laya/XiuXian/ui/plugins",
     "E:/study/IT/Projects/Laya/JiuChongShiLian/ui/plugins",
+    "E:/study/IT/Projects/FairyGUI/FGUICustomInspector/plugins"
 ];
 const copyFileOrDir = [
-    // "config",
+    "config",
     "js",
     "packages",
     "icon.png",
@@ -50,11 +51,13 @@ const getAllFiles = function (dirPath) {
 
 const rootDir = path.resolve(__dirname, "../");
 const rootParentDir = path.resolve(__dirname, "../../");
+const rootDirName = rootDir.replace(rootParentDir + "\\", "");
 
 removeDir(path.resolve(rootDir, "js"));
 childProcess.exec("tsc", (err, stdout, stderr) => {
     if (!err && args[0]) {
-        let allFiles = [];
+        let allFiles = [""];
+        allFiles.length = 0;
         copyFileOrDir.forEach(v => {
             const tempPath = path.resolve(rootDir, v);
             const stat = fs.statSync(tempPath);
@@ -65,10 +68,17 @@ childProcess.exec("tsc", (err, stdout, stderr) => {
         });
 
         exportPathes.forEach(ev => {
-            removeDir(ev);
+            let copyConfig = true;
+            if (!fs.existsSync(ev) || !fs.existsSync(path.resolve(ev, rootDirName + "/config")))
+                removeDir(ev);
+            else {
+                copyConfig = false;
+                removeDir(path.resolve(ev, "js"));
+            }
             allFiles.forEach(file => {
-                const tempPath = file.replace(rootParentDir, ev);
-                const lastIndex = tempPath.lastIndexOf("\\");
+                if (file.includes("config") && !copyConfig) return;
+                const tempPath = file.replace(rootParentDir, ev).replace(/\\/g, "/");
+                const lastIndex = tempPath.lastIndexOf("/");
                 const dir = tempPath.substring(0, lastIndex);
                 fs.mkdirSync(dir, { recursive: true });
                 fs.copyFileSync(file, tempPath);

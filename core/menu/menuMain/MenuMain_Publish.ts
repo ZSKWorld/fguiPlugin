@@ -48,6 +48,11 @@ export class MenuMain_Publish extends MenuBase {
                     }
                 })
             };
+        }else{
+            this.menuData = {
+                text: "未配置的发布平台",
+                isSubMenu: true,
+            }
         }
     }
 
