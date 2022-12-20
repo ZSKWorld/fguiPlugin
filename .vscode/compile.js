@@ -5,6 +5,7 @@ const path = require("path");
 const args = process.argv.splice(2);
 
 const exportPathes = [
+    "E:/study/IT/Projects/Laya/XiuXian_Branch/ui/plugins",
     "E:/study/IT/Projects/Laya/XiuXian/ui/plugins",
     "E:/study/IT/Projects/Laya/JiuChongShiLian/ui/plugins",
     "E:/study/IT/Projects/FairyGUI/FGUICustomInspector/plugins"

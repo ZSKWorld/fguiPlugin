@@ -16,7 +16,7 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
         this.platformCfg = EditorUtils_1.EditorUtils.GetConfig("publishSettings" /* ConfigType.PublishSettings */, "PlatformConfig");
         if (this.platformCfg) {
             this.platformKeys = Object.keys(this.platformCfg).filter(v => !!this.platformCfg[v].enable && this.platformCfg[v].configFiles.length > 0);
-            this.initSettings();
+            this.InitSettings();
             this.menuData = {
                 text: "未配置的发布平台",
                 isSubMenu: true,
@@ -27,14 +27,11 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
                         name: key,
                         text: key,
                         isSubMenu: isSubMenu,
-                        selectCallback: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
-                            this.selectedPlatform = str;
-                            this.refreshPublishPlatform(0, true);
-                        }),
+                        selectCallback: isSubMenu ? () => this.RefreshMenuChecked() : (name) => this.SetPulibcPlatormCfg(name, 0, true),
                         subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
                             name: index.toString(),
-                            text: configFiles[index],
-                            selectCallback: (str) => this.refreshPublishPlatform(+str, true)
+                            text: cfg,
+                            selectCallback: (name) => this.SetPulibcPlatormCfg(key, +name, true)
                         })) : null
                     };
                 })
@@ -51,30 +48,39 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
         const list = csharp_1.FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
         this.menuBtn = list.GetChildAt(list.numChildren - 1).asButton;
         this.menuBtn.GetChild('title').asTextField.UBBEnabled = true;
-        this.selectedPlatform = csharp_1.FairyEditor.App.project.type;
-        if (this.settingsMap[this.selectedPlatform]) {
-            let cfgIndex = CustomSetting_1.CustomSetting.PublishSelectedCfgIndex;
-            cfgIndex = Math.min(cfgIndex, this.settingsMap[this.selectedPlatform].length - 1);
-            this.refreshPublishPlatform(cfgIndex, false);
+        if (!this.SetPulibcPlatormCfg(csharp_1.FairyEditor.App.project.type, CustomSetting_1.CustomSetting.PublishSelectedCfgIndex, false)) {
+            try {
+                let cfgIndex = -1;
+                Object.keys(this.settingsMap).forEach(key => {
+                    cfgIndex = this.settingsMap[key].findIndex(cfg => !!cfg);
+                    if (cfgIndex >= 0) {
+                        this.SetPulibcPlatormCfg(key, cfgIndex, false);
+                        throw new Error();
+                    }
+                });
+                if (cfgIndex == -1)
+                    csharp_1.FairyEditor.App.Alert(`暂无可用发布配置，使用默认发布配置`);
+            }
+            catch (error) { }
         }
     }
     OnDestroy() {
         this.menuBtn = null;
     }
-    initSettings() {
+    InitSettings() {
         let errStr = "";
         this.platformKeys.forEach(key => {
-            this.platformCfg[key].configFiles.forEach(cfgFileName => {
-                var _a;
+            var _a;
+            (_a = this.settingsMap)[key] || (_a[key] = []);
+            this.platformCfg[key].configFiles.forEach((cfgFileName, cfgIndex) => {
                 const setting = EditorUtils_1.EditorUtils.GetConfig("publishSettings" /* ConfigType.PublishSettings */, cfgFileName);
-                (_a = this.settingsMap)[key] || (_a[key] = []);
                 this.settingsMap[key].push(setting);
-                !setting && (errStr += `${key} 平台 ${cfgFileName} 配置错误\n`);
+                !setting && (errStr += `${key} 平台 ${cfgFileName} 配置文件不存在\n`);
             });
         });
-        errStr && csharp_1.FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在！！！");
+        errStr && csharp_1.FairyEditor.App.Alert(errStr);
     }
-    copySetting(target, source) {
+    CopySetting(target, source) {
         //C#只读字段，不能更改
         const readOnlyKey = ["fileName"];
         for (const key in source) {
@@ -84,52 +90,70 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
                 const element = source[key];
                 if (element != null && key in target) {
                     if (typeof element == "object")
-                        this.copySetting(target[key], element);
+                        this.CopySetting(target[key], element);
                     else
                         target[key] = element;
                 }
             }
         }
     }
-    /**刷新发布平台 */
-    refreshPublishPlatform(cfgIndex, showTip = true) {
-        const newSetting = this.settingsMap[this.selectedPlatform][cfgIndex];
-        if (newSetting) {
-            const project = csharp_1.FairyEditor.App.project;
-            //设置全局设置并保存
-            const globalSetting = project.GetSettings("Publish" /* SettingName.Publish */);
-            this.copySetting(globalSetting, newSetting);
-            globalSetting.Save();
-            //设置项目类型并保存
-            project.type = this.selectedPlatform;
-            project.Save();
-            //设置选择索引并保存
-            CustomSetting_1.CustomSetting.PublishSelectedCfgIndex = cfgIndex;
-            CustomSetting_1.CustomSetting.Save();
-            project.allPackages.ForEach(v => v.Open());
-            this.lastCfgIndex = cfgIndex;
-            let cfgStr = `[color=#ff0000]${project.type}[/color]`;
-            const platformCfg = this.platformCfg[this.selectedPlatform];
-            if (platformCfg.configFiles.length > 1)
-                cfgStr += ` [color=#0000ff]${platformCfg.configFiles[cfgIndex]}[/color]`;
-            this.menuBtn.title = `当前发布到 ${cfgStr}`;
-            showTip && Tip_1.Tip.Inst.Show(`已切换发布平台到 ${cfgStr}`);
+    /** 设置发布平台配置 */
+    SetPulibcPlatormCfg(platform, cfgIndex, showTip = true) {
+        let result = false;
+        const platformMap = this.settingsMap[platform];
+        if (platformMap) {
+            const setting = platformMap[cfgIndex];
+            if (setting) {
+                result = true;
+                if (this.publicPlatform != platform || this.publicCfgIndex != cfgIndex) {
+                    this.publicPlatform = platform;
+                    this.publicCfgIndex = cfgIndex;
+                    this.RefreshPublishPlatform();
+                }
+                let tipStr = `[color=#ff0000]${platform}[/color]`;
+                const platformCfg = this.platformCfg[platform];
+                if (platformCfg.configFiles.length > 1)
+                    tipStr += ` [color=#0000ff]${platformCfg.configFiles[cfgIndex]}[/color]`;
+                this.menuBtn.title = `当前发布到 ${tipStr}`;
+                showTip && Tip_1.Tip.Inst.Show(`已切换发布平台到 ${tipStr}`);
+            }
+            else {
+                const cfgName = this.platformCfg[platform].configFiles[cfgIndex];
+                showTip && csharp_1.FairyEditor.App.Alert(`${platform} 平台 ${cfgName} 配置文件不存在`);
+            }
         }
         else {
-            cfgIndex = this.lastCfgIndex || 0;
-            const cfgName = this.platformCfg[this.selectedPlatform].configFiles[cfgIndex];
-            csharp_1.FairyEditor.App.Alert(`${this.selectedPlatform} 平台 ${cfgName} 配置错误，请检查配置文件是否存在`);
+            showTip && csharp_1.FairyEditor.App.Alert(`未知的发布平台 => ${platform}`);
         }
-        this.refreshMenuChecked(cfgIndex);
+        this.RefreshMenuChecked();
+        return result;
     }
-    refreshMenuChecked(cfgIndex) {
-        const curMenu = this.parentMenu.GetSubMenu(this.menuData.name);
-        this.platformKeys.forEach(key => {
-            curMenu.SetItemChecked(key, key == this.selectedPlatform);
-            const curSubMenu = curMenu.GetSubMenu(key);
-            if (this.platformCfg[key].configFiles.length > 1) {
-                this.platformCfg[key].configFiles.forEach((_, index) => {
-                    curSubMenu.SetItemChecked(index.toString(), key == this.selectedPlatform && index == cfgIndex);
+    /**刷新发布平台 */
+    RefreshPublishPlatform() {
+        const { settingsMap, publicPlatform, publicCfgIndex } = this;
+        const setting = settingsMap[publicPlatform][publicCfgIndex];
+        const project = csharp_1.FairyEditor.App.project;
+        //设置全局设置并保存
+        const globalSetting = project.GetSettings("Publish" /* SettingName.Publish */);
+        this.CopySetting(globalSetting, setting);
+        globalSetting.Save();
+        //设置项目类型并保存
+        project.type = publicPlatform;
+        project.Save();
+        //设置选择索引并保存
+        CustomSetting_1.CustomSetting.PublishSelectedCfgIndex = publicCfgIndex;
+        CustomSetting_1.CustomSetting.Save();
+        project.allPackages.ForEach(v => v.Open());
+    }
+    RefreshMenuChecked() {
+        const { parentMenu, menuData, platformKeys, publicPlatform, platformCfg, publicCfgIndex } = this;
+        const curMenu = parentMenu.GetSubMenu(menuData.name);
+        platformKeys.forEach(key => {
+            curMenu.SetItemChecked(key, key == publicPlatform);
+            if (platformCfg[key].configFiles.length > 1) {
+                const curSubMenu = curMenu.GetSubMenu(key);
+                platformCfg[key].configFiles.forEach((_, index) => {
+                    curSubMenu.SetItemChecked(index.toString(), key == publicPlatform && index == publicCfgIndex);
                 });
             }
         });
