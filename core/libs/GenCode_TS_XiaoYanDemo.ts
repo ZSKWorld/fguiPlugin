@@ -2,7 +2,7 @@ import { FairyEditor, System } from 'csharp';
 import CodeWriter from './CodeWriter';
 
 /** 加入不同包的资源引入路径 */
-function genExtension(
+function genExtension( 
     pkgName: string,
     members: System.Collections.Generic.List$1<FairyEditor.PublishHandler.MemberInfo>,
     references: System.Collections.Generic.List$1<string>,
