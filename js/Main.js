@@ -6,7 +6,7 @@ const Const_1 = require("./core/common/Const");
 const CustomSetting_1 = require("./core/common/CustomSetting");
 const BaseInspector_1 = require("./core/inspectors/BaseInspector");
 const BaseClass_1 = require("./core/libs/BaseClass");
-const GenCode_TS_1 = require("./core/libs/GenCode_TS");
+const GenCode_TS_XiaoYanDemo_1 = require("./core/libs/GenCode_TS_XiaoYanDemo");
 const MenuMain_Publish_1 = require("./core/menu/menuMain/MenuMain_Publish");
 const EditorUtils_1 = require("./core/utils/EditorUtils");
 /** 加载插件UI包 */
@@ -39,7 +39,7 @@ function onPublish(handler) {
         return;
     handler.genCode = false; //prevent default output
     console.log('Handling gen code in plugin');
-    (0, GenCode_TS_1.genCode_TS)(handler); //do it myself
+    (0, GenCode_TS_XiaoYanDemo_1.genCode_TS_XiaoYanDemo)(handler); //do it myself
 }
 exports.onPublish = onPublish;
 function onDestroy() {

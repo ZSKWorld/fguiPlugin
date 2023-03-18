@@ -5,6 +5,7 @@ import { MainMenuType } from './core/common/Types';
 import { BaseInspector } from './core/inspectors/BaseInspector';
 import { BaseClass } from './core/libs/BaseClass';
 import { genCode_TS } from './core/libs/GenCode_TS';
+import { genCode_TS_XiaoYanDemo } from './core/libs/GenCode_TS_XiaoYanDemo';
 import { MenuDoc_CreateLayaName } from './core/menu/menuDoc/MenuDoc_CreateLayaName';
 import { MenuMain_Publish } from './core/menu/menuMain/MenuMain_Publish';
 import { Menu_Test } from './core/menu/Menu_Test';
@@ -48,7 +49,7 @@ export function onPublish(handler: FairyEditor.PublishHandler) {
     handler.genCode = false; //prevent default output
 
     console.log('Handling gen code in plugin');
-    genCode_TS(handler); //do it myself
+    genCode_TS_XiaoYanDemo(handler); //do it myself
 }
 
 export function onDestroy() {
