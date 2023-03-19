@@ -4,17 +4,56 @@ exports.genCode_TS_XiaoYanDemo = void 0;
 const csharp_1 = require("csharp");
 const CodeWriter_1 = require("./CodeWriter");
 /** 加入不同包的资源引入路径 */
-function genExtension(pkgName, members, references) {
-    let memberCnt = members.Count;
-    for (let j = 0; j < memberCnt; j++) {
-        let memberInfo = members.get_Item(j);
-        if (memberInfo.res && memberInfo.res.owner.name != pkgName) {
-            memberInfo.type = memberInfo.res.name;
-            const ref = `/${memberInfo.res.owner.name}/${memberInfo.res.name}`;
-            if (references.Contains(ref) == false)
-                references.Add(ref);
+function CollectClasses(handler, stripMember, ns) {
+    let classes = handler.CollectClasses(stripMember, stripMember, ns);
+    let hasOtherPkgRes = false;
+    const clsCnt = classes.Count;
+    for (let i = 0; i < clsCnt; i++) {
+        const memberInfos = classes.get_Item(i).members;
+        const memberCnt = memberInfos.Count;
+        for (let j = 0; j < memberCnt; j++) {
+            const info = memberInfos.get_Item(j);
+            if (info.res && info.res.owner.name != handler.pkg.name) {
+                if (!handler.items.Contains(info.res)) {
+                    hasOtherPkgRes = true;
+                    handler.items.Add(info.res);
+                }
+            }
         }
     }
+    if (hasOtherPkgRes) {
+        classes = handler.CollectClasses(stripMember, stripMember, ns);
+        classes.ForEach(cls => {
+            if (cls.res.owner.name == handler.pkg.name) {
+                cls.members.ForEach(memberInfo => {
+                    if (memberInfo.res && memberInfo.res.owner.name != handler.pkg.name) {
+                        let existRes = false;
+                        let tempClsCnt = classes.Count;
+                        for (let k = 0; k < tempClsCnt; k++) {
+                            if (classes.get_Item(k).res == memberInfo.res) {
+                                existRes = true;
+                                break;
+                            }
+                        }
+                        if (existRes) {
+                            memberInfo.type = memberInfo.res.name;
+                            const ref = `/${memberInfo.res.owner.name}/${memberInfo.res.name}`;
+                            if (cls.references.Contains(ref) == false)
+                                cls.references.Add(ref);
+                        }
+                    }
+                });
+            }
+        });
+        const clsCnt = classes.Count;
+        for (let i = clsCnt - 1; i >= 0; i--) {
+            const cls = classes.get_Item(i);
+            if (cls.res.owner.name != handler.pkg.name) {
+                classes.RemoveAt(i);
+            }
+        }
+    }
+    return classes;
 }
 function genReferenceExt(writer, references) {
     let refCount = references.Count;
@@ -23,7 +62,7 @@ function genReferenceExt(writer, references) {
             let ref = references.get_Item(j);
             if (ref.startsWith("/")) {
                 let tempArr = ref.split("/");
-                writer.writeln('import %s from "../%s";', tempArr[2], ref);
+                writer.writeln('import %s from "..%s";', tempArr[2], ref);
             }
             else
                 writer.writeln('import %s from "./%s";', ref, ref);
@@ -41,7 +80,8 @@ function genCode_TS_XiaoYanDemo(handler) {
     if (settings.packageName)
         namespaceName = settings.packageName + '.' + namespaceName;
     //CollectClasses(stripeMemeber, stripeClass, fguiNamespace)
-    let classes = handler.CollectClasses(settings.ignoreNoname, settings.ignoreNoname, ns);
+    // let classes = handler.CollectClasses(settings.ignoreNoname, settings.ignoreNoname, ns);
+    let classes = CollectClasses(handler, settings.ignoreNoname, ns);
     handler.SetupCodeFolder(exportCodePath, "ts"); //check if target folder exists, and delete old files
     let getMemberByName = settings.getMemberByName;
     let classCnt = classes.Count;
@@ -50,7 +90,6 @@ function genCode_TS_XiaoYanDemo(handler) {
         let classInfo = classes.get_Item(i);
         let members = classInfo.members;
         let references = classInfo.references;
-        genExtension(handler.pkg.name, members, references);
         writer.reset();
         let refCount = references.Count;
         // if (refCount > 0) {

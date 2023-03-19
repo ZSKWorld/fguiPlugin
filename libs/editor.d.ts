@@ -508,7 +508,8 @@ declare module 'csharp' {
 
         }
         class Enumerator<TKey, TValue> extends System.ValueType {
-
+            Current: { Key: TKey, Value: TValue };
+            MoveNext(): boolean;
         }
 
     }
