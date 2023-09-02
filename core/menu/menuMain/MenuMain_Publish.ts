@@ -16,17 +16,16 @@ export class MenuMain_Publish extends MenuBase {
     private platformCfg: PlatformConfig;
     /** 平台发布设置 */
     private settingsMap: { [ key: string ]: Partial<FairyEditor.GlobalPublishSettings>[] } = {};
-    /** 发布的平台 */
-    private publicPlatform: string;
-    /** 发布的平台配置索引 */
-    private publicCfgIndex: number;
+    /** 选中的平台 */
+    private selectedPlatform: string;
+    private lastCfgIndex: number;
 
     protected InitMenuData(): void {
         this.platformCfg = EditorUtils.GetConfig(ConfigType.PublishSettings, "PlatformConfig");
         if (this.platformCfg) {
             this.platformKeys = Object.keys(this.platformCfg).filter(v =>
                 !!this.platformCfg[ v ].enable && this.platformCfg[ v ].configFiles.length > 0);
-            this.InitSettings();
+            this.initSettings();
             this.menuData = {
                 text: "未配置的发布平台",
                 isSubMenu: true,
@@ -37,20 +36,18 @@ export class MenuMain_Publish extends MenuBase {
                         name: key,
                         text: key,
                         isSubMenu: isSubMenu,
-                        selectCallback: isSubMenu ? () => this.RefreshMenuChecked() : (name) => this.SetPulibcPlatormCfg(name, 0, true),
+                        selectCallback: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
+                            this.selectedPlatform = str;
+                            this.refreshPublishPlatform(0, true);
+                        }),
                         subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
                             name: index.toString(),
-                            text: cfg,
-                            selectCallback: (name) => this.SetPulibcPlatormCfg(key, +name, true)
+                            text: configFiles[ index ],// + " => " + this.settingsMap[ key ][ index ].path,
+                            selectCallback: (str) => this.refreshPublishPlatform(+str, true)
                         })) : null
                     }
                 })
             };
-        } else {
-            this.menuData = {
-                text: "未配置的发布平台",
-                isSubMenu: true,
-            }
         }
     }
 
@@ -58,18 +55,12 @@ export class MenuMain_Publish extends MenuBase {
         const list = FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
         this.menuBtn = list.GetChildAt(list.numChildren - 1).asButton;
         this.menuBtn.GetChild('title').asTextField.UBBEnabled = true;
-        if (!this.SetPulibcPlatormCfg(FairyEditor.App.project.type, CustomSetting.PublishSelectedCfgIndex, false)) {
-            try {
-                let cfgIndex = -1;
-                Object.keys(this.settingsMap).forEach(key => {
-                    cfgIndex = this.settingsMap[ key ].findIndex(cfg => !!cfg);
-                    if (cfgIndex >= 0) {
-                        this.SetPulibcPlatormCfg(key, cfgIndex, false);
-                        throw new Error();
-                    }
-                });
-                if (cfgIndex == -1) FairyEditor.App.Alert(`暂无可用发布配置，使用默认发布配置`);
-            } catch (error) { }
+        this.selectedPlatform = FairyEditor.App.project.type;
+
+        if (this.settingsMap[ this.selectedPlatform ]) {
+            let cfgIndex = CustomSetting.PublishSelectedCfgIndex;
+            cfgIndex = Math.min(cfgIndex, this.settingsMap[ this.selectedPlatform ].length - 1);
+            this.refreshPublishPlatform(cfgIndex, false);
         }
     }
 
@@ -77,20 +68,20 @@ export class MenuMain_Publish extends MenuBase {
         this.menuBtn = null;
     }
 
-    private InitSettings() {
+    private initSettings() {
         let errStr = "";
         this.platformKeys.forEach(key => {
-            this.settingsMap[ key ] ||= [];
-            this.platformCfg[ key ].configFiles.forEach((cfgFileName, cfgIndex) => {
+            this.platformCfg[ key ].configFiles.forEach(cfgFileName => {
                 const setting = EditorUtils.GetConfig(ConfigType.PublishSettings, cfgFileName);
+                this.settingsMap[ key ] ||= [];
                 this.settingsMap[ key ].push(setting);
-                !setting && (errStr += `${ key } 平台 ${ cfgFileName } 配置文件不存在\n`);
+                !setting && (errStr += `${ key } 平台 ${ cfgFileName } 配置错误\n`);
             });
         });
-        errStr && FairyEditor.App.Alert(errStr);
+        errStr && FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在！！！");
     }
 
-    private CopySetting(target: any, source: any) {
+    private copySetting(target: any, source: any) {
         //C#只读字段，不能更改
         const readOnlyKey = [ "fileName" ];
         for (const key in source) {
@@ -98,73 +89,57 @@ export class MenuMain_Publish extends MenuBase {
                 if (readOnlyKey.indexOf(key) >= 0) continue;
                 const element = source[ key ];
                 if (element != null && key in target) {
-                    if (typeof element == "object") this.CopySetting(target[ key ], element);
+                    if (typeof element == "object") this.copySetting(target[ key ], element);
                     else target[ key ] = element;
                 }
             }
         }
     }
 
-    /** 设置发布平台配置 */
-    private SetPulibcPlatormCfg(platform: string, cfgIndex: number, showTip = true) {
-        let result = false;
-        const platformMap = this.settingsMap[ platform ];
-        if (platformMap) {
-            const setting = platformMap[ cfgIndex ];
-            if (setting) {
-                result = true;
-                if (this.publicPlatform != platform || this.publicCfgIndex != cfgIndex) {
-                    this.publicPlatform = platform;
-                    this.publicCfgIndex = cfgIndex;
-                    this.RefreshPublishPlatform();
-                }
-                let tipStr = `[color=#ff0000]${ platform }[/color]`;
-                const platformCfg = this.platformCfg[ platform ];
-                if (platformCfg.configFiles.length > 1)
-                    tipStr += ` [color=#0000ff]${ platformCfg.configFiles[ cfgIndex ] }[/color]`;
-                this.menuBtn.title = `当前发布到 ${ tipStr }`;
-                showTip && Tip.Inst.Show(`已切换发布平台到 ${ tipStr }`);
-            } else {
-                const cfgName = this.platformCfg[ platform ].configFiles[ cfgIndex ];
-                showTip && FairyEditor.App.Alert(`${ platform } 平台 ${ cfgName } 配置文件不存在`);
-            }
-        } else {
-            showTip && FairyEditor.App.Alert(`未知的发布平台 => ${ platform }`);
-        }
-        this.RefreshMenuChecked();
-        return result;
-    }
-
     /**刷新发布平台 */
-    private RefreshPublishPlatform() {
-        const { settingsMap, publicPlatform, publicCfgIndex } = this;
-        const setting = settingsMap[ publicPlatform ][ publicCfgIndex ];
-        const project = FairyEditor.App.project;
-        //设置全局设置并保存
-        const globalSetting = project.GetSettings(SettingName.Publish) as FairyEditor.GlobalPublishSettings;
-        this.CopySetting(globalSetting, setting);
-        globalSetting.Save();
+    private refreshPublishPlatform(cfgIndex: number, showTip: boolean = true) {
+        const newSetting = this.settingsMap[ this.selectedPlatform ][ cfgIndex ];
+        if (newSetting) {
+            //设置全局设置并保存
+            const globalSetting = FairyEditor.App.project.GetSettings(SettingName.Publish) as FairyEditor.GlobalPublishSettings;
+            this.copySetting(globalSetting, newSetting);
+            globalSetting.Save();
 
-        //设置项目类型并保存
-        project.type = publicPlatform;
-        project.Save();
+            //设置项目类型并保存
+            FairyEditor.App.project.type = this.selectedPlatform;
+            FairyEditor.App.project.Save();
 
-        //设置选择索引并保存
-        CustomSetting.PublishSelectedCfgIndex = publicCfgIndex;
-        CustomSetting.Save()
+            //设置选择索引并保存
+            CustomSetting.PublishSelectedCfgIndex = cfgIndex;
+            CustomSetting.Save();
 
-        project.allPackages.ForEach(v => v.Open());
+            //刷新package包发布设置。包设置居然是一开始就设置好的，不是发布时候才使用全局进行配置的，所以要刷新一下
+            //没找到刷新包设置的API，只有Open才能刷新，Open刷新的时候编辑区会闪一下，问题不大
+            FairyEditor.App.project.allPackages.ForEach(v => v.Open());
+
+            this.lastCfgIndex = cfgIndex;
+            let cfgStr = `[color=#ff0000]${ FairyEditor.App.project.type }[/color]`;
+            const platformCfg = this.platformCfg[ this.selectedPlatform ];
+            if (platformCfg.configFiles.length > 1)
+                cfgStr += ` [color=#0000ff]${ platformCfg.configFiles[ cfgIndex ] }[/color]`;
+            this.menuBtn.title = `当前发布到 ${ cfgStr }`;
+            showTip && Tip.Inst.Show(`已切换发布平台到 ${ cfgStr }`);
+        } else {
+            cfgIndex = this.lastCfgIndex || 0;
+            const cfgName = this.platformCfg[ this.selectedPlatform ].configFiles[ cfgIndex ];
+            FairyEditor.App.Alert(`${ this.selectedPlatform } 平台 ${ cfgName } 配置错误，请检查配置文件是否存在`);
+        }
+        this.refreshMenuChecked(cfgIndex);
     }
 
-    private RefreshMenuChecked() {
-        const { parentMenu, menuData, platformKeys, publicPlatform, platformCfg, publicCfgIndex } = this;
-        const curMenu = parentMenu.GetSubMenu(menuData.name);
-        platformKeys.forEach(key => {
-            curMenu.SetItemChecked(key, key == publicPlatform);
-            if (platformCfg[ key ].configFiles.length > 1) {
-                const curSubMenu = curMenu.GetSubMenu(key);
-                platformCfg[ key ].configFiles.forEach((_, index) => {
-                    curSubMenu.SetItemChecked(index.toString(), key == publicPlatform && index == publicCfgIndex);
+    private refreshMenuChecked(cfgIndex: number) {
+        const curMenu = this.parentMenu.GetSubMenu(this.menuData.name);
+        this.platformKeys.forEach(key => {
+            curMenu.SetItemChecked(key, key == this.selectedPlatform);
+            const curSubMenu = curMenu.GetSubMenu(key);
+            if (this.platformCfg[ key ].configFiles.length > 1) {
+                this.platformCfg[ key ].configFiles.forEach((_, index) => {
+                    curSubMenu.SetItemChecked(index.toString(), key == this.selectedPlatform && index == cfgIndex)
                 });
             }
         });

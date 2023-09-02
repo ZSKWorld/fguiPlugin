@@ -15,6 +15,7 @@ export class Menu_Test extends MenuBase {
     protected OnDestroy(): void {
     }
 
-    private CallBack() { }
+    private CallBack() { 
+    }
 
 }

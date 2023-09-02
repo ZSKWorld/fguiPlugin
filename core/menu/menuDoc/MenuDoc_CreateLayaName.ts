@@ -1,11 +1,15 @@
 import { FairyEditor } from "csharp";
 import { MenuBase } from "../MenuBase";
-
-const LayaType2Type: { [key: string]: { type: string, asType: string, ext: string } } = {
+interface Type2Type {
+    type: string;
+    asType: string;
+    ext: string;
+}
+const LayaType2Type: { [ key: string ]: Type2Type } = {
     Button: { type: "fairygui.GButton", asType: "asButton", ext: "btn_" },
-    text: { type: "fairygui.GTextField", asType: "asTextField", ext: "tf_" },
-    richtext: { type: "fairygui.GRichTextField", asType: "asRichTextField", ext: "rtf_" },
-    inputtext: { type: "fairygui.GTextInput", asType: "asTextInput", ext: "txtIpt_" },
+    text: { type: "fairygui.GTextField", asType: "asTextField", ext: "txt_" },
+    richtext: { type: "fairygui.GRichTextField", asType: "asRichTextField", ext: "rtxt_" },
+    inputtext: { type: "fairygui.GTextInput", asType: "asTextInput", ext: "itxt_" },
     graph: { type: "fairygui.GGraph", asType: "asGraph", ext: "graph_" },
     list: { type: "fairygui.GList", asType: "asList", ext: "list_" },
     loader: { type: "fairygui.GLoader", asType: "asLoader", ext: "loader_" },
@@ -17,6 +21,8 @@ const LayaType2Type: { [key: string]: { type: string, asType: string, ext: strin
     ComboBox: { type: "fairygui.GComboBox", asType: "asComboBox", ext: "cmb_" },
     ProgressBar: { type: "fairygui.GProgressBar", asType: "asProgress", ext: "pb_" },
     ScrollBar: { type: "fairygui.GScrollBar", asType: "", ext: "sb_" },
+    Controller: { type: "fairygui.Controller", asType: "", ext: "ctrl_" },
+    Transition: { type: "fairygui.Transition", asType: "", ext: "trans_" },
 };
 
 export class MenuDoc_CreateLayaName extends MenuBase {
@@ -35,19 +41,43 @@ export class MenuDoc_CreateLayaName extends MenuBase {
     protected OnDestroy(): void { }
 
     private CallBack() {
-        const target = FairyEditor.App.activeDoc.GetSelection();
-        const count: number = (target as any).Count;
-
+        const { children, controllers, transitions } = FairyEditor.App.activeDoc.content;
+        const childCount = children.Count;
+        const ctrlCount = controllers.Count;
+        const transCount = transitions.items.Count;
         let getStr = "";
         let defineStr = "";
-        if (count) {
-            for (let i = 0; i < count; i++) {
-                const child = target.get_Item(i);
-                const type = LayaType2Type[child.objectType];
-                defineStr += `public ${type.ext}${child.name}: ${type.type};\n`;
-                getStr += `this.${type.ext}${child.name} = this.me.getChild("${child.name}").${type.asType};\n`;
+        for (let i = 0; i < childCount; i++) {
+            const child = children.get_Item(i);
+            if (/^n[0-9]+$/g.test(child.name)) continue;
+            let type = LayaType2Type[ child._objectType ];
+            if (child instanceof FairyEditor.FComponent) {
+                if (LayaType2Type[ child.extention?._type ])
+                    type = LayaType2Type[ child.extention?._type ];
             }
+            defineStr += `\t\tpublic ${ type.ext }${ child.name }: ${ type.type };\n`;
+            getStr += `\t\t\tthis.${ type.ext }${ child.name } = me.getChild("${ child.name }").${ type.asType };\n`;
         }
-        if (getStr) FairyEditor.Clipboard.SetText(defineStr + getStr);
+        for (let i = 0; i < ctrlCount; i++) {
+            const ctrl = controllers.get_Item(i);
+            let type = LayaType2Type.Controller;
+            defineStr += `\t\tpublic ${ type.ext }${ ctrl.name }: ${ type.type };\n`;
+            getStr += `\t\t\tthis.${ type.ext }${ ctrl.name } = me.getController("${ ctrl.name }");\n`;
+        }
+        for (let i = 0; i < transCount; i++) {
+            const trans = transitions.items.get_Item(i);
+            let type = LayaType2Type.Transition;
+            defineStr += `\t\tpublic ${ type.ext }${ trans.name }: ${ type.type };\n`;
+            getStr += `\t\t\tthis.${ type.ext }${ trans.name } = me.getTransition("${ trans.name }");\n`;
+        }
+        //#region 
+        //#endregion
+
+        if (getStr) {
+            defineStr = "\t\t//#region 节点\n" + defineStr + "\t\t//#endregion\n";
+            getStr = "\t\t\t//#region 节点获取\n\t\t\tconst me = this.me;\n" + getStr + "\t\t\t//#endregion\n";
+            FairyEditor.Clipboard.SetText(defineStr + getStr);
+        }
     }
 }
+

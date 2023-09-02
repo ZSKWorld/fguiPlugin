@@ -12,9 +12,9 @@ export abstract class MenuBase extends BaseClass {
     /** 父菜单，现在的菜单都是附加在已有的菜单上的 */
     protected parentMenu: FairyEditor.Component.IMenu;
 
-    constructor(_parentMenu: FairyEditor.Component.IMenu) {
+    constructor(parentMenu: FairyEditor.Component.IMenu) {
         super();
-        this.parentMenu = _parentMenu;
+        this.parentMenu = parentMenu;
     }
 
     public Create(): void {
