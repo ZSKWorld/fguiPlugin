@@ -1,5 +1,5 @@
 import { FairyEditor, System } from 'csharp';
-import CodeWriter from './CodeWriter';
+import CodeWriter from '../../libs/CodeWriter';
 
 /** 加入不同包的资源引入路径 */
 function CollectClasses(

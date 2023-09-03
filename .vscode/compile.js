@@ -10,13 +10,6 @@ const exportPathes = [
     // "E:/study/IT/Projects/Laya/JiuChongShiLian/ui/plugins",
     // "E:/study/IT/Projects/FairyGUI/FGUICustomInspector/plugins"
 ];
-const copyFileOrDir = [
-    "config",
-    "js",
-    "packages",
-    "icon.png",
-    "package.json",
-];
 
 /**删除目录，包括目录中所有文件和子目录 */
 const removeDir = function (dir) {
@@ -35,6 +28,7 @@ const removeDir = function (dir) {
     }
     fs.rmdirSync(dir)
 }
+
 /**获取目录中的所有文件 */
 const getAllFiles = function (dirPath) {
     const names = [];
@@ -50,11 +44,8 @@ const getAllFiles = function (dirPath) {
     return names;
 }
 
-const rootDir = path.resolve(__dirname, "../");
-const rootParentDir = path.resolve(__dirname, "../../");
-const rootDirName = rootDir.replace(rootParentDir + "\\", "");
-
-removeDir(path.resolve(rootDir, "js"));
+removeDir(path.resolve(__dirname, "../bin/js"));
+return;
 childProcess.exec("tsc", (err, stdout, stderr) => {
     if (!err && args[0]) {
         let allFiles = [""];
@@ -77,6 +68,7 @@ childProcess.exec("tsc", (err, stdout, stderr) => {
                 removeDir(path.resolve(ev, "js"));
             }
             allFiles.forEach(file => {
+                console.log(file, "  ", copyConfig);
                 if (file.includes("config") && !copyConfig) return;
                 const tempPath = file.replace(rootParentDir, ev).replace(/\\/g, "/");
                 const lastIndex = tempPath.lastIndexOf("/");
