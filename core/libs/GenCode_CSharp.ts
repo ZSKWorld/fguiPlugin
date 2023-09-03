@@ -1,5 +1,5 @@
 import { FairyEditor } from 'csharp';
-import CodeWriter from './CodeWriter';
+import CodeWriter from '../../libs/CodeWriter';
 
 export function genCode_CSharp(handler: FairyEditor.PublishHandler) {
     let settings = (<FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;

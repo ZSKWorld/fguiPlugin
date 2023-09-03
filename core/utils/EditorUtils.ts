@@ -96,6 +96,16 @@ export class EditorUtils {
         }
 
     }
+
+    public static GetFields(obj:System.Object) {
+        if (!obj) return null;
+        return obj.GetType().GetFields(
+            System.Reflection.BindingFlags.Public
+            | System.Reflection.BindingFlags.Instance
+            | System.Reflection.BindingFlags.Static
+            | System.Reflection.BindingFlags.NonPublic
+        );
+    }
 }
 
 //界面
