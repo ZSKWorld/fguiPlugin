@@ -25,7 +25,7 @@ export class MenuMain_Publish extends MenuBase {
         if (this.platformCfg) {
             this.platformKeys = Object.keys(this.platformCfg).filter(v =>
                 !!this.platformCfg[ v ].enable && this.platformCfg[ v ].configFiles.length > 0);
-            this.initSettings();
+            this.InitSettings();
             this.menuData = {
                 text: "未配置的发布平台",
                 isSubMenu: true,
@@ -38,12 +38,12 @@ export class MenuMain_Publish extends MenuBase {
                         isSubMenu: isSubMenu,
                         selectCallback: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
                             this.selectedPlatform = str;
-                            this.refreshPublishPlatform(0, true);
+                            this.RefreshPublishPlatform(0, true);
                         }),
                         subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
                             name: index.toString(),
                             text: configFiles[ index ],// + " => " + this.settingsMap[ key ][ index ].path,
-                            selectCallback: (str) => this.refreshPublishPlatform(+str, true)
+                            selectCallback: (str) => this.RefreshPublishPlatform(+str, true)
                         })) : null
                     }
                 })
@@ -60,7 +60,7 @@ export class MenuMain_Publish extends MenuBase {
         if (this.settingsMap[ this.selectedPlatform ]) {
             let cfgIndex = CustomSetting.PublishSelectedCfgIndex;
             cfgIndex = Math.min(cfgIndex, this.settingsMap[ this.selectedPlatform ].length - 1);
-            this.refreshPublishPlatform(cfgIndex, false);
+            this.RefreshPublishPlatform(cfgIndex, false);
         }
     }
 
@@ -68,7 +68,7 @@ export class MenuMain_Publish extends MenuBase {
         this.menuBtn = null;
     }
 
-    private initSettings() {
+    private InitSettings() {
         let errStr = "";
         this.platformKeys.forEach(key => {
             this.platformCfg[ key ].configFiles.forEach(cfgFileName => {
@@ -81,7 +81,7 @@ export class MenuMain_Publish extends MenuBase {
         errStr && FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在！！！");
     }
 
-    private copySetting(target: any, source: any) {
+    private CopySetting(target: any, source: any) {
         //C#只读字段，不能更改
         const readOnlyKey = [ "fileName" ];
         for (const key in source) {
@@ -89,7 +89,7 @@ export class MenuMain_Publish extends MenuBase {
                 if (readOnlyKey.indexOf(key) >= 0) continue;
                 const element = source[ key ];
                 if (element != null && key in target) {
-                    if (typeof element == "object") this.copySetting(target[ key ], element);
+                    if (typeof element == "object") this.CopySetting(target[ key ], element);
                     else target[ key ] = element;
                 }
             }
@@ -97,12 +97,12 @@ export class MenuMain_Publish extends MenuBase {
     }
 
     /**刷新发布平台 */
-    private refreshPublishPlatform(cfgIndex: number, showTip: boolean = true) {
+    private RefreshPublishPlatform(cfgIndex: number, showTip: boolean = true) {
         const newSetting = this.settingsMap[ this.selectedPlatform ][ cfgIndex ];
         if (newSetting) {
             //设置全局设置并保存
             const globalSetting = FairyEditor.App.project.GetSettings(SettingName.Publish) as FairyEditor.GlobalPublishSettings;
-            this.copySetting(globalSetting, newSetting);
+            this.CopySetting(globalSetting, newSetting);
             globalSetting.Save();
 
             //设置项目类型并保存
@@ -129,10 +129,10 @@ export class MenuMain_Publish extends MenuBase {
             const cfgName = this.platformCfg[ this.selectedPlatform ].configFiles[ cfgIndex ];
             FairyEditor.App.Alert(`${ this.selectedPlatform } 平台 ${ cfgName } 配置错误，请检查配置文件是否存在`);
         }
-        this.refreshMenuChecked(cfgIndex);
+        this.RefreshMenuChecked(cfgIndex);
     }
 
-    private refreshMenuChecked(cfgIndex: number) {
+    private RefreshMenuChecked(cfgIndex: number) {
         const curMenu = this.parentMenu.GetSubMenu(this.menuData.name);
         this.platformKeys.forEach(key => {
             curMenu.SetItemChecked(key, key == this.selectedPlatform);

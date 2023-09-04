@@ -1,11 +1,9 @@
-import { FairyEditor } from "csharp";
-import { MenuBase } from "../MenuBase";
-interface Type2Type {
-    type: string;
-    asType: string;
-    ext: string;
-}
-const LuaType2Type: { [ key: string ]: Type2Type } = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MenuDoc_CreateLuaName = void 0;
+const csharp_1 = require("csharp");
+const MenuBase_1 = require("../MenuBase");
+const LuaType2Type = {
     Button: { type: "FairyGUI.GButton", asType: "asButton", ext: "btn_" },
     text: { type: "FairyGUI.GTextField", asType: "asTextField", ext: "txt_" },
     richtext: { type: "FairyGUI.GRichTextField", asType: "asRichTextField", ext: "rtxt_" },
@@ -24,9 +22,8 @@ const LuaType2Type: { [ key: string ]: Type2Type } = {
     Controller: { type: "FairyGUI.Controller", asType: "", ext: "ctrl_" },
     Transition: { type: "FairyGUI.Transition", asType: "", ext: "trans_" },
 };
-
-export class MenuDoc_CreateLuaName extends MenuBase {
-    protected InitMenuData(): void {
+class MenuDoc_CreateLuaName extends MenuBase_1.MenuBase {
+    InitMenuData() {
         this.menuData = {
             name: "MenuDoc_CreateLuaName",
             text: "创建Lua名称代码到剪切板",
@@ -34,43 +31,42 @@ export class MenuDoc_CreateLuaName extends MenuBase {
             selectCallback: () => this.CallBack()
         };
     }
-
-    protected OnCreate(): void { }
-
-    protected OnDestroy(): void { }
-
-    private CallBack() {
-        const { children, controllers, transitions } = FairyEditor.App.activeDoc.content;
+    OnCreate() { }
+    OnDestroy() { }
+    CallBack() {
+        var _a, _b;
+        const { children, controllers, transitions } = csharp_1.FairyEditor.App.activeDoc.content;
         const childCount = children.Count;
         const ctrlCount = controllers.Count;
         const transCount = transitions.items.Count;
         let getStr = "";
         for (let i = 0; i < childCount; i++) {
             const child = children.get_Item(i);
-            if (/^n[0-9]+$/g.test(child.name)) continue;
-            let type = LuaType2Type[ child._objectType ];
-            if (child instanceof FairyEditor.FComponent) {
-                if (LuaType2Type[ child.extention?._type ])
-                    type = LuaType2Type[ child.extention?._type ];
+            if (/^n[0-9]+$/g.test(child.name))
+                continue;
+            let type = LuaType2Type[child._objectType];
+            if (child instanceof csharp_1.FairyEditor.FComponent) {
+                if (LuaType2Type[(_a = child.extention) === null || _a === void 0 ? void 0 : _a._type])
+                    type = LuaType2Type[(_b = child.extention) === null || _b === void 0 ? void 0 : _b._type];
             }
-            getStr += `\t\t\tself.${ type.ext }${ child.name } = self:GetChild("${ child.name }").${ type.asType }\n`;
+            getStr += `\t\t\tself.${type.ext}${child.name} = self:GetChild("${child.name}").${type.asType}\n`;
         }
         for (let i = 0; i < ctrlCount; i++) {
             const ctrl = controllers.get_Item(i);
             let type = LuaType2Type.Controller;
-            getStr += `\t\t\tself.${ type.ext }${ ctrl.name } = self:GetController("${ ctrl.name }")\n`;
+            getStr += `\t\t\tself.${type.ext}${ctrl.name} = self:GetController("${ctrl.name}")\n`;
         }
         for (let i = 0; i < transCount; i++) {
             const trans = transitions.items.get_Item(i);
             let type = LuaType2Type.Transition;
-            getStr += `\t\t\tself.${ type.ext }${ trans.name } = self:GetTransition("${ trans.name }")\n`;
+            getStr += `\t\t\tself.${type.ext}${trans.name} = self:GetTransition("${trans.name}")\n`;
         }
         //#region
         //#endregion
-
         if (getStr) {
             getStr = "\t\t\t---#region 节点获取\n" + getStr + "\t\t\t---#endregion\n";
-            FairyEditor.Clipboard.SetText(getStr);
+            csharp_1.FairyEditor.Clipboard.SetText(getStr);
         }
     }
 }
+exports.MenuDoc_CreateLuaName = MenuDoc_CreateLuaName;

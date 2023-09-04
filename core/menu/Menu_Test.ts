@@ -1,8 +1,8 @@
-import { FairyEditor, FairyGUI, System } from "csharp";
+import { FairyEditor, System } from "csharp";
 import { MenuBase } from "./MenuBase";
-import { ViewID } from "../common/Types";
 
 export class Menu_Test extends MenuBase {
+    private _query: FairyEditor.DependencyQuery;
     protected InitMenuData(): void {
         this.menuData = {
             text: "测试",
@@ -11,22 +11,49 @@ export class Menu_Test extends MenuBase {
     }
 
     protected OnCreate(): void {
-
+        this._query = new FairyEditor.DependencyQuery();
     }
 
     protected OnDestroy(): void {
     }
 
     private CallBack() {
-        const view = FairyEditor.App.viewManager.GetView(ViewID.ReferenceView);
-        const field = view.GetType().GetField("_query", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        const query = field["GetValue"](view) as FairyEditor.DependencyQuery;
-        const selectRes = FairyEditor.App.libView.GetSelectedResources(false);
-        if (selectRes.Count > 0) {
-            query.QueryReferences(FairyEditor.App.project, selectRes.get_Item(0).GetURL());
-            query.resultList.ForEach(v => console.log(111, v.item.name, v.item.owner?.name, v.item.parent?.name));
-            query.references.ForEach(v => console.log(222, v.ownerPkg.name, v.pkgId, v.itemId, v.propKey));
-        }
+        const project = FairyEditor.App.project;
+        const allPng: FairyEditor.FPackageItem[] = [];
+        project.allPackages.ForEach(pkg => {
+            pkg.items.ForEach(item => {
+                if (item.type == FairyEditor.FPackageItemType.IMAGE) {
+                    allPng.push(item);
+                }
+            });
+        });
+        const query = this._query;
+        const assetsPath = FairyEditor.App.project.assetsPath;
+        const data = {};
+        const count = allPng.length;
+        let index = -1;
+        const startTime = Date.now();
+        const intervalId = setInterval(() => {
+            if (++index < count) {
+                const item = allPng[ index ];
+                query.QueryReferences(project, item.GetURL());
+                const references = [];
+                if (query.resultList.Count > 0) {
+                    query.resultList.ForEach(ref => {
+                        references.push(ref.item.file.replace(assetsPath + "\\", "").replace("\\", "/"));
+                    });
+                }
+                data[ item.file.replace(assetsPath + "\\", "").replace("\\", "/") ] = references;
+                FairyEditor.App.ShowWaiting(`已查找 ${ index + 1 }/${ count }`);
+            } else {
+                clearInterval(intervalId);
+                setTimeout(() => {
+                    FairyEditor.App.CloseWaiting();
+                }, 2000);
+                FairyEditor.App.ShowWaiting(`查找完毕！用时:${ Date.now() - startTime }ms`);
+                System.IO.File.WriteAllText(FairyEditor.App.project.basePath + "\\image_references.json", JSON.stringify(data, null, "\t"));
+            }
+        }, 1);
     }
 
 }

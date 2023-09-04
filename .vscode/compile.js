@@ -5,7 +5,7 @@ const path = require("path");
 const args = process.argv.splice(2);
 
 const exportPathes = [
-    "E:/study/IT/Projects/Laya/Laya2.13.1_beta_framework/ui/plugins",
+    "E:/study/IT/Projects/Laya/Laya2.13.1_beta_framework/ui/plugins/myplugin",
     // "E:/study/IT/Projects/Laya/XiuXian/ui/plugins",
     // "E:/study/IT/Projects/Laya/JiuChongShiLian/ui/plugins",
     // "E:/study/IT/Projects/FairyGUI/FGUICustomInspector/plugins"
@@ -31,7 +31,8 @@ const removeDir = function (dir) {
 
 /**获取目录中的所有文件 */
 const getAllFiles = function (dirPath) {
-    const names = [];
+    const names = [""];
+    names.length = 0;
     fs.readdirSync(dirPath).forEach(filename => {
         const filePath = path.resolve(dirPath, filename);
         const state = fs.statSync(filePath);
@@ -44,37 +45,33 @@ const getAllFiles = function (dirPath) {
     return names;
 }
 
-removeDir(path.resolve(__dirname, "../bin/js"));
-return;
+const binDir = path.resolve(__dirname, "../bin").replace(/\\/g, "/");
+const jsDir = path.resolve(binDir, "js");
+
+removeDir(jsDir);
 childProcess.exec("tsc", (err, stdout, stderr) => {
     if (!err && args[0]) {
-        let allFiles = [""];
-        allFiles.length = 0;
-        copyFileOrDir.forEach(v => {
-            const tempPath = path.resolve(rootDir, v);
-            const stat = fs.statSync(tempPath);
-            if (stat.isDirectory())
-                allFiles.push(...getAllFiles(tempPath));
-            else
-                allFiles.push(tempPath);
-        });
 
-        exportPathes.forEach(ev => {
-            let copyConfig = true;
-            if (!fs.existsSync(ev) || !fs.existsSync(path.resolve(ev, rootDirName + "/config")))
-                removeDir(ev);
-            else {
-                copyConfig = false;
-                removeDir(path.resolve(ev, "js"));
+        exportPathes.forEach(epPath => {
+            let haveConfig = false;
+            if (fs.existsSync(epPath)) {
+                fs.readdirSync(epPath).forEach(epName => {
+                    if (epName != "config") {
+                        const evPath = path.resolve(epPath, epName);
+                        const state = fs.statSync(evPath);
+                        if (state.isDirectory()) removeDir(evPath);
+                        else if (state.isFile()) fs.unlinkSync(evPath);
+                    } else haveConfig = true;
+                });
             }
-            allFiles.forEach(file => {
-                console.log(file, "  ", copyConfig);
-                if (file.includes("config") && !copyConfig) return;
-                const tempPath = file.replace(rootParentDir, ev).replace(/\\/g, "/");
-                const lastIndex = tempPath.lastIndexOf("/");
-                const dir = tempPath.substring(0, lastIndex);
-                fs.mkdirSync(dir, { recursive: true });
-                fs.copyFileSync(file, tempPath);
+            const allFiles = getAllFiles(binDir);
+            allFiles.forEach(filePath => {
+                filePath = filePath.replace(/\\/g, "/");
+                const relativePath = filePath.replace(binDir + "/", "");
+                if (relativePath.startsWith("config/") && haveConfig) return;
+                const targetPath = path.resolve(epPath, relativePath);
+                fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+                fs.copyFileSync(filePath, targetPath);
             });
         });
     }

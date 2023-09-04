@@ -4,7 +4,6 @@ import { CustomSetting } from './core/common/CustomSetting';
 import { MainMenuType } from './core/common/Types';
 import { BaseInspector } from './core/inspectors/BaseInspector';
 import { BaseClass } from './core/libs/BaseClass';
-import { genCode_TS } from './core/libs/GenCode_TS';
 import { genCode_TS_XiaoYanDemo } from './core/libs/GenCode_TS_XiaoYanDemo';
 import { MenuDoc_CreateLayaName } from './core/menu/menuDoc/MenuDoc_CreateLayaName';
 import { MenuDoc_CreateLuaName } from './core/menu/menuDoc/MenuDoc_CreateLuaName';
@@ -23,7 +22,7 @@ const mainSubMenu = (name: MainMenuType) => mainMenu.GetSubMenu(name);
 
 [
     //测试用例
-    // new Menu_Test(libMenu),
+    new Menu_Test(libMenu),
 
     //编辑区菜单
     // new MenuDoc_CreateComponent(docMenu),
