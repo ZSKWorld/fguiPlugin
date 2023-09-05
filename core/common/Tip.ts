@@ -4,7 +4,7 @@ import { PkgCustom, PkgCustom_Tip } from "./Const";
 /** 弹窗提示 */
 export class Tip extends BaseClass {
     private static _inst: Tip;
-    public static get Inst() { return Tip._inst || (Tip._inst = new Tip()); }
+    public static get Inst() { return this._inst || (this._inst = new Tip()); }
     private readonly targetY = 20;
     private readonly duration: number = 150;
     private label: FairyGUI.GLabel;

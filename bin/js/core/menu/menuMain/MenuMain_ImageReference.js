@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuMain_ImageReference = void 0;
 const csharp_1 = require("csharp");
+const ProgressView_1 = require("../../common/ProgressView");
 const MenuBase_1 = require("../MenuBase");
 class MenuMain_ImageReference extends MenuBase_1.MenuBase {
     InitMenuData() {
@@ -31,6 +32,16 @@ class MenuMain_ImageReference extends MenuBase_1.MenuBase {
                 }
             });
         });
+        let findingPro = 0;
+        let findingTime = 10;
+        const findingStr = "查找中....";
+        const updateFinding = () => {
+            if (++findingTime > 5) {
+                findingTime = 0;
+                findingPro++;
+                ProgressView_1.ProgressView.Inst.SetTip(findingStr.substring(0, findingPro % findingStr.length));
+            }
+        };
         const query = this._query;
         const assetsPath = csharp_1.FairyEditor.App.project.assetsPath;
         const data = {};
@@ -38,6 +49,7 @@ class MenuMain_ImageReference extends MenuBase_1.MenuBase {
         let index = -1;
         const startTime = Date.now();
         const intervalId = setInterval(() => {
+            updateFinding();
             if (++index < count) {
                 const item = allPng[index];
                 query.QueryReferences(project, item.GetURL());
@@ -48,17 +60,21 @@ class MenuMain_ImageReference extends MenuBase_1.MenuBase {
                     });
                 }
                 data[item.file.replace(assetsPath + "\\", "").replace("\\", "/")] = references;
-                csharp_1.FairyEditor.App.ShowWaiting(`已查找 ${index + 1}/${count}`);
+                ProgressView_1.ProgressView.Inst.RefreshProgress(index + 1, count);
             }
             else {
                 clearInterval(intervalId);
-                setTimeout(() => {
-                    csharp_1.FairyEditor.App.CloseWaiting();
-                }, 2000);
-                csharp_1.FairyEditor.App.ShowWaiting(`查找完毕！用时:${Date.now() - startTime}ms`);
-                csharp_1.System.IO.File.WriteAllText(csharp_1.FairyEditor.App.project.basePath + "\\image_references.json", JSON.stringify(data, null, "\t"));
+                ProgressView_1.ProgressView.Inst.RefreshProgress(count, count);
+                const targetPath = csharp_1.FairyEditor.App.project.basePath + "\\image_references.json";
+                let tip = `查找完毕！用时:[color=#00ff00]${Date.now() - startTime}ms[/color]\n引用文件已保存至：${targetPath}`;
+                ProgressView_1.ProgressView.Inst.SetTip(tip);
+                csharp_1.System.IO.File.WriteAllText(targetPath, JSON.stringify(data, null, "\t"));
             }
         }, 1);
+        ProgressView_1.ProgressView.Inst.Show(() => {
+            clearInterval(intervalId);
+            ProgressView_1.ProgressView.Inst.SetTip(`[color=#ff0000]已取消！[/color]`);
+        });
     }
 }
 exports.MenuMain_ImageReference = MenuMain_ImageReference;

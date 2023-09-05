@@ -1,4 +1,5 @@
 import { FairyEditor, System } from "csharp";
+import { ProgressView } from "../../common/ProgressView";
 import { MenuBase } from "../MenuBase";
 
 export class MenuMain_ImageReference extends MenuBase {
@@ -15,9 +16,11 @@ export class MenuMain_ImageReference extends MenuBase {
             ]
         };
     }
+
     protected OnCreate(): void {
         this._query = new FairyEditor.DependencyQuery();
     }
+    
     protected OnDestroy(): void {
 
     }
@@ -32,6 +35,16 @@ export class MenuMain_ImageReference extends MenuBase {
                 }
             });
         });
+        let findingPro = 0;
+        let findingTime = 10;
+        const findingStr = "查找中....";
+        const updateFinding = () => {
+            if (++findingTime > 5) {
+                findingTime = 0;
+                findingPro++;
+                ProgressView.Inst.SetTip(findingStr.substring(0, findingPro % findingStr.length));
+            }
+        };
         const query = this._query;
         const assetsPath = FairyEditor.App.project.assetsPath;
         const data = {};
@@ -39,6 +52,7 @@ export class MenuMain_ImageReference extends MenuBase {
         let index = -1;
         const startTime = Date.now();
         const intervalId = setInterval(() => {
+            updateFinding();
             if (++index < count) {
                 const item = allPng[ index ];
                 query.QueryReferences(project, item.GetURL());
@@ -49,15 +63,19 @@ export class MenuMain_ImageReference extends MenuBase {
                     });
                 }
                 data[ item.file.replace(assetsPath + "\\", "").replace("\\", "/") ] = references;
-                FairyEditor.App.ShowWaiting(`已查找 ${ index + 1 }/${ count }`);
+                ProgressView.Inst.RefreshProgress(index + 1, count);
             } else {
                 clearInterval(intervalId);
-                setTimeout(() => {
-                    FairyEditor.App.CloseWaiting();
-                }, 2000);
-                FairyEditor.App.ShowWaiting(`查找完毕！用时:${ Date.now() - startTime }ms`);
-                System.IO.File.WriteAllText(FairyEditor.App.project.basePath + "\\image_references.json", JSON.stringify(data, null, "\t"));
+                ProgressView.Inst.RefreshProgress(count, count);
+                const targetPath = FairyEditor.App.project.basePath + "\\image_references.json";
+                let tip = `查找完毕！用时:[color=#00ff00]${ Date.now() - startTime }ms[/color]\n引用文件已保存至：${ targetPath }`;
+                ProgressView.Inst.SetTip(tip);
+                System.IO.File.WriteAllText(targetPath, JSON.stringify(data, null, "\t"));
             }
         }, 1);
+        ProgressView.Inst.Show(() => {
+            clearInterval(intervalId);
+            ProgressView.Inst.SetTip(`[color=#ff0000]已取消！[/color]`);
+        });
     }
 }

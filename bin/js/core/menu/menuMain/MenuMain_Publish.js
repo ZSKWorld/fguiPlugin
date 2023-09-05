@@ -44,7 +44,6 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
     OnCreate() {
         const list = csharp_1.FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
         this.menuBtn = list.GetChildAt(list.numChildren - 1).asButton;
-        console.log("zsk", this.menuBtn.name);
         this.menuBtn.GetChild('title').asTextField.UBBEnabled = true;
         this.selectedPlatform = csharp_1.FairyEditor.App.project.type;
         if (this.settingsMap[this.selectedPlatform]) {

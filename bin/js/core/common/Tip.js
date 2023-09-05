@@ -6,7 +6,7 @@ const BaseClass_1 = require("../libs/BaseClass");
 const Const_1 = require("./Const");
 /** 弹窗提示 */
 class Tip extends BaseClass_1.BaseClass {
-    static get Inst() { return Tip._inst || (Tip._inst = new Tip()); }
+    static get Inst() { return this._inst || (this._inst = new Tip()); }
     constructor() {
         super();
         this.targetY = 20;
