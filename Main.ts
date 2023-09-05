@@ -7,6 +7,7 @@ import { BaseClass } from './core/libs/BaseClass';
 import { genCode_TS_XiaoYanDemo } from './core/libs/GenCode_TS_XiaoYanDemo';
 import { MenuDoc_CreateLayaName } from './core/menu/menuDoc/MenuDoc_CreateLayaName';
 import { MenuDoc_CreateLuaName } from './core/menu/menuDoc/MenuDoc_CreateLuaName';
+import { MenuMain_ImageReference } from './core/menu/menuMain/MenuMain_ImageReference';
 import { MenuMain_Publish } from './core/menu/menuMain/MenuMain_Publish';
 import { Menu_Test } from './core/menu/Menu_Test';
 import { EditorUtils } from './core/utils/EditorUtils';
@@ -22,7 +23,7 @@ const mainSubMenu = (name: MainMenuType) => mainMenu.GetSubMenu(name);
 
 [
     //测试用例
-    new Menu_Test(libMenu),
+    // new Menu_Test(libMenu),
 
     //编辑区菜单
     // new MenuDoc_CreateComponent(docMenu),
@@ -35,6 +36,7 @@ const mainSubMenu = (name: MainMenuType) => mainMenu.GetSubMenu(name);
 
     //主菜单，注意：使用mainMenu做父菜单时，menuData.isSubMenu必须为true
     new MenuMain_Publish(mainMenu),
+    new MenuMain_ImageReference(mainMenu),
 
     //检查器
     // new BtnInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_BtnInspector, "按钮自定义数据", ShowObjectType.Button, true)),

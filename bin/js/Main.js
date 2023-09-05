@@ -9,8 +9,8 @@ const BaseClass_1 = require("./core/libs/BaseClass");
 const GenCode_TS_XiaoYanDemo_1 = require("./core/libs/GenCode_TS_XiaoYanDemo");
 const MenuDoc_CreateLayaName_1 = require("./core/menu/menuDoc/MenuDoc_CreateLayaName");
 const MenuDoc_CreateLuaName_1 = require("./core/menu/menuDoc/MenuDoc_CreateLuaName");
+const MenuMain_ImageReference_1 = require("./core/menu/menuMain/MenuMain_ImageReference");
 const MenuMain_Publish_1 = require("./core/menu/menuMain/MenuMain_Publish");
-const Menu_Test_1 = require("./core/menu/Menu_Test");
 const EditorUtils_1 = require("./core/utils/EditorUtils");
 /** 加载插件UI包 */
 csharp_1.FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils_1.EditorUtils.GetPackagePath(Const_1.PkgCustom));
@@ -21,7 +21,7 @@ const mainMenu = csharp_1.FairyEditor.App.menu;
 const mainSubMenu = (name) => mainMenu.GetSubMenu(name);
 [
     //测试用例
-    new Menu_Test_1.Menu_Test(libMenu),
+    // new Menu_Test(libMenu),
     //编辑区菜单
     // new MenuDoc_CreateComponent(docMenu),
     // new MenuDoc_CreateRelation(docMenu),
@@ -31,6 +31,7 @@ const mainSubMenu = (name) => mainMenu.GetSubMenu(name);
     // new MenuLib_CreateController(libMenu),
     //主菜单，注意：使用mainMenu做父菜单时，menuData.isSubMenu必须为true
     new MenuMain_Publish_1.MenuMain_Publish(mainMenu),
+    new MenuMain_ImageReference_1.MenuMain_ImageReference(mainMenu),
     //检查器
     // new BtnInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_BtnInspector, "按钮自定义数据", ShowObjectType.Button, true)),
     // new ComInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_ComInspector, "组件自定义数据", ShowObjectType.Component, true, true)),
