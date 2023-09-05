@@ -7,7 +7,7 @@ class Menu_Test extends MenuBase_1.MenuBase {
     InitMenuData() {
         this.menuData = {
             text: "测试",
-            selectCallback: () => this.CallBack()
+            onSelected: () => this.OnSelected()
         };
     }
     OnCreate() {
@@ -15,7 +15,7 @@ class Menu_Test extends MenuBase_1.MenuBase {
     }
     OnDestroy() {
     }
-    CallBack() {
+    OnSelected() {
         const project = csharp_1.FairyEditor.App.project;
         const allPng = [];
         project.allPackages.ForEach(pkg => {

@@ -12,7 +12,7 @@ class MenuDoc_CreateRelation extends MenuBase_1.MenuBase {
             subMenuData: Object.keys(csharp_1.FairyEditor.FRelationType).slice(0, 25).map(v => ({
                 name: v,
                 text: this.GetRelationText(v),
-                selectCallback: (name) => this.CallBack(name)
+                onSelected: (name) => this.OnSelected(name)
             }))
         };
     }
@@ -47,7 +47,7 @@ class MenuDoc_CreateRelation extends MenuBase_1.MenuBase {
             .replace(/_/g, "->");
         return str;
     }
-    CallBack(name) {
+    OnSelected(name) {
         if (this.relationFirst && this.relationSecond) {
             this.relationFirst.relations.AddItem(this.relationSecond, csharp_1.FairyEditor.FRelationType[name]);
             csharp_1.FairyEditor.App.inspectorView.GetInspector("relation" /* InspectorName.Relation */).UpdateUI();

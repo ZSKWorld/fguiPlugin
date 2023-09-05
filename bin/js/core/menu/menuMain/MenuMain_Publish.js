@@ -27,14 +27,14 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
                         name: key,
                         text: key,
                         isSubMenu: isSubMenu,
-                        selectCallback: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
+                        onSelected: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
                             this.selectedPlatform = str;
                             this.RefreshPublishPlatform(0, true);
                         }),
                         subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
                             name: index.toString(),
                             text: configFiles[index],
-                            selectCallback: (str) => this.RefreshPublishPlatform(+str, true)
+                            onSelected: (str) => this.RefreshPublishPlatform(+str, true)
                         })) : null
                     };
                 })
@@ -44,6 +44,7 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
     OnCreate() {
         const list = csharp_1.FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
         this.menuBtn = list.GetChildAt(list.numChildren - 1).asButton;
+        console.log("zsk", this.menuBtn.name);
         this.menuBtn.GetChild('title').asTextField.UBBEnabled = true;
         this.selectedPlatform = csharp_1.FairyEditor.App.project.type;
         if (this.settingsMap[this.selectedPlatform]) {

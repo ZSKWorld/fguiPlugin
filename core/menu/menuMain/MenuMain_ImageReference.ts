@@ -10,7 +10,7 @@ export class MenuMain_ImageReference extends MenuBase {
             subMenuData: [
                 {
                     text: "启动",
-                    selectCallback: () => this.CallBack()
+                    onSelected: () => this.OnSelected()
                 }
             ]
         };
@@ -22,7 +22,7 @@ export class MenuMain_ImageReference extends MenuBase {
 
     }
 
-    private CallBack() {
+    private OnSelected() {
         const project = FairyEditor.App.project;
         const allPng: FairyEditor.FPackageItem[] = [];
         project.allPackages.ForEach(pkg => {

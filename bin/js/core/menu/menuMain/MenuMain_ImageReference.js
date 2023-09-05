@@ -11,7 +11,7 @@ class MenuMain_ImageReference extends MenuBase_1.MenuBase {
             subMenuData: [
                 {
                     text: "启动",
-                    selectCallback: () => this.CallBack()
+                    onSelected: () => this.OnSelected()
                 }
             ]
         };
@@ -21,7 +21,7 @@ class MenuMain_ImageReference extends MenuBase_1.MenuBase {
     }
     OnDestroy() {
     }
-    CallBack() {
+    OnSelected() {
         const project = csharp_1.FairyEditor.App.project;
         const allPng = [];
         project.allPackages.ForEach(pkg => {

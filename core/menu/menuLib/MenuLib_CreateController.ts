@@ -21,7 +21,7 @@ export class MenuLib_CreateController extends MenuBase {
         this.menuData = {
             atIndex: 0,
             text: "为编辑对象创建图片控制器",
-            selectCallback: () => this.CallBack()
+            onSelected: () => this.OnSelected()
         };
     }
 
@@ -116,7 +116,7 @@ export class MenuLib_CreateController extends MenuBase {
         this.createEnable = false;
     }
 
-    private CallBack() {
+    private OnSelected() {
         if (FairyEditor.App.activeDoc.GetSelection().Count == 0) return Tip.Inst.Show("未选中编辑对象");
         if (FairyEditor.App.activeDoc?.inspectingObjectType != ShowObjectType.Loader)
             return Tip.Inst.Show("编辑对象必须是\"装载器\"");

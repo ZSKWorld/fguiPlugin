@@ -6,7 +6,7 @@ export class Menu_Test extends MenuBase {
     protected InitMenuData(): void {
         this.menuData = {
             text: "测试",
-            selectCallback: () => this.CallBack()
+            onSelected: () => this.OnSelected()
         };
     }
 
@@ -17,7 +17,7 @@ export class Menu_Test extends MenuBase {
     protected OnDestroy(): void {
     }
 
-    private CallBack() {
+    private OnSelected() {
         const project = FairyEditor.App.project;
         const allPng: FairyEditor.FPackageItem[] = [];
         project.allPackages.ForEach(pkg => {

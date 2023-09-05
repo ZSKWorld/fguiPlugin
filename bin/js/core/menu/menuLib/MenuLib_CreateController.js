@@ -12,7 +12,7 @@ class MenuLib_CreateController extends MenuBase_1.MenuBase {
         this.menuData = {
             atIndex: 0,
             text: "为编辑对象创建图片控制器",
-            selectCallback: () => this.CallBack()
+            onSelected: () => this.OnSelected()
         };
     }
     OnCreate() {
@@ -99,7 +99,7 @@ class MenuLib_CreateController extends MenuBase_1.MenuBase {
         controller.selectedIndex = 0;
         this.createEnable = false;
     }
-    CallBack() {
+    OnSelected() {
         var _a;
         if (csharp_1.FairyEditor.App.activeDoc.GetSelection().Count == 0)
             return Tip_1.Tip.Inst.Show("未选中编辑对象");

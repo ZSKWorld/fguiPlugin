@@ -28,12 +28,12 @@ class MenuDoc_CreateLuaName extends MenuBase_1.MenuBase {
             name: "MenuDoc_CreateLuaName",
             text: "创建Lua名称代码到剪切板",
             atIndex: 0,
-            selectCallback: () => this.CallBack()
+            onSelected: () => this.OnSelected()
         };
     }
     OnCreate() { }
     OnDestroy() { }
-    CallBack() {
+    OnSelected() {
         var _a, _b;
         const { children, controllers, transitions } = csharp_1.FairyEditor.App.activeDoc.content;
         const childCount = children.Count;

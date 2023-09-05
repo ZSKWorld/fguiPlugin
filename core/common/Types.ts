@@ -15,7 +15,7 @@ export interface IMenuData {
     /** 子菜单数据 */
     subMenuData?: IMenuData[];
     /** 点击回调 */
-    selectCallback?: System.Action$1<string>;
+    onSelected?: System.Action$1<string>;
 };
 
 /** 自定义数据类型 */

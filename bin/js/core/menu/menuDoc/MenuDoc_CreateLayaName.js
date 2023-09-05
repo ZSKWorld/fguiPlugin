@@ -24,17 +24,16 @@ const LayaType2Type = {
 };
 class MenuDoc_CreateLayaName extends MenuBase_1.MenuBase {
     InitMenuData() {
-        const _this = this;
         this.menuData = {
             name: "MenuDoc_CreateLayaName",
             text: "创建Laya代码到剪切板",
             atIndex: 0,
-            selectCallback: () => { _this.CallBack(); }
+            onSelected: () => this.OnSelected()
         };
     }
     OnCreate() { }
     OnDestroy() { }
-    CallBack() {
+    OnSelected() {
         var _a, _b;
         const { children, controllers, transitions } = csharp_1.FairyEditor.App.activeDoc.content;
         const childCount = children.Count;

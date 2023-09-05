@@ -17,7 +17,7 @@ export class MenuDoc_CreateRelation extends MenuBase {
             subMenuData: Object.keys(FairyEditor.FRelationType).slice(0, 25).map(v => ({
                 name: v,
                 text: this.GetRelationText(v),
-                selectCallback: (name: string) => this.CallBack(name)
+                onSelected: (name: string) => this.OnSelected(name)
             }))
         };
     }
@@ -56,7 +56,7 @@ export class MenuDoc_CreateRelation extends MenuBase {
         return str;
     }
 
-    private CallBack(name: string) {
+    private OnSelected(name: string) {
         if (this.relationFirst && this.relationSecond) {
             this.relationFirst.relations.AddItem(this.relationSecond, FairyEditor.FRelationType[ name ]);
             FairyEditor.App.inspectorView.GetInspector(InspectorName.Relation).UpdateUI();

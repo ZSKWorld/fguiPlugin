@@ -21,14 +21,14 @@ class EditorUtils {
             }
         }
         if (data.isSubMenu) {
-            parent.AddItem(data.text, data.name, (_a = data.atIndex) !== null && _a !== void 0 ? _a : -1, true, data.selectCallback);
+            parent.AddItem(data.text, data.name, (_a = data.atIndex) !== null && _a !== void 0 ? _a : -1, true, data.onSelected);
             if (data.subMenuData && data.subMenuData.length) {
                 const curMenu = parent.GetSubMenu(data.name);
                 data.subMenuData.forEach((v) => this.CreateMenu(v, curMenu));
             }
         }
         else
-            parent.AddItem(data.text, data.name, (_b = data.atIndex) !== null && _b !== void 0 ? _b : -1, false, data.selectCallback);
+            parent.AddItem(data.text, data.name, (_b = data.atIndex) !== null && _b !== void 0 ? _b : -1, false, data.onSelected);
     }
     /**
      * 创建控制器XML数据

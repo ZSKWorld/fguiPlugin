@@ -4,24 +4,24 @@ exports.MenuDoc_CreateComponent = void 0;
 const MenuBase_1 = require("../MenuBase");
 class MenuDoc_CreateComponent extends MenuBase_1.MenuBase {
     InitMenuData() {
-        const callback = (name) => this.CallBack(name);
+        const onSelected = (name) => this.OnSelected(name);
         this.menuData = {
             text: "自定义组件",
             isSubMenu: true,
-            selectCallback: this.CallBack,
+            onSelected: this.OnSelected,
             subMenuData: [
-                { name: "button", text: "按钮组件", url: "ui://38ft0jfga4q55", selectCallback: callback, },
-                { name: "list", text: "列表组件", url: "ui://2pshu6oingyqa7iufv", selectCallback: callback, },
-                { name: "page", text: "分页组件", url: "ui://2pshu6oiau3n5i", selectCallback: callback, },
-                { name: "enum", text: "枚举组件", url: "ui://2pshu6oiau3nh", selectCallback: callback, },
-                { name: "text", text: "文本组件", url: "ui://2pshu6oid8p0a7iuft", selectCallback: callback, },
-                { name: "image", text: "图片组件", url: "ui://2pshu6oioj7qiu9e", selectCallback: callback, },
+                { name: "button", text: "按钮组件", url: "ui://38ft0jfga4q55", onSelected, },
+                { name: "list", text: "列表组件", url: "ui://2pshu6oingyqa7iufv", onSelected, },
+                { name: "page", text: "分页组件", url: "ui://2pshu6oiau3n5i", onSelected, },
+                { name: "enum", text: "枚举组件", url: "ui://2pshu6oiau3nh", onSelected, },
+                { name: "text", text: "文本组件", url: "ui://2pshu6oid8p0a7iuft", onSelected, },
+                { name: "image", text: "图片组件", url: "ui://2pshu6oioj7qiu9e", onSelected, },
             ]
         };
     }
     OnCreate() { }
     OnDestroy() { }
-    CallBack(name) {
+    OnSelected(name) {
         // let url = "";
         // const getUrl = function (data: IMenuData) {
         //     let temp = "";

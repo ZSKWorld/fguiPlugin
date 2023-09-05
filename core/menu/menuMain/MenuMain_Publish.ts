@@ -36,14 +36,14 @@ export class MenuMain_Publish extends MenuBase {
                         name: key,
                         text: key,
                         isSubMenu: isSubMenu,
-                        selectCallback: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
+                        onSelected: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
                             this.selectedPlatform = str;
                             this.RefreshPublishPlatform(0, true);
                         }),
                         subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
                             name: index.toString(),
                             text: configFiles[ index ],// + " => " + this.settingsMap[ key ][ index ].path,
-                            selectCallback: (str) => this.RefreshPublishPlatform(+str, true)
+                            onSelected: (str) => this.RefreshPublishPlatform(+str, true)
                         })) : null
                     }
                 })

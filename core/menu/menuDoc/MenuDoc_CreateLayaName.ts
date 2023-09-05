@@ -27,12 +27,11 @@ const LayaType2Type: { [ key: string ]: Type2Type } = {
 
 export class MenuDoc_CreateLayaName extends MenuBase {
     protected InitMenuData(): void {
-        const _this = this;
         this.menuData = {
             name: "MenuDoc_CreateLayaName",
             text: "创建Laya代码到剪切板",
             atIndex: 0,
-            selectCallback: () => { _this.CallBack(); }
+            onSelected: () => this.OnSelected()
         };
     }
 
@@ -40,7 +39,7 @@ export class MenuDoc_CreateLayaName extends MenuBase {
 
     protected OnDestroy(): void { }
 
-    private CallBack() {
+    private OnSelected() {
         const { children, controllers, transitions } = FairyEditor.App.activeDoc.content;
         const childCount = children.Count;
         const ctrlCount = controllers.Count;

@@ -16,12 +16,12 @@ export class EditorUtils {
             }
         }
         if (data.isSubMenu) {
-            parent.AddItem(data.text, data.name, data.atIndex ?? -1, true, data.selectCallback);
+            parent.AddItem(data.text, data.name, data.atIndex ?? -1, true, data.onSelected);
             if (data.subMenuData && data.subMenuData.length) {
                 const curMenu = parent.GetSubMenu(data.name);
                 data.subMenuData.forEach((v) => this.CreateMenu(v, curMenu));
             }
-        } else parent.AddItem(data.text, data.name, data.atIndex ?? -1, false, data.selectCallback);
+        } else parent.AddItem(data.text, data.name, data.atIndex ?? -1, false, data.onSelected);
     }
 
     /**
@@ -29,7 +29,7 @@ export class EditorUtils {
      * @param name 控制器名字
      * @param pageNames 页数量&名字
      * @param exported 是否导出为组件属性
-     * @returns 
+     * @returns
      */
     public static CreateControllerXML(name: string, pageNames?: (string | number)[], exported?: boolean) {
         const xml = FairyGUI.Utils.XML.Create("");
@@ -73,11 +73,11 @@ export class EditorUtils {
         return this.GetPluginRootDir() + "/Packages/" + name;
     }
 
-    
+
     /**获取config目录下的配置路径 */
     public static GetConfigPath(type: ConfigType, fileName: string): string {
         const dir = type ? type + "/" : "";
-        return `${this.GetPluginRootDir()}/config/${dir}${fileName}.json`; 
+        return `${this.GetPluginRootDir()}/config/${dir}${fileName}.json`;
     }
 
     /**获取config目录下的配置数据 */

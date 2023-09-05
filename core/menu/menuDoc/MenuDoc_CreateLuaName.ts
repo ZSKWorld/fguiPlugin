@@ -31,7 +31,7 @@ export class MenuDoc_CreateLuaName extends MenuBase {
             name: "MenuDoc_CreateLuaName",
             text: "创建Lua名称代码到剪切板",
             atIndex: 0,
-            selectCallback: () => this.CallBack()
+            onSelected: () => this.OnSelected()
         };
     }
 
@@ -39,7 +39,7 @@ export class MenuDoc_CreateLuaName extends MenuBase {
 
     protected OnDestroy(): void { }
 
-    private CallBack() {
+    private OnSelected() {
         const { children, controllers, transitions } = FairyEditor.App.activeDoc.content;
         const childCount = children.Count;
         const ctrlCount = controllers.Count;
