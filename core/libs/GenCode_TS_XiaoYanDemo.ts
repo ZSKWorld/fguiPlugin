@@ -1,6 +1,30 @@
 import { FairyEditor, System } from 'csharp';
 import CodeWriter from './CodeWriter';
 
+const signArr = [ "UI", "Com", "Btn", "Render" ];
+const viewDirs = [ "", "coms/", "btns/", "renders/" ];
+
+function setMemberTypeName(info: FairyEditor.PublishHandler.MemberInfo, clsInfo: FairyEditor.PublishHandler.ClassInfo) {
+    if (!info.res) return;
+    const resName = info.res.name;
+    const viewIndex = signArr.findIndex(v => resName.startsWith(v));
+    if (viewIndex >= 0) {
+        info.type = resName + "View";
+        let infoRefIndex = -1;
+        for (let i = 0; i < clsInfo.references.Count; i++) {
+            if (clsInfo.references.get_Item(i).startsWith(resName)) {
+                infoRefIndex = i;
+                break;
+            }
+        }
+        const ref = `/../view/${ info.res.owner.name }/view/${ viewDirs[ viewIndex ] }${ info.type }`;
+        if (infoRefIndex >= 0) clsInfo.references.set_Item(infoRefIndex, ref);
+        else clsInfo.references.Contains(ref) == false && clsInfo.references.Add(ref);
+        return true;
+    }
+    return false;
+}
+
 /** 加入不同包的资源引入路径 */
 function CollectClasses(
     handler: FairyEditor.PublishHandler,
@@ -9,26 +33,26 @@ function CollectClasses(
 ) {
     let classes = handler.CollectClasses(stripMember, stripMember, ns);
     let hasOtherPkgRes = false;
-    const clsCnt = classes.Count;
-    for (let i = 0; i < clsCnt; i++) {
-        const memberInfos = classes.get_Item(i).members;
-        const memberCnt = memberInfos.Count;
-        for (let j = 0; j < memberCnt; j++) {
-            const info = memberInfos.get_Item(j);
-            if (info.res && info.res.owner.name != handler.pkg.name) {
-                if (!handler.items.Contains(info.res)) {
-                    hasOtherPkgRes = true;
-                    handler.items.Add(info.res);
+    classes.ForEach(clsInfo => {
+        clsInfo.members.ForEach(memberInfo => {
+            if (memberInfo.res) {
+                if (memberInfo.res.owner.name != handler.pkg.name) {
+                    if (!handler.items.Contains(memberInfo.res)) {
+                        hasOtherPkgRes = true;
+                        handler.items.Add(memberInfo.res);
+                    }
                 }
+                setMemberTypeName(memberInfo, clsInfo);
             }
-        }
-    }
+        });
+    });
     if (hasOtherPkgRes) {
         classes = handler.CollectClasses(stripMember, stripMember, ns);
-        classes.ForEach(cls => {
-            if (cls.res.owner.name == handler.pkg.name) {
-                cls.members.ForEach(memberInfo => {
-                    if (memberInfo.res && memberInfo.res.owner.name != handler.pkg.name) {
+        classes.ForEach(clsInfo => {
+            if (clsInfo.res.owner.name == handler.pkg.name) {
+                clsInfo.members.ForEach(memberInfo => {
+                    if (memberInfo.res) {
+                        // if (memberInfo.res.owner.name != handler.pkg.name) {
                         let existRes = false;
                         let tempClsCnt = classes.Count;
                         for (let k = 0; k < tempClsCnt; k++) {
@@ -38,12 +62,14 @@ function CollectClasses(
                             }
                         }
 
-                        if (existRes) {
+                        if (existRes && !setMemberTypeName(memberInfo, clsInfo) && memberInfo.res.owner.name != handler.pkg.name) {
                             memberInfo.type = memberInfo.res.name;
-                            const ref = `/${ memberInfo.res.owner.name }/${ memberInfo.res.name }`;
-                            if (cls.references.Contains(ref) == false)
-                                cls.references.Add(ref);
+                            const ref = `//${ memberInfo.res.owner.name }/${ memberInfo.res.name }`;
+                            if (clsInfo.references.Contains(ref) == false)
+                                clsInfo.references.Add(ref);
                         }
+                        // } else
+                        //     setMemberTypeName(memberInfo, clsInfo);
                     }
                 });
             }
@@ -66,7 +92,11 @@ function genReferenceExt(writer: CodeWriter, references: System.Collections.Gene
             let ref = references.get_Item(j);
             if (ref.startsWith("/")) {
                 let tempArr = ref.split("/");
-                writer.writeln('import %s from "..%s";', tempArr[ 2 ], ref);
+                if (ref.startsWith("//")) {
+                    writer.writeln('import %s from "..%s";', tempArr[ tempArr.length - 1 ], ref.substring(1));
+                } else {
+                    writer.writeln('import { %s } from "..%s";', tempArr[ tempArr.length - 1 ], ref);
+                }
             }
             else writer.writeln('import %s from "./%s";', ref, ref);
         }
@@ -102,13 +132,6 @@ export function genCode_TS_XiaoYanDemo(handler: FairyEditor.PublishHandler) {
         writer.reset();
 
         let refCount = references.Count;
-        // if (refCount > 0) {
-        //     for (let j: number = 0; j < refCount; j++) {
-        //         let ref = references.get_Item(j);
-        //         writer.writeln('import %s from "./%s";', ref, ref);
-        //     }
-        //     writer.writeln();
-        // }
         genReferenceExt(writer, references);
 
         if (isThree) {
@@ -172,6 +195,11 @@ export function genCode_TS_XiaoYanDemo(handler: FairyEditor.PublishHandler) {
     for (let i: number = 0; i < classCnt; i++) {
         let classInfo = classes.get_Item(i);
         writer.writeln('import %s from "./%s";', classInfo.className, classInfo.className);
+        const viewIndex = signArr.findIndex(v => classInfo.className.startsWith(v));
+        if (viewIndex >= 0)
+            writer.writeln('import { %sView } from "../../view/%s/view/%s%sView";', classInfo.className, classInfo.res.owner.name, viewDirs[ viewIndex ], classInfo.className);
+        // import { ComZhiZuoView } from "../../view/PkgMain/view/coms/ComZhiZuoView";
+        // const ref = `/../view/${ info.res.owner.name }/view/${ viewDirs[ viewIndex ] }${ info.type }`;
     }
 
     if (isThree) {
@@ -187,7 +215,11 @@ export function genCode_TS_XiaoYanDemo(handler: FairyEditor.PublishHandler) {
     writer.startBlock();
     for (let i: number = 0; i < classCnt; i++) {
         let classInfo = classes.get_Item(i);
-        writer.writeln('%s.UIObjectFactory.setExtension(%s.URL, %s);', ns, classInfo.className, classInfo.className);
+        const viewIndex = signArr.findIndex(v => classInfo.className.startsWith(v));
+        if (viewIndex == -1)
+            writer.writeln('%s.UIObjectFactory.setExtension(%s.URL, %s);', ns, classInfo.className, classInfo.className);
+        else
+            writer.writeln('%s.UIObjectFactory.setExtension(%s.URL, %sView);', ns, classInfo.className, classInfo.className);
     }
     writer.endBlock(); //bindall
 

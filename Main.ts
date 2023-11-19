@@ -23,7 +23,7 @@ const mainSubMenu = (name: MainMenuType) => mainMenu.GetSubMenu(name);
 
 [
     //测试用例
-    // new Menu_Test(libMenu),
+    new Menu_Test(libMenu),
 
     //编辑区菜单
     // new MenuDoc_CreateComponent(docMenu),

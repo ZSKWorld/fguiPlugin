@@ -84,6 +84,7 @@ class BtnInspector extends BaseInspector_1.BaseInspector {
         App.activeDoc.SetModified(true);
     }
 }
+exports.BtnInspector = BtnInspector;
 __decorate([
     (0, Decorators_1.ViewChild)("BtnFunc")
 ], BtnInspector.prototype, "btnFunc", void 0);
@@ -102,4 +103,3 @@ __decorate([
 __decorate([
     (0, Decorators_1.ViewChild)("InputHoldPress")
 ], BtnInspector.prototype, "inputHoldPress", void 0);
-exports.BtnInspector = BtnInspector;

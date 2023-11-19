@@ -73,6 +73,7 @@ class ComInspector extends BaseInspector_1.BaseInspector {
         App.activeDoc.SetModified(true);
     }
 }
+exports.ComInspector = ComInspector;
 __decorate([
     (0, Decorators_1.ViewChild)("BtnEffectAdd")
 ], ComInspector.prototype, "btnEffectAdd", void 0);
@@ -85,4 +86,3 @@ __decorate([
 __decorate([
     (0, Decorators_1.ViewChild)("InputEffectValue")
 ], ComInspector.prototype, "inputEffectValue", void 0);
-exports.ComInspector = ComInspector;

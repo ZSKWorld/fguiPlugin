@@ -18,5 +18,5 @@ class CustomSetting {
         csharp_1.System.IO.File.WriteAllText(EditorUtils_1.EditorUtils.GetConfigPath("" /* ConfigType.None */, this.SettingName), JSON.stringify(obj));
     }
 }
-CustomSetting.PublishSelectedCfgIndex = 0;
 exports.CustomSetting = CustomSetting;
+CustomSetting.PublishSelectedCfgIndex = 0;

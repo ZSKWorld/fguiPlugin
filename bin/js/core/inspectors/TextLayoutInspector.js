@@ -64,10 +64,10 @@ class TextLayoutInspector extends BaseInspector_1.BaseInspector {
         }
     }
 }
+exports.TextLayoutInspector = TextLayoutInspector;
 __decorate([
     (0, Decorators_1.ViewChild)("TextArea")
 ], TextLayoutInspector.prototype, "textArea", void 0);
 __decorate([
     (0, Decorators_1.ViewChild)("BtnSubmit")
 ], TextLayoutInspector.prototype, "btnSubmit", void 0);
-exports.TextLayoutInspector = TextLayoutInspector;

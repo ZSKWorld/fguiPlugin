@@ -27,7 +27,7 @@ let BaseInspector = class BaseInspector extends csharp_1.FairyEditor.View.Plugin
         this.OnCreate();
     }
 };
-BaseInspector = __decorate([
+exports.BaseInspector = BaseInspector;
+exports.BaseInspector = BaseInspector = __decorate([
     (0, Decorators_1.DestroyInstanceClass)("Dispose")
 ], BaseInspector);
-exports.BaseInspector = BaseInspector;

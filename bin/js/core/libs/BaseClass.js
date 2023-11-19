@@ -13,7 +13,7 @@ const Decorators_1 = require("../utils/Decorators");
  */
 let BaseClass = class BaseClass {
 };
-BaseClass = __decorate([
+exports.BaseClass = BaseClass;
+exports.BaseClass = BaseClass = __decorate([
     (0, Decorators_1.DestroyInstanceClass)("Destroy")
 ], BaseClass);
-exports.BaseClass = BaseClass;

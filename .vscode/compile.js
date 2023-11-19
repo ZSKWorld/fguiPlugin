@@ -51,7 +51,7 @@ const jsDir = path.resolve(binDir, "js");
 removeDir(jsDir);
 childProcess.exec("tsc", (err, stdout, stderr) => {
     if (!err && args[0]) {
-
+        console.log("编译成功！");
         exportPathes.forEach(epPath => {
             let haveConfig = false;
             if (fs.existsSync(epPath)) {
@@ -74,5 +74,9 @@ childProcess.exec("tsc", (err, stdout, stderr) => {
                 fs.copyFileSync(filePath, targetPath);
             });
         });
+        console.log("发布成功！");
+    } else {
+        console.log("编译失败！");
+        console.log(stdout);
     }
 });
