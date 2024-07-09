@@ -18,7 +18,7 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
             this.platformKeys = Object.keys(this.platformCfg).filter(v => !!this.platformCfg[v].enable && this.platformCfg[v].configFiles.length > 0);
             this.InitSettings();
             this.menuData = {
-                text: "未配置的发布平台",
+                text: `当前发布到 [color=#ff0000]${csharp_1.FairyEditor.App.project.type}[/color]`,
                 isSubMenu: true,
                 subMenuData: this.platformKeys.map(key => {
                     const configFiles = this.platformCfg[key].configFiles;
@@ -27,18 +27,20 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
                         name: key,
                         text: key,
                         isSubMenu: isSubMenu,
-                        onSelected: isSubMenu ? ((str) => this.selectedPlatform = str) : ((str) => {
-                            this.selectedPlatform = str;
-                            this.RefreshPublishPlatform(0, true);
-                        }),
+                        onSelected: isSubMenu
+                            ? (str) => this.TryChangePlatform(this.selectedPlatform, this.selectedIndex)
+                            : (str) => this.TryChangePlatform(str, 0),
                         subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
                             name: index.toString(),
                             text: configFiles[index],
-                            onSelected: (str) => this.RefreshPublishPlatform(+str, true)
+                            onSelected: (str) => this.TryChangePlatform(key, +str)
                         })) : null
                     };
                 })
             };
+        }
+        else {
+            this.menuData = { text: "unknown", name: "unknown", isSubMenu: true };
         }
     }
     OnCreate() {
@@ -46,10 +48,12 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
         this.menuBtn = list.GetChildAt(list.numChildren - 1).asButton;
         this.menuBtn.GetChild('title').asTextField.UBBEnabled = true;
         this.selectedPlatform = csharp_1.FairyEditor.App.project.type;
+        this.selectedIndex = 0;
         if (this.settingsMap[this.selectedPlatform]) {
             let cfgIndex = CustomSetting_1.CustomSetting.PublishSelectedCfgIndex;
-            cfgIndex = Math.min(cfgIndex, this.settingsMap[this.selectedPlatform].length - 1);
-            this.RefreshPublishPlatform(cfgIndex, false);
+            cfgIndex = Math.max(0, Math.min(cfgIndex, this.settingsMap[this.selectedPlatform].length - 1));
+            this.selectedIndex = cfgIndex;
+            this.RefreshPublishPlatform(false);
         }
     }
     OnDestroy() {
@@ -66,7 +70,7 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
                 !setting && (errStr += `${key} 平台 ${cfgFileName} 配置错误\n`);
             });
         });
-        errStr && csharp_1.FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在！！！");
+        errStr && csharp_1.FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在或配置数据是否正确！！！");
     }
     CopySetting(target, source) {
         //C#只读字段，不能更改
@@ -85,46 +89,56 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
             }
         }
     }
-    /**刷新发布平台 */
-    RefreshPublishPlatform(cfgIndex, showTip = true) {
-        const newSetting = this.settingsMap[this.selectedPlatform][cfgIndex];
-        if (newSetting) {
-            //设置全局设置并保存
-            const globalSetting = csharp_1.FairyEditor.App.project.GetSettings("Publish" /* SettingName.Publish */);
-            this.CopySetting(globalSetting, newSetting);
-            globalSetting.Save();
-            //设置项目类型并保存
-            csharp_1.FairyEditor.App.project.type = this.selectedPlatform;
-            csharp_1.FairyEditor.App.project.Save();
-            //设置选择索引并保存
-            CustomSetting_1.CustomSetting.PublishSelectedCfgIndex = cfgIndex;
-            CustomSetting_1.CustomSetting.Save();
-            //刷新package包发布设置。包设置居然是一开始就设置好的，不是发布时候才使用全局进行配置的，所以要刷新一下
-            //没找到刷新包设置的API，只有Open才能刷新，Open刷新的时候编辑区会闪一下，问题不大
-            csharp_1.FairyEditor.App.project.allPackages.ForEach(v => v.Open());
-            this.lastCfgIndex = cfgIndex;
-            let cfgStr = `[color=#ff0000]${csharp_1.FairyEditor.App.project.type}[/color]`;
-            const platformCfg = this.platformCfg[this.selectedPlatform];
-            if (platformCfg.configFiles.length > 1)
-                cfgStr += ` [color=#0000ff]${platformCfg.configFiles[cfgIndex]}[/color]`;
-            this.menuBtn.title = `当前发布到 ${cfgStr}`;
-            showTip && Tip_1.Tip.Inst.Show(`已切换发布平台到 ${cfgStr}`);
+    TryChangePlatform(platform, cfgIndex) {
+        if (this.selectedPlatform == platform && this.selectedIndex == cfgIndex) {
+            this.RefreshMenuChecked();
         }
         else {
-            cfgIndex = this.lastCfgIndex || 0;
-            const cfgName = this.platformCfg[this.selectedPlatform].configFiles[cfgIndex];
-            csharp_1.FairyEditor.App.Alert(`${this.selectedPlatform} 平台 ${cfgName} 配置错误，请检查配置文件是否存在`);
+            const newSetting = this.settingsMap[platform][cfgIndex];
+            if (newSetting) {
+                this.selectedPlatform = platform;
+                this.selectedIndex = cfgIndex;
+                this.RefreshPublishPlatform(true);
+            }
+            else {
+                this.RefreshMenuChecked();
+                const cfgName = this.platformCfg[platform].configFiles[cfgIndex];
+                csharp_1.FairyEditor.App.Alert(`${platform} 平台 ${cfgName} 配置错误\n请检查该配置文件是否存在或配置数据是否正确！！！`);
+            }
         }
-        this.RefreshMenuChecked(cfgIndex);
     }
-    RefreshMenuChecked(cfgIndex) {
+    /**刷新发布平台 */
+    RefreshPublishPlatform(showTip = true) {
+        const newSetting = this.settingsMap[this.selectedPlatform][this.selectedIndex];
+        //设置全局设置并保存
+        const globalSetting = csharp_1.FairyEditor.App.project.GetSettings("Publish" /* SettingName.Publish */);
+        this.CopySetting(globalSetting, newSetting);
+        globalSetting.Save();
+        //设置项目类型并保存
+        csharp_1.FairyEditor.App.project.type = this.selectedPlatform;
+        csharp_1.FairyEditor.App.project.Save();
+        //设置选择索引并保存
+        CustomSetting_1.CustomSetting.PublishSelectedCfgIndex = this.selectedIndex;
+        CustomSetting_1.CustomSetting.Save();
+        //刷新package包发布设置。包设置居然是一开始就设置好的，不是发布时候才使用全局进行配置的，所以要刷新一下
+        //没找到刷新包设置的API，只有Open才能刷新，Open刷新的时候编辑区会闪一下，问题不大
+        csharp_1.FairyEditor.App.project.allPackages.ForEach(v => v.Open());
+        this.RefreshMenuChecked();
+        let cfgStr = `[color=#ff0000]${csharp_1.FairyEditor.App.project.type}[/color]`;
+        const platformCfg = this.platformCfg[this.selectedPlatform];
+        if (platformCfg.configFiles.length > 1)
+            cfgStr += ` [color=#0000ff]${platformCfg.configFiles[this.selectedIndex]}[/color]`;
+        this.menuBtn.title = `当前发布到 ${cfgStr}`;
+        showTip && Tip_1.Tip.Inst.Show(`已切换发布平台到 ${cfgStr}`);
+    }
+    RefreshMenuChecked() {
         const curMenu = this.parentMenu.GetSubMenu(this.menuData.name);
         this.platformKeys.forEach(key => {
             curMenu.SetItemChecked(key, key == this.selectedPlatform);
             const curSubMenu = curMenu.GetSubMenu(key);
             if (this.platformCfg[key].configFiles.length > 1) {
                 this.platformCfg[key].configFiles.forEach((_, index) => {
-                    curSubMenu.SetItemChecked(index.toString(), key == this.selectedPlatform && index == cfgIndex);
+                    curSubMenu.SetItemChecked(index.toString(), key == this.selectedPlatform && index == this.selectedIndex);
                 });
             }
         });
