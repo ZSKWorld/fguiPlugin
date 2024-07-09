@@ -5,11 +5,11 @@ import { MainMenuType } from './core/common/Types';
 import { BaseInspector } from './core/inspectors/BaseInspector';
 import { BaseClass } from './core/libs/BaseClass';
 import { genCode_TS_XiaoYanDemo } from './core/libs/GenCode_TS_XiaoYanDemo';
+import { Menu_Test } from './core/menu/Menu_Test';
 import { MenuDoc_CreateLayaName } from './core/menu/menuDoc/MenuDoc_CreateLayaName';
 import { MenuDoc_CreateLuaName } from './core/menu/menuDoc/MenuDoc_CreateLuaName';
 import { MenuMain_ImageReference } from './core/menu/menuMain/MenuMain_ImageReference';
 import { MenuMain_Publish } from './core/menu/menuMain/MenuMain_Publish';
-import { Menu_Test } from './core/menu/Menu_Test';
 import { EditorUtils } from './core/utils/EditorUtils';
 
 /** 加载插件UI包 */
@@ -45,13 +45,21 @@ const mainSubMenu = (name: MainMenuType) => mainMenu.GetSubMenu(name);
 
 ].forEach(v => v.Create());
 
+export function onPublishStart() {
+    console.log("[color=#00ff00]on publish start[/color]");
+}
+
 //自定义发布代码
 export function onPublish(handler: FairyEditor.PublishHandler) {
     if (!handler.genCode) return;
+    console.log("[color=#ffff00]on publish code[/color] => [u][b]" + handler.pkg.name + "[/b][/u]");
     handler.genCode = false; //prevent default output
-
-    console.log('Handling gen code in plugin');
     genCode_TS_XiaoYanDemo(handler); //do it myself
+}
+
+export function onPublishEnd() {
+    console.log("on publish end");
+    console.log("[color=#00ff00]on publish end[/color]");
 }
 
 export function onDestroy() {
