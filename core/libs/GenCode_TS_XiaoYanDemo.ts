@@ -147,18 +147,18 @@ export function genCode_TS_XiaoYanDemo(handler: FairyEditor.PublishHandler) {
         let memberCnt = members.Count;
         for (let j: number = 0; j < memberCnt; j++) {
             let memberInfo = members.get_Item(j);
-            writer.writeln('public %s:%s;', memberInfo.varName, memberInfo.type);
+            writer.writeln('public %s: %s;', memberInfo.varName, memberInfo.type);
         }
-        writer.writeln('public static URL:string = "ui://%s%s";', handler.pkg.id, classInfo.resId);
+        writer.writeln('public static URL: string = "ui://%s%s";', handler.pkg.id, classInfo.resId);
         writer.writeln();
 
-        writer.writeln('public static createInstance():%s', classInfo.className);
+        writer.writeln('public static createInstance(): %s', classInfo.className);
         writer.startBlock();
         writer.writeln('return <%s>(%s.UIPackage.createObject("%s", "%s"));', classInfo.className, ns, handler.pkg.name, classInfo.resName);
         writer.endBlock();
         writer.writeln();
 
-        writer.writeln('protected override onConstruct():void');
+        writer.writeln('protected override onConstruct(): void');
         writer.startBlock();
         for (let j: number = 0; j < memberCnt; j++) {
             let memberInfo = members.get_Item(j);
@@ -211,7 +211,7 @@ export function genCode_TS_XiaoYanDemo(handler: FairyEditor.PublishHandler) {
     writer.writeln('export default class %s', binderName);
     writer.startBlock();
 
-    writer.writeln('public static bindAll():void');
+    writer.writeln('public static bindAll(): void');
     writer.startBlock();
     for (let i: number = 0; i < classCnt; i++) {
         let classInfo = classes.get_Item(i);
