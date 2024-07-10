@@ -52,7 +52,6 @@ function onPublish(handler) {
 }
 exports.onPublish = onPublish;
 function onPublishEnd() {
-    console.log("on publish end");
     console.log("[color=#00ff00]on publish end[/color]");
 }
 exports.onPublishEnd = onPublishEnd;

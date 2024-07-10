@@ -5,13 +5,19 @@
 			"label": "编译",
 			"type": "shell",
 			"command": "node ./.vscode/compile.js",
-			"problemMatcher": []
+			"problemMatcher": [],
+			"presentation": {
+				"close": true
+			}
 		},
 		{
 			"label": "编译并发布",
 			"type": "shell",
 			"command": "node ./.vscode/compile.js public",
-			"problemMatcher": []
+			"problemMatcher": [],
+			"presentation": {
+				"close": true
+			}
 		}
 	]
 }

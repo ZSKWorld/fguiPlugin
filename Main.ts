@@ -58,7 +58,6 @@ export function onPublish(handler: FairyEditor.PublishHandler) {
 }
 
 export function onPublishEnd() {
-    console.log("on publish end");
     console.log("[color=#00ff00]on publish end[/color]");
 }
 
