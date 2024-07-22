@@ -6,16 +6,15 @@ const ProgressView_1 = require("../../common/ProgressView");
 const MenuBase_Main_1 = require("../MenuBase_Main");
 class MenuMain_ImageReference extends MenuBase_Main_1.MenuBase_Main {
     InitMenuData() {
-        this.menuData = {
-            text: "查找图片引用",
-            isSubMenu: true,
-            subMenuData: [
-                {
-                    text: "启动",
-                    onSelected: () => this.OnSelected()
-                }
-            ]
-        };
+        const menuData = this.menuData;
+        menuData.text = "查找图片引用";
+        menuData.isSubMenu = true;
+        menuData.subMenuData = [
+            {
+                text: "启动",
+                onSelected: () => this.OnSelected(),
+            }
+        ];
     }
     OnCreate() {
         this._query = new csharp_1.FairyEditor.DependencyQuery();

@@ -12,8 +12,10 @@ export abstract class BaseInspector extends FairyEditor.View.PluginInspector {
         ViewChildInit(this);
         this.updateAction = () => this.OnUpdate();
         this.disposeAction = () => this.OnDestroy();
-        
-        const { InspectorName, InspectorTitle, ForObjectType, ShowInSelection, ShowInComponent, ShowInTransition } = info;
+    }
+
+    Create() {
+        const { InspectorName, InspectorTitle, ForObjectType, ShowInSelection, ShowInComponent, ShowInTransition } = this.info;
         FairyEditor.App.inspectorView.AddInspector(() => this, InspectorName, InspectorTitle);
         ShowInSelection && FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, false, false);
         ShowInComponent && FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, true, false);

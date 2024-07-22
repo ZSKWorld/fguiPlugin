@@ -24,12 +24,9 @@ const LuaType2Type = {
 };
 class MenuDoc_CreateLuaName extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
-        this.menuData = {
-            name: "MenuDoc_CreateLuaName",
-            text: "创建Lua名称代码到剪切板",
-            atIndex: 0,
-            onSelected: () => this.OnSelected()
-        };
+        const menuData = this.menuData;
+        menuData.text = "创建Lua名称代码到剪切板";
+        menuData.onSelected = () => this.OnSelected();
     }
     OnCreate() { }
     OnDestroy() { }

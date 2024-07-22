@@ -9,11 +9,9 @@ const MenuBase_Lib_1 = require("../MenuBase_Lib");
 const List = (0, puerts_1.$generic)(csharp_1.System.Collections.Generic.List$1, csharp_1.FairyEditor.FPackageItem);
 class MenuLib_CreateController extends MenuBase_Lib_1.MenuBase_Lib {
     InitMenuData() {
-        this.menuData = {
-            atIndex: 0,
-            text: "为编辑对象创建图片控制器",
-            onSelected: () => this.OnSelected()
-        };
+        const menuData = this.menuData;
+        menuData.text = "为编辑对象创建图片控制器";
+        menuData.onSelected = () => this.OnSelected();
     }
     OnCreate() {
         this.selectRES = new List();

@@ -9,7 +9,6 @@ import { InspectorData } from './core/inspectors/InspectorData';
 import { TextLayoutInspector } from './core/inspectors/TextLayoutInspector';
 import { BaseClass } from './core/libs/BaseClass';
 import { genCode_TS_XiaoYanDemo } from './core/libs/GenCode_TS_XiaoYanDemo';
-import { MenuTest_Lib } from './core/menu/MenuTest_Lib';
 import { MenuDoc_CreateComponent } from './core/menu/menuDoc/MenuDoc_CreateComponent';
 import { MenuDoc_CreateLayaName } from './core/menu/menuDoc/MenuDoc_CreateLayaName';
 import { MenuDoc_CreateLuaName } from './core/menu/menuDoc/MenuDoc_CreateLuaName';
@@ -17,32 +16,43 @@ import { MenuDoc_CreateRelation } from './core/menu/menuDoc/MenuDoc_CreateRelati
 import { MenuLib_CreateController } from './core/menu/menuLib/MenuLib_CreateController';
 import { MenuMain_ImageReference } from './core/menu/menuMain/MenuMain_ImageReference';
 import { MenuMain_Publish } from './core/menu/menuMain/MenuMain_Publish';
+import { MenuTest_Doc } from './core/menu/test/MenuTest_Doc';
+import { MenuTest_Lib } from './core/menu/test/MenuTest_Lib';
+import { MenuTest_Main } from './core/menu/test/MenuTest_Main';
 import { EditorUtils } from './core/utils/EditorUtils';
+import { MenuBase_Doc } from './core/menu/MenuBase_Doc';
+import { MenuBase_Lib } from './core/menu/MenuBase_Lib';
 
 /** 加载插件UI包 */
 FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils.GetPackagePath(PkgCustom));
 CustomSetting.Init();
+[
+    //编辑区菜单
+    new MenuDoc_CreateRelation(),
+    new MenuDoc_CreateLuaName(),
+    new MenuDoc_CreateLayaName(),
+    new MenuDoc_CreateComponent(),
 
-//测试用例
-new MenuTest_Lib();
+    //资源库菜单
+    new MenuLib_CreateController(),
 
-//编辑区菜单
-new MenuDoc_CreateComponent();
-new MenuDoc_CreateRelation();
-new MenuDoc_CreateLuaName();
-new MenuDoc_CreateLayaName();
+    //主菜单
+    new MenuMain_Publish(),
+    new MenuMain_ImageReference(),
 
-//资源库菜单
-new MenuLib_CreateController();
+    //测试用例
+    new MenuTest_Doc(),
+    new MenuTest_Lib(),
+    new MenuTest_Main(),
 
-//主菜单，注意：使用mainMenu做父菜单时，menuData.isSubMenu必须为true
-new MenuMain_Publish();
-new MenuMain_ImageReference();
+    //检查器
+    new BtnInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_BtnInspector, "按钮自定义数据", ShowObjectType.Button, true)),
+    new ComInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_ComInspector, "组件自定义数据", ShowObjectType.Component, true, true)),
+    new TextLayoutInspector(new InspectorData(PkgCustom, PkgCustom_Text, "TextInspector", "文本横竖排", ShowObjectType.Mixed, true)),
+].forEach(v => v.Create());
 
-//检查器
-new BtnInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_BtnInspector, "按钮自定义数据", ShowObjectType.Button, true));
-new ComInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_ComInspector, "组件自定义数据", ShowObjectType.Component, true, true));
-new TextLayoutInspector(new InspectorData(PkgCustom, PkgCustom_Text, "TextInspector", "文本横竖排", ShowObjectType.Mixed, true));
+MenuBase_Doc.AddSeperator();
+MenuBase_Lib.AddSeperator();
 
 export function onPublishStart() {
     console.log("[color=#00ff00]on publish start[/color]");

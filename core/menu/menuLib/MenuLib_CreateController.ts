@@ -18,11 +18,9 @@ export class MenuLib_CreateController extends MenuBase_Lib {
     private controllerName: string;
 
     protected InitMenuData(): void {
-        this.menuData = {
-            atIndex: 0,
-            text: "为编辑对象创建图片控制器",
-            onSelected: () => this.OnSelected()
-        };
+        const menuData = this.menuData;
+        menuData.text = "为编辑对象创建图片控制器";
+        menuData.onSelected = () => this.OnSelected();
     }
 
     protected OnCreate(): void {

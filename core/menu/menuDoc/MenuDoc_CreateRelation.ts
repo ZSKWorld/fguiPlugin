@@ -10,16 +10,14 @@ export class MenuDoc_CreateRelation extends MenuBase_Doc {
     private rightClickCallback: FairyGUI.EventCallback0;
 
     protected InitMenuData(): void {
-        this.menuData = {
-            text: "关联",
-            atIndex: 0,
-            isSubMenu: true,
-            subMenuData: Object.keys(FairyEditor.FRelationType).slice(0, 25).map(v => ({
-                name: v,
-                text: this.GetRelationText(v),
-                onSelected: (name: string) => this.OnSelected(name)
-            }))
-        };
+        const menuData = this.menuData;
+        menuData.text = "关联";
+        menuData.isSubMenu = true;
+        menuData.subMenuData = Object.keys(FairyEditor.FRelationType).slice(0, 25).map(v => ({
+            name: v,
+            text: this.GetRelationText(v),
+            onSelected: (name: string) => this.OnSelected(name)
+        }));
     }
 
     protected OnCreate(): void {

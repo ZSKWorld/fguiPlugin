@@ -5,16 +5,15 @@ import { MenuBase_Main } from "../MenuBase_Main";
 export class MenuMain_ImageReference extends MenuBase_Main {
     private _query: FairyEditor.DependencyQuery;
     protected InitMenuData(): void {
-        this.menuData = {
-            text: "查找图片引用",
-            isSubMenu: true,
-            subMenuData: [
-                {
-                    text: "启动",
-                    onSelected: () => this.OnSelected()
-                }
-            ]
-        };
+        const menuData = this.menuData;
+        menuData.text = "查找图片引用";
+        menuData.isSubMenu = true;
+        menuData.subMenuData = [
+            {
+                text: "启动",
+                onSelected: () => this.OnSelected(),
+            }
+        ];
     }
 
     protected OnCreate(): void {

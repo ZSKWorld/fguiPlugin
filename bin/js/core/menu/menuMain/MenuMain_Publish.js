@@ -7,40 +7,30 @@ const Tip_1 = require("../../common/Tip");
 const EditorUtils_1 = require("../../utils/EditorUtils");
 const MenuBase_Main_1 = require("../MenuBase_Main");
 class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
-    constructor() {
-        super(...arguments);
-        /** 平台发布设置 */
-        this.settingsMap = {};
-    }
     InitMenuData() {
         this.platformCfg = EditorUtils_1.EditorUtils.GetConfig("publishSettings" /* ConfigType.PublishSettings */, "PlatformConfig");
         if (this.platformCfg) {
             this.platformKeys = Object.keys(this.platformCfg).filter(v => !!this.platformCfg[v].enable && this.platformCfg[v].configFiles.length > 0);
             this.InitSettings();
-            this.menuData = {
-                text: `当前发布到 [color=#ff0000]${csharp_1.FairyEditor.App.project.type}[/color]`,
-                isSubMenu: true,
-                subMenuData: this.platformKeys.map(key => {
-                    const configFiles = this.platformCfg[key].configFiles;
-                    const isSubMenu = configFiles.length > 1;
-                    return {
-                        name: key,
-                        text: key,
-                        isSubMenu: isSubMenu,
-                        onSelected: isSubMenu
-                            ? (str) => this.TryChangePlatform(this.selectedPlatform, this.selectedIndex)
-                            : (str) => this.TryChangePlatform(str, 0),
-                        subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
-                            name: index.toString(),
-                            text: configFiles[index], // + " => " + this.settingsMap[ key ][ index ].path,
-                            onSelected: (str) => this.TryChangePlatform(key, +str)
-                        })) : null
-                    };
-                })
-            };
-        }
-        else {
-            this.menuData = { text: "unknown", name: "unknown", isSubMenu: true };
+            const menuData = this.menuData;
+            menuData.text = `当前发布到 [color=#ff0000]${csharp_1.FairyEditor.App.project.type}[/color]`;
+            menuData.subMenuData = this.platformKeys.map(key => {
+                const configFiles = this.platformCfg[key].configFiles;
+                const isSubMenu = configFiles.length > 1;
+                return {
+                    name: key,
+                    text: key,
+                    isSubMenu: isSubMenu,
+                    onSelected: isSubMenu
+                        ? (str) => this.TryChangePlatform(this.selectedPlatform, this.selectedIndex)
+                        : (str) => this.TryChangePlatform(str, 0),
+                    subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
+                        name: index.toString(),
+                        text: configFiles[index],
+                        onSelected: (str) => this.TryChangePlatform(key, +str)
+                    })) : null
+                };
+            });
         }
     }
     OnCreate() {
@@ -60,6 +50,7 @@ class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
         this.menuBtn = null;
     }
     InitSettings() {
+        this.settingsMap = {};
         let errStr = "";
         this.platformKeys.forEach(key => {
             this.platformCfg[key].configFiles.forEach(cfgFileName => {

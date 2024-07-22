@@ -24,12 +24,9 @@ const LayaType2Type = {
 };
 class MenuDoc_CreateLayaName extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
-        this.menuData = {
-            name: "MenuDoc_CreateLayaName",
-            text: "创建Laya代码到剪切板",
-            atIndex: 0,
-            onSelected: () => this.OnSelected()
-        };
+        const menuData = this.menuData;
+        menuData.text = "创建Laya代码到剪切板";
+        menuData.onSelected = () => this.OnSelected();
     }
     OnCreate() { }
     OnDestroy() { }

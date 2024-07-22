@@ -5,16 +5,14 @@ const csharp_1 = require("csharp");
 const MenuBase_Doc_1 = require("../MenuBase_Doc");
 class MenuDoc_CreateRelation extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
-        this.menuData = {
-            text: "关联",
-            atIndex: 0,
-            isSubMenu: true,
-            subMenuData: Object.keys(csharp_1.FairyEditor.FRelationType).slice(0, 25).map(v => ({
-                name: v,
-                text: this.GetRelationText(v),
-                onSelected: (name) => this.OnSelected(name)
-            }))
-        };
+        const menuData = this.menuData;
+        menuData.text = "关联";
+        menuData.isSubMenu = true;
+        menuData.subMenuData = Object.keys(csharp_1.FairyEditor.FRelationType).slice(0, 25).map(v => ({
+            name: v,
+            text: this.GetRelationText(v),
+            onSelected: (name) => this.OnSelected(name)
+        }));
     }
     OnCreate() {
         this.rightClickCallback = new csharp_1.FairyGUI.EventCallback0(() => this.OnRightClick());

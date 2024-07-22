@@ -10,17 +10,15 @@ class MenuBase extends BaseClass_1.BaseClass {
     constructor(parentMenu) {
         super();
         this.parentMenu = parentMenu;
-        setTimeout(() => {
-            var _a;
-            this.InitMenuData();
-            (_a = this.menuData).name || (_a.name = this["__proto__"].constructor.name);
-            EditorUtils_1.EditorUtils.CreateMenu(this.menuData, this.parentMenu);
-            this.OnCreate();
-        }, 1);
+        this.menuData = { text: "undefined", name: this["__proto__"].constructor.name };
+    }
+    Create() {
+        this.InitMenuData();
+        EditorUtils_1.EditorUtils.CreateMenu(this.menuData, this.parentMenu);
+        this.OnCreate();
     }
     Destroy() {
         this.parentMenu.RemoveItem(this.menuData.name);
-        this.parentMenu = null;
         this.OnDestroy();
     }
 }

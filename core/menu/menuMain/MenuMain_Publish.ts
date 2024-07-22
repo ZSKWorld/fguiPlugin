@@ -15,7 +15,7 @@ export class MenuMain_Publish extends MenuBase_Main {
     /** 平台配置文件 */
     private platformCfg: PlatformConfig;
     /** 平台发布设置 */
-    private settingsMap: { [key: string]: Partial<FairyEditor.GlobalPublishSettings>[] } = {};
+    private settingsMap: { [key: string]: Partial<FairyEditor.GlobalPublishSettings>[] };
     /** 选中的平台 */
     private selectedPlatform: string;
     private selectedIndex: number;
@@ -26,29 +26,25 @@ export class MenuMain_Publish extends MenuBase_Main {
             this.platformKeys = Object.keys(this.platformCfg).filter(v =>
                 !!this.platformCfg[v].enable && this.platformCfg[v].configFiles.length > 0);
             this.InitSettings();
-            this.menuData = {
-                text: `当前发布到 [color=#ff0000]${ FairyEditor.App.project.type }[/color]`,
-                isSubMenu: true,
-                subMenuData: this.platformKeys.map(key => {
-                    const configFiles = this.platformCfg[key].configFiles;
-                    const isSubMenu = configFiles.length > 1;
-                    return {
-                        name: key,
-                        text: key,
-                        isSubMenu: isSubMenu,
-                        onSelected: isSubMenu
-                            ? (str) => this.TryChangePlatform(this.selectedPlatform, this.selectedIndex)
-                            : (str) => this.TryChangePlatform(str, 0),
-                        subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
-                            name: index.toString(),
-                            text: configFiles[index],// + " => " + this.settingsMap[ key ][ index ].path,
-                            onSelected: (str) => this.TryChangePlatform(key, +str)
-                        })) : null
-                    }
-                })
-            };
-        } else {
-            this.menuData = { text: "unknown", name: "unknown", isSubMenu: true };
+            const menuData = this.menuData;
+            menuData.text = `当前发布到 [color=#ff0000]${ FairyEditor.App.project.type }[/color]`;
+            menuData.subMenuData = this.platformKeys.map(key => {
+                const configFiles = this.platformCfg[key].configFiles;
+                const isSubMenu = configFiles.length > 1;
+                return {
+                    name: key,
+                    text: key,
+                    isSubMenu: isSubMenu,
+                    onSelected: isSubMenu
+                        ? (str) => this.TryChangePlatform(this.selectedPlatform, this.selectedIndex)
+                        : (str) => this.TryChangePlatform(str, 0),
+                    subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
+                        name: index.toString(),
+                        text: configFiles[index],
+                        onSelected: (str) => this.TryChangePlatform(key, +str)
+                    })) : null
+                }
+            });
         }
     }
 
@@ -72,6 +68,7 @@ export class MenuMain_Publish extends MenuBase_Main {
     }
 
     private InitSettings() {
+        this.settingsMap = {};
         let errStr = "";
         this.platformKeys.forEach(key => {
             this.platformCfg[key].configFiles.forEach(cfgFileName => {
