@@ -3,12 +3,12 @@ import { CustomSetting } from "../../common/CustomSetting";
 import { Tip } from "../../common/Tip";
 import { ConfigType, SettingName } from "../../common/Types";
 import { EditorUtils } from "../../utils/EditorUtils";
-import { MenuBase } from "../MenuBase";
+import { MenuBase_Main } from "../MenuBase_Main";
 
 type Partial<T> = { [P in keyof T]?: Partial<T[P]>; };
 type PlatformConfig = { [key: string]: { enable: boolean, configFiles: string[] } };
 
-export class MenuMain_Publish extends MenuBase {
+export class MenuMain_Publish extends MenuBase_Main {
     /** 主菜单按钮 */
     private menuBtn: FairyGUI.GButton;
     private platformKeys: string[];

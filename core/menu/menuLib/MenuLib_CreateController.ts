@@ -3,10 +3,10 @@ import { $generic } from "puerts";
 import { Tip } from "../../common/Tip";
 import { AppConfirmResult, InspectorControlListIndex, InspectorName, MoreControllIndex, ShowObjectType } from "../../common/Types";
 import { EditorUtils } from "../../utils/EditorUtils";
-import { MenuBase } from "../MenuBase";
+import { MenuBase_Lib } from "../MenuBase_Lib";
 const List = $generic(System.Collections.Generic.List$1, FairyEditor.FPackageItem);
 
-export class MenuLib_CreateController extends MenuBase {
+export class MenuLib_CreateController extends MenuBase_Lib {
     /** libView item 点击事件 */
     private itemClick: FairyGUI.EventCallback1;
     /** “+更多控制” 点击事件 */

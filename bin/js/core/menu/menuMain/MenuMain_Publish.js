@@ -5,8 +5,8 @@ const csharp_1 = require("csharp");
 const CustomSetting_1 = require("../../common/CustomSetting");
 const Tip_1 = require("../../common/Tip");
 const EditorUtils_1 = require("../../utils/EditorUtils");
-const MenuBase_1 = require("../MenuBase");
-class MenuMain_Publish extends MenuBase_1.MenuBase {
+const MenuBase_Main_1 = require("../MenuBase_Main");
+class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
     constructor() {
         super(...arguments);
         /** 平台发布设置 */
@@ -32,7 +32,7 @@ class MenuMain_Publish extends MenuBase_1.MenuBase {
                             : (str) => this.TryChangePlatform(str, 0),
                         subMenuData: isSubMenu ? configFiles.map((cfg, index) => ({
                             name: index.toString(),
-                            text: configFiles[index],
+                            text: configFiles[index], // + " => " + this.settingsMap[ key ][ index ].path,
                             onSelected: (str) => this.TryChangePlatform(key, +str)
                         })) : null
                     };

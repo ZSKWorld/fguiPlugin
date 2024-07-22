@@ -15,13 +15,12 @@ export abstract class MenuBase extends BaseClass {
     constructor(parentMenu: FairyEditor.Component.IMenu) {
         super();
         this.parentMenu = parentMenu;
-    }
-
-    public Create(): void {
-        this.InitMenuData();
-        this.menuData.name ||= this[ "__proto__" ].constructor.name;
-        EditorUtils.CreateMenu(this.menuData, this.parentMenu);
-        this.OnCreate();
+        setTimeout(() => {
+            this.InitMenuData();
+            this.menuData.name ||= this["__proto__"].constructor.name;
+            EditorUtils.CreateMenu(this.menuData, this.parentMenu);
+            this.OnCreate();
+        }, 1);
     }
 
     protected Destroy() {

@@ -17,9 +17,7 @@ let BaseInspector = class BaseInspector extends csharp_1.FairyEditor.View.Plugin
         (0, Decorators_1.ViewChildInit)(this);
         this.updateAction = () => this.OnUpdate();
         this.disposeAction = () => this.OnDestroy();
-    }
-    Create() {
-        const { InspectorName, InspectorTitle, ForObjectType, ShowInSelection, ShowInComponent, ShowInTransition } = this.info;
+        const { InspectorName, InspectorTitle, ForObjectType, ShowInSelection, ShowInComponent, ShowInTransition } = info;
         csharp_1.FairyEditor.App.inspectorView.AddInspector(() => this, InspectorName, InspectorTitle);
         ShowInSelection && csharp_1.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, false, false);
         ShowInComponent && csharp_1.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, true, false);

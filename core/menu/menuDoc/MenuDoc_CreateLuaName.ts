@@ -1,11 +1,11 @@
 import { FairyEditor } from "csharp";
-import { MenuBase } from "../MenuBase";
+import { MenuBase_Doc } from "../MenuBase_Doc";
 interface Type2Type {
     type: string;
     asType: string;
     ext: string;
 }
-const LuaType2Type: { [ key: string ]: Type2Type } = {
+const LuaType2Type: { [key: string]: Type2Type } = {
     Button: { type: "FairyGUI.GButton", asType: "asButton", ext: "btn_" },
     text: { type: "FairyGUI.GTextField", asType: "asTextField", ext: "txt_" },
     richtext: { type: "FairyGUI.GRichTextField", asType: "asRichTextField", ext: "rtxt_" },
@@ -25,7 +25,7 @@ const LuaType2Type: { [ key: string ]: Type2Type } = {
     Transition: { type: "FairyGUI.Transition", asType: "", ext: "trans_" },
 };
 
-export class MenuDoc_CreateLuaName extends MenuBase {
+export class MenuDoc_CreateLuaName extends MenuBase_Doc {
     protected InitMenuData(): void {
         this.menuData = {
             name: "MenuDoc_CreateLuaName",
@@ -48,10 +48,10 @@ export class MenuDoc_CreateLuaName extends MenuBase {
         for (let i = 0; i < childCount; i++) {
             const child = children.get_Item(i);
             if (/^n[0-9]+$/g.test(child.name)) continue;
-            let type = LuaType2Type[ child._objectType ];
+            let type = LuaType2Type[child._objectType];
             if (child instanceof FairyEditor.FComponent) {
-                if (LuaType2Type[ child.extention?._type ])
-                    type = LuaType2Type[ child.extention?._type ];
+                if (LuaType2Type[child.extention?._type])
+                    type = LuaType2Type[child.extention?._type];
             }
             getStr += `\t\t\tself.${ type.ext }${ child.name } = self:GetChild("${ child.name }").${ type.asType }\n`;
         }

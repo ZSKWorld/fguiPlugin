@@ -1,8 +1,8 @@
 import { FairyEditor } from "csharp";
 import { EditorUtils } from "../utils/EditorUtils";
-import { MenuBase } from "./MenuBase";
+import { MenuBase_Lib } from "./MenuBase_Lib";
 
-export class Menu_Test extends MenuBase {
+export class MenuTest_Lib extends MenuBase_Lib {
     protected InitMenuData(): void {
         this.menuData = {
             text: "测试",

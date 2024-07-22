@@ -1,8 +1,8 @@
 import { FairyEditor, FairyGUI } from 'csharp';
 import { InspectorName, ViewID } from '../../common/Types';
-import { MenuBase } from '../MenuBase';
+import { MenuBase_Doc } from '../MenuBase_Doc';
 
-export class MenuDoc_CreateRelation extends MenuBase {
+export class MenuDoc_CreateRelation extends MenuBase_Doc {
     /** 关联对象 */
     private relationFirst: FairyEditor.FObject;
     /** 被关联对象 */
@@ -58,7 +58,7 @@ export class MenuDoc_CreateRelation extends MenuBase {
 
     private OnSelected(name: string) {
         if (this.relationFirst && this.relationSecond) {
-            this.relationFirst.relations.AddItem(this.relationSecond, FairyEditor.FRelationType[ name ]);
+            this.relationFirst.relations.AddItem(this.relationSecond, FairyEditor.FRelationType[name]);
             FairyEditor.App.inspectorView.GetInspector(InspectorName.Relation).UpdateUI();
             FairyEditor.App.activeDoc.SetModified(true);
         }

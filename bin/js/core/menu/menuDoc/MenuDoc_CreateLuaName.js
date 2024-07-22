@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuDoc_CreateLuaName = void 0;
 const csharp_1 = require("csharp");
-const MenuBase_1 = require("../MenuBase");
+const MenuBase_Doc_1 = require("../MenuBase_Doc");
 const LuaType2Type = {
     Button: { type: "FairyGUI.GButton", asType: "asButton", ext: "btn_" },
     text: { type: "FairyGUI.GTextField", asType: "asTextField", ext: "txt_" },
@@ -22,7 +22,7 @@ const LuaType2Type = {
     Controller: { type: "FairyGUI.Controller", asType: "", ext: "ctrl_" },
     Transition: { type: "FairyGUI.Transition", asType: "", ext: "trans_" },
 };
-class MenuDoc_CreateLuaName extends MenuBase_1.MenuBase {
+class MenuDoc_CreateLuaName extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
         this.menuData = {
             name: "MenuDoc_CreateLuaName",

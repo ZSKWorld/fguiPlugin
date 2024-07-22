@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Menu_Test = void 0;
+exports.MenuTest_Lib = void 0;
 const csharp_1 = require("csharp");
 const EditorUtils_1 = require("../utils/EditorUtils");
-const MenuBase_1 = require("./MenuBase");
-class Menu_Test extends MenuBase_1.MenuBase {
+const MenuBase_Lib_1 = require("./MenuBase_Lib");
+class MenuTest_Lib extends MenuBase_Lib_1.MenuBase_Lib {
     InitMenuData() {
         this.menuData = {
             text: "测试",
@@ -20,4 +20,4 @@ class Menu_Test extends MenuBase_1.MenuBase {
         csharp_1.FairyEditor.ProcessUtil.Start("python aaa.py", null, EditorUtils_1.EditorUtils.GetPluginRootDir(), true);
     }
 }
-exports.Menu_Test = Menu_Test;
+exports.MenuTest_Lib = MenuTest_Lib;

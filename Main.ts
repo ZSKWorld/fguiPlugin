@@ -1,13 +1,20 @@
 import { FairyEditor } from 'csharp';
-import { DestroyInstanceMethodName, PkgCustom } from './core/common/Const';
+import { DestroyInstanceMethodName, PkgCustom, PkgCustom_Btn, PkgCustom_Text } from './core/common/Const';
 import { CustomSetting } from './core/common/CustomSetting';
-import { MainMenuType } from './core/common/Types';
+import { InspectorName, ShowObjectType } from './core/common/Types';
 import { BaseInspector } from './core/inspectors/BaseInspector';
+import { BtnInspector } from './core/inspectors/BtnInspector';
+import { ComInspector } from './core/inspectors/ComInspector';
+import { InspectorData } from './core/inspectors/InspectorData';
+import { TextLayoutInspector } from './core/inspectors/TextLayoutInspector';
 import { BaseClass } from './core/libs/BaseClass';
 import { genCode_TS_XiaoYanDemo } from './core/libs/GenCode_TS_XiaoYanDemo';
-import { Menu_Test } from './core/menu/Menu_Test';
+import { MenuTest_Lib } from './core/menu/MenuTest_Lib';
+import { MenuDoc_CreateComponent } from './core/menu/menuDoc/MenuDoc_CreateComponent';
 import { MenuDoc_CreateLayaName } from './core/menu/menuDoc/MenuDoc_CreateLayaName';
 import { MenuDoc_CreateLuaName } from './core/menu/menuDoc/MenuDoc_CreateLuaName';
+import { MenuDoc_CreateRelation } from './core/menu/menuDoc/MenuDoc_CreateRelation';
+import { MenuLib_CreateController } from './core/menu/menuLib/MenuLib_CreateController';
 import { MenuMain_ImageReference } from './core/menu/menuMain/MenuMain_ImageReference';
 import { MenuMain_Publish } from './core/menu/menuMain/MenuMain_Publish';
 import { EditorUtils } from './core/utils/EditorUtils';
@@ -16,34 +23,26 @@ import { EditorUtils } from './core/utils/EditorUtils';
 FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils.GetPackagePath(PkgCustom));
 CustomSetting.Init();
 
-const docMenu = FairyEditor.App.docFactory.contextMenu;
-const libMenu = FairyEditor.App.libView.contextMenu;
-const mainMenu = FairyEditor.App.menu;
-const mainSubMenu = (name: MainMenuType) => mainMenu.GetSubMenu(name);
+//测试用例
+new MenuTest_Lib();
 
-[
-    //测试用例
-    new Menu_Test(libMenu),
+//编辑区菜单
+new MenuDoc_CreateComponent();
+new MenuDoc_CreateRelation();
+new MenuDoc_CreateLuaName();
+new MenuDoc_CreateLayaName();
 
-    //编辑区菜单
-    // new MenuDoc_CreateComponent(docMenu),
-    // new MenuDoc_CreateRelation(docMenu),
-    new MenuDoc_CreateLuaName(docMenu),
-    new MenuDoc_CreateLayaName(docMenu),
+//资源库菜单
+new MenuLib_CreateController();
 
-    //资源库菜单
-    // new MenuLib_CreateController(libMenu),
+//主菜单，注意：使用mainMenu做父菜单时，menuData.isSubMenu必须为true
+new MenuMain_Publish();
+new MenuMain_ImageReference();
 
-    //主菜单，注意：使用mainMenu做父菜单时，menuData.isSubMenu必须为true
-    new MenuMain_Publish(mainMenu),
-    new MenuMain_ImageReference(mainMenu),
-
-    //检查器
-    // new BtnInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_BtnInspector, "按钮自定义数据", ShowObjectType.Button, true)),
-    // new ComInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_ComInspector, "组件自定义数据", ShowObjectType.Component, true, true)),
-    // new TextLayoutInspector(new InspectorData(PkgCustom, PkgCustom_Text, "TextInspector", "文本横竖排", ShowObjectType.Mixed, true)),
-
-].forEach(v => v.Create());
+//检查器
+new BtnInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_BtnInspector, "按钮自定义数据", ShowObjectType.Button, true));
+new ComInspector(new InspectorData(PkgCustom, PkgCustom_Btn, InspectorName.Custom_ComInspector, "组件自定义数据", ShowObjectType.Component, true, true));
+new TextLayoutInspector(new InspectorData(PkgCustom, PkgCustom_Text, "TextInspector", "文本横竖排", ShowObjectType.Mixed, true));
 
 export function onPublishStart() {
     console.log("[color=#00ff00]on publish start[/color]");

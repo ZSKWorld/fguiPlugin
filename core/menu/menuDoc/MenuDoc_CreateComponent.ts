@@ -1,6 +1,6 @@
-import { MenuBase } from "../MenuBase";
+import { MenuBase_Doc } from "../MenuBase_Doc";
 
-export class MenuDoc_CreateComponent extends MenuBase {
+export class MenuDoc_CreateComponent extends MenuBase_Doc {
     protected InitMenuData(): void {
         const onSelected = (name: string) => this.OnSelected(name);
         this.menuData = {

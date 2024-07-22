@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.genCode_TS = void 0;
+exports.genCode_TS = genCode_TS;
 const csharp_1 = require("csharp");
 const CodeWriter_1 = require("./CodeWriter");
 function genCode_TS(handler) {
@@ -101,4 +101,3 @@ function genCode_TS(handler) {
     writer.endBlock(); //class
     writer.save(exportCodePath + '/' + binderName + '.ts');
 }
-exports.genCode_TS = genCode_TS;

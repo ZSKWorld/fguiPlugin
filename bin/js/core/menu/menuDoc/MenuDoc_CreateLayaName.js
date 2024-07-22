@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuDoc_CreateLayaName = void 0;
 const csharp_1 = require("csharp");
-const MenuBase_1 = require("../MenuBase");
+const MenuBase_Doc_1 = require("../MenuBase_Doc");
 const LayaType2Type = {
     Button: { type: "fairygui.GButton", asType: "asButton", ext: "btn_" },
     text: { type: "fairygui.GTextField", asType: "asTextField", ext: "txt_" },
@@ -22,7 +22,7 @@ const LayaType2Type = {
     Controller: { type: "fairygui.Controller", asType: "", ext: "ctrl_" },
     Transition: { type: "fairygui.Transition", asType: "", ext: "trans_" },
 };
-class MenuDoc_CreateLayaName extends MenuBase_1.MenuBase {
+class MenuDoc_CreateLayaName extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
         this.menuData = {
             name: "MenuDoc_CreateLayaName",

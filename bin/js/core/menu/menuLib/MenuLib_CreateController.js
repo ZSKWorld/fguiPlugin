@@ -5,9 +5,9 @@ const csharp_1 = require("csharp");
 const puerts_1 = require("puerts");
 const Tip_1 = require("../../common/Tip");
 const EditorUtils_1 = require("../../utils/EditorUtils");
-const MenuBase_1 = require("../MenuBase");
+const MenuBase_Lib_1 = require("../MenuBase_Lib");
 const List = (0, puerts_1.$generic)(csharp_1.System.Collections.Generic.List$1, csharp_1.FairyEditor.FPackageItem);
-class MenuLib_CreateController extends MenuBase_1.MenuBase {
+class MenuLib_CreateController extends MenuBase_Lib_1.MenuBase_Lib {
     InitMenuData() {
         this.menuData = {
             atIndex: 0,

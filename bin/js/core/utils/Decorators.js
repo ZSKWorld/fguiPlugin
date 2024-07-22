@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DestroyInstanceClass = exports.ViewChildInit = exports.ViewChild = void 0;
+exports.ViewChild = ViewChild;
+exports.ViewChildInit = ViewChildInit;
+exports.DestroyInstanceClass = DestroyInstanceClass;
 const Const_1 = require("../common/Const");
 /**
  * 查找子节点
@@ -15,7 +17,6 @@ function ViewChild(childName) {
         childMap[propertyKey] = childName;
     };
 }
-exports.ViewChild = ViewChild;
 function ViewChildInit(target) {
     if (target && target.__childMap) {
         const childMap = target.__childMap;
@@ -32,7 +33,6 @@ function ViewChildInit(target) {
         }
     }
 }
-exports.ViewChildInit = ViewChildInit;
 /**
  * 重写类构造，保存所有类实例，方便统一销毁
  * @param destroyFuncName 销毁时调用的方法名
@@ -55,4 +55,3 @@ function DestroyInstanceClass(destroyFuncName) {
         return NewClass;
     };
 }
-exports.DestroyInstanceClass = DestroyInstanceClass;

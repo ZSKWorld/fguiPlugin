@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.genCode_TS_XiaoYanDemo = void 0;
+exports.genCode_TS_XiaoYanDemo = genCode_TS_XiaoYanDemo;
 const csharp_1 = require("csharp");
 const CodeWriter_1 = require("./CodeWriter");
 const signArr = ["UI", "Com", "Btn", "Render"];
@@ -204,4 +204,3 @@ function genCode_TS_XiaoYanDemo(handler) {
     writer.endBlock(); //class
     writer.save(exportCodePath + '/' + binderName + '.ts');
 }
-exports.genCode_TS_XiaoYanDemo = genCode_TS_XiaoYanDemo;

@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuDoc_CreateRelation = void 0;
 const csharp_1 = require("csharp");
-const MenuBase_1 = require("../MenuBase");
-class MenuDoc_CreateRelation extends MenuBase_1.MenuBase {
+const MenuBase_Doc_1 = require("../MenuBase_Doc");
+class MenuDoc_CreateRelation extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
         this.menuData = {
             text: "关联",

@@ -1,8 +1,8 @@
 import { FairyEditor, System } from "csharp";
 import { ProgressView } from "../../common/ProgressView";
-import { MenuBase } from "../MenuBase";
+import { MenuBase_Main } from "../MenuBase_Main";
 
-export class MenuMain_ImageReference extends MenuBase {
+export class MenuMain_ImageReference extends MenuBase_Main {
     private _query: FairyEditor.DependencyQuery;
     protected InitMenuData(): void {
         this.menuData = {
@@ -20,7 +20,7 @@ export class MenuMain_ImageReference extends MenuBase {
     protected OnCreate(): void {
         this._query = new FairyEditor.DependencyQuery();
     }
-    
+
     protected OnDestroy(): void {
 
     }
@@ -54,7 +54,7 @@ export class MenuMain_ImageReference extends MenuBase {
         const intervalId = setInterval(() => {
             updateFinding();
             if (++index < count) {
-                const item = allPng[ index ];
+                const item = allPng[index];
                 query.QueryReferences(project, item.GetURL());
                 const references = [];
                 if (query.resultList.Count > 0) {
@@ -62,7 +62,7 @@ export class MenuMain_ImageReference extends MenuBase {
                         references.push(ref.item.file.replace(assetsPath + "\\", "").replace("\\", "/"));
                     });
                 }
-                data[ item.file.replace(assetsPath + "\\", "").replace("\\", "/") ] = references;
+                data[item.file.replace(assetsPath + "\\", "").replace("\\", "/")] = references;
                 ProgressView.Inst.RefreshProgress(index + 1, count);
             } else {
                 clearInterval(intervalId);

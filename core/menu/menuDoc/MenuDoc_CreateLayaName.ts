@@ -1,11 +1,11 @@
 import { FairyEditor } from "csharp";
-import { MenuBase } from "../MenuBase";
+import { MenuBase_Doc } from "../MenuBase_Doc";
 interface Type2Type {
     type: string;
     asType: string;
     ext: string;
 }
-const LayaType2Type: { [ key: string ]: Type2Type } = {
+const LayaType2Type: { [key: string]: Type2Type } = {
     Button: { type: "fairygui.GButton", asType: "asButton", ext: "btn_" },
     text: { type: "fairygui.GTextField", asType: "asTextField", ext: "txt_" },
     richtext: { type: "fairygui.GRichTextField", asType: "asRichTextField", ext: "rtxt_" },
@@ -25,7 +25,7 @@ const LayaType2Type: { [ key: string ]: Type2Type } = {
     Transition: { type: "fairygui.Transition", asType: "", ext: "trans_" },
 };
 
-export class MenuDoc_CreateLayaName extends MenuBase {
+export class MenuDoc_CreateLayaName extends MenuBase_Doc {
     protected InitMenuData(): void {
         this.menuData = {
             name: "MenuDoc_CreateLayaName",
@@ -49,10 +49,10 @@ export class MenuDoc_CreateLayaName extends MenuBase {
         for (let i = 0; i < childCount; i++) {
             const child = children.get_Item(i);
             if (/^n[0-9]+$/g.test(child.name)) continue;
-            let type = LayaType2Type[ child._objectType ];
+            let type = LayaType2Type[child._objectType];
             if (child instanceof FairyEditor.FComponent) {
-                if (LayaType2Type[ child.extention?._type ])
-                    type = LayaType2Type[ child.extention?._type ];
+                if (LayaType2Type[child.extention?._type])
+                    type = LayaType2Type[child.extention?._type];
             }
             defineStr += `\t\tpublic ${ type.ext }${ child.name }: ${ type.type };\n`;
             getStr += `\t\t\tthis.${ type.ext }${ child.name } = me.getChild("${ child.name }").${ type.asType };\n`;

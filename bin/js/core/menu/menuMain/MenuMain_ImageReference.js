@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuMain_ImageReference = void 0;
 const csharp_1 = require("csharp");
 const ProgressView_1 = require("../../common/ProgressView");
-const MenuBase_1 = require("../MenuBase");
-class MenuMain_ImageReference extends MenuBase_1.MenuBase {
+const MenuBase_Main_1 = require("../MenuBase_Main");
+class MenuMain_ImageReference extends MenuBase_Main_1.MenuBase_Main {
     InitMenuData() {
         this.menuData = {
             text: "查找图片引用",

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuDoc_CreateComponent = void 0;
-const MenuBase_1 = require("../MenuBase");
-class MenuDoc_CreateComponent extends MenuBase_1.MenuBase {
+const MenuBase_Doc_1 = require("../MenuBase_Doc");
+class MenuDoc_CreateComponent extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
         const onSelected = (name) => this.OnSelected(name);
         this.menuData = {
