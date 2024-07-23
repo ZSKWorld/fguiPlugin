@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.genCode_CSharp = genCode_CSharp;
-const csharp_1 = require("csharp");
 const CodeWriter_1 = require("./CodeWriter");
 function genCode_CSharp(handler) {
     let settings = handler.project.GetSettings("Publish").codeGeneration;
     let codePkgName = handler.ToFilename(handler.pkg.name); //convert chinese to pinyin, remove special chars etc.
     let exportCodePath = handler.exportCodePath + '/' + codePkgName;
     let namespaceName = codePkgName;
-    let isMonoGame = handler.project.type == csharp_1.FairyEditor.ProjectType.MonoGame;
+    let isMonoGame = handler.project.type == CS.FairyEditor.ProjectType.MonoGame;
     if (settings.packageName)
         namespaceName = settings.packageName + '.' + namespaceName;
     //CollectClasses(stripeMemeber, stripeClass, fguiNamespace)

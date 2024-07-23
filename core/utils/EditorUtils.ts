@@ -1,4 +1,3 @@
-import { FairyEditor, FairyGUI, System } from "csharp";
 import { ConfigType, IMenuData } from "../common/Types";
 export class EditorUtils {
     /**
@@ -6,12 +5,12 @@ export class EditorUtils {
      * @param data 菜单数据
      * @param parent 父菜单
      */
-    public static CreateMenu(data: IMenuData, parent: FairyEditor.Component.IMenu): void {
+    public static CreateMenu(data: IMenuData, parent: CS.FairyEditor.Component.IMenu): void {
         if (data.subMenuData && data.subMenuData.length) {
             const nameCheckArr = [];
             for (let i = data.subMenuData.length - 1; i >= 0; i--) {
                 const name = data.subMenuData[i].name;
-                if (nameCheckArr.indexOf(name) != -1) return FairyEditor.App.Alert("菜单目录有重名：" + name);
+                if (nameCheckArr.indexOf(name) != -1) return CS.FairyEditor.App.Alert("菜单目录有重名：" + name);
                 else nameCheckArr.push(name);
             }
         }
@@ -32,7 +31,7 @@ export class EditorUtils {
      * @returns
      */
     public static CreateControllerXML(name: string, pageNames?: (string | number)[], exported?: boolean) {
-        const xml = FairyGUI.Utils.XML.Create("");
+        const xml = CS.FairyGUI.Utils.XML.Create("");
         xml.SetAttribute("name", name);
         // xml.SetAttribute("alias","asdfas");  //备注名
         // xml.SetAttribute("autoRadioGroupDepth",true);    //自动调整单选组对象层次
@@ -54,15 +53,15 @@ export class EditorUtils {
      * @param url 组件URL
      */
     public static AddComponent(url: string): void {
-        if (!FairyEditor.App.activeDoc) return;
-        if (url.startsWith("ui://") == false) return FairyEditor.App.Alert(`错误的组件URL---${url}\nURL必须以 ui:// 开头`);
-        FairyEditor.App.activeDoc.UnselectAll();
-        FairyEditor.App.activeDoc.InsertObject(url);
+        if (!CS.FairyEditor.App.activeDoc) return;
+        if (url.startsWith("ui://") == false) return CS.FairyEditor.App.Alert(`错误的组件URL---${url}\nURL必须以 ui:// 开头`);
+        CS.FairyEditor.App.activeDoc.UnselectAll();
+        CS.FairyEditor.App.activeDoc.InsertObject(url);
     }
 
     /** 获取插件根目录 */
     public static GetPluginRootDir() {
-        return FairyEditor.App.pluginManager.projectPluginFolder + "/" + (eval("__dirname") as string).split("/")[0];
+        return CS.FairyEditor.App.pluginManager.projectPluginFolder + "/" + (eval("__dirname") as string).split("/")[0];
     }
 
     /**
@@ -83,9 +82,9 @@ export class EditorUtils {
     /**获取config目录下的配置数据 */
     public static GetConfig<T = any>(type: ConfigType, fileName: string): T {
         const cfgPath = this.GetConfigPath(type, fileName);
-        if (System.IO.File.Exists(cfgPath) == false)
+        if (CS.System.IO.File.Exists(cfgPath) == false)
             return console.warn("文件不存在" + cfgPath) as unknown as T;
-        const cfgJsonStr = System.IO.File.ReadAllText(cfgPath);
+        const cfgJsonStr = CS.System.IO.File.ReadAllText(cfgPath);
         if (!cfgJsonStr)
             return console.warn("文件内容为空" + cfgPath) as unknown as T;
         try {
@@ -97,13 +96,13 @@ export class EditorUtils {
 
     }
 
-    public static GetFields(obj:System.Object) {
+    public static GetFields(obj:CS.System.Object) {
         if (!obj) return null;
         return obj.GetType().GetFields(
-            System.Reflection.BindingFlags.Public
-            | System.Reflection.BindingFlags.Instance
-            | System.Reflection.BindingFlags.Static
-            | System.Reflection.BindingFlags.NonPublic
+            CS.System.Reflection.BindingFlags.Public
+            | CS.System.Reflection.BindingFlags.Instance
+            | CS.System.Reflection.BindingFlags.Static
+            | CS.System.Reflection.BindingFlags.NonPublic
         );
     }
 }

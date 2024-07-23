@@ -1,4 +1,3 @@
-import { System } from "csharp";
 import { EditorUtils } from "../utils/EditorUtils";
 import { ConfigType } from "./Types";
 
@@ -16,6 +15,6 @@ export class CustomSetting {
     public static Save() {
         const obj = {};
         Object.keys(CustomSetting).forEach(key => obj[key] = CustomSetting[key]);
-        System.IO.File.WriteAllText(EditorUtils.GetConfigPath(ConfigType.None, this.SettingName), JSON.stringify(obj));
+        CS.System.IO.File.WriteAllText(EditorUtils.GetConfigPath(ConfigType.None, this.SettingName), JSON.stringify(obj));
     }
 }

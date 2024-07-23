@@ -1,13 +1,12 @@
-import { FairyEditor } from 'csharp';
 import CodeWriter from './CodeWriter';
 
-export function genCode_TS(handler: FairyEditor.PublishHandler) {
-    let settings = (<FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;
+export function genCode_TS(handler: CS.FairyEditor.PublishHandler) {
+    let settings = (<CS.FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;
     let codePkgName = handler.ToFilename(handler.pkg.name); //convert chinese to pinyin, remove special chars etc.
     let exportCodePath = handler.exportCodePath + '/' + codePkgName;
     let namespaceName = codePkgName;
     let ns = "fgui";
-    let isThree = handler.project.type == FairyEditor.ProjectType.ThreeJS;
+    let isThree = handler.project.type == CS.FairyEditor.ProjectType.ThreeJS;
 
     if (settings.packageName)
         namespaceName = settings.packageName + '.' + namespaceName;

@@ -7,23 +7,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseInspector = void 0;
-const csharp_1 = require("csharp");
 const Decorators_1 = require("../utils/Decorators");
-let BaseInspector = class BaseInspector extends csharp_1.FairyEditor.View.PluginInspector {
+let BaseInspector = class BaseInspector extends CS.FairyEditor.View.PluginInspector {
     constructor(info) {
         super();
         this.info = info;
-        this.panel = csharp_1.FairyGUI.UIPackage.CreateObject(info.PkgName, info.ComponentName).asCom;
+        this.panel = CS.FairyGUI.UIPackage.CreateObject(info.PkgName, info.ComponentName).asCom;
         (0, Decorators_1.ViewChildInit)(this);
         this.updateAction = () => this.OnUpdate();
         this.disposeAction = () => this.OnDestroy();
     }
     Create() {
         const { InspectorName, InspectorTitle, ForObjectType, ShowInSelection, ShowInComponent, ShowInTransition } = this.info;
-        csharp_1.FairyEditor.App.inspectorView.AddInspector(() => this, InspectorName, InspectorTitle);
-        ShowInSelection && csharp_1.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, false, false);
-        ShowInComponent && csharp_1.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, true, false);
-        ShowInTransition && csharp_1.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, false, true);
+        CS.FairyEditor.App.inspectorView.AddInspector(() => this, InspectorName, InspectorTitle);
+        ShowInSelection && CS.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, false, false);
+        ShowInComponent && CS.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, true, false);
+        ShowInTransition && CS.FairyEditor.App.docFactory.ConnectInspector(InspectorName, ForObjectType, false, true);
         this.OnCreate();
     }
 };

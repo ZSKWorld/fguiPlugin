@@ -1,19 +1,18 @@
-import { FairyEditor, FairyGUI } from 'csharp';
 import { InspectorName, ViewID } from '../../common/Types';
 import { MenuBase_Doc } from '../MenuBase_Doc';
 
 export class MenuDoc_CreateRelation extends MenuBase_Doc {
     /** 关联对象 */
-    private relationFirst: FairyEditor.FObject;
+    private relationFirst: CS.FairyEditor.FObject;
     /** 被关联对象 */
-    private relationSecond: FairyEditor.FObject;
-    private rightClickCallback: FairyGUI.EventCallback0;
+    private relationSecond: CS.FairyEditor.FObject;
+    private rightClickCallback: CS.FairyGUI.EventCallback0;
 
     protected InitMenuData(): void {
         const menuData = this.menuData;
         menuData.text = "关联";
         menuData.isSubMenu = true;
-        menuData.subMenuData = Object.keys(FairyEditor.FRelationType).slice(0, 25).map(v => ({
+        menuData.subMenuData = Object.keys(CS.FairyEditor.FRelationType).slice(0, 25).map(v => ({
             name: v,
             text: this.GetRelationText(v),
             onSelected: (name: string) => this.OnSelected(name)
@@ -21,14 +20,14 @@ export class MenuDoc_CreateRelation extends MenuBase_Doc {
     }
 
     protected OnCreate(): void {
-        this.rightClickCallback = new FairyGUI.EventCallback0(() => this.OnRightClick());
-        FairyEditor.App.docView.docContainer.onRightClick.Add(this.rightClickCallback);
-        FairyEditor.App.viewManager.GetView(ViewID.HierarchyView).onRightClick.Add(this.rightClickCallback);
+        this.rightClickCallback = new CS.FairyGUI.EventCallback0(() => this.OnRightClick());
+        CS.FairyEditor.App.docView.docContainer.onRightClick.Add(this.rightClickCallback);
+        CS.FairyEditor.App.viewManager.GetView(ViewID.HierarchyView).onRightClick.Add(this.rightClickCallback);
     }
 
     protected OnDestroy(): void {
-        FairyEditor.App.docView.docContainer.onRightClick.Remove(this.rightClickCallback);
-        FairyEditor.App.viewManager.GetView(ViewID.HierarchyView).onRightClick.Remove(this.rightClickCallback);
+        CS.FairyEditor.App.docView.docContainer.onRightClick.Remove(this.rightClickCallback);
+        CS.FairyEditor.App.viewManager.GetView(ViewID.HierarchyView).onRightClick.Remove(this.rightClickCallback);
         this.relationFirst = null;
         this.relationSecond = null;
         this.rightClickCallback = null;
@@ -56,14 +55,14 @@ export class MenuDoc_CreateRelation extends MenuBase_Doc {
 
     private OnSelected(name: string) {
         if (this.relationFirst && this.relationSecond) {
-            this.relationFirst.relations.AddItem(this.relationSecond, FairyEditor.FRelationType[name]);
-            FairyEditor.App.inspectorView.GetInspector(InspectorName.Relation).UpdateUI();
-            FairyEditor.App.activeDoc.SetModified(true);
+            this.relationFirst.relations.AddItem(this.relationSecond, CS.FairyEditor.FRelationType[name]);
+            CS.FairyEditor.App.inspectorView.GetInspector(InspectorName.Relation).UpdateUI();
+            CS.FairyEditor.App.activeDoc.SetModified(true);
         }
     }
 
     private OnRightClick() {
-        let targets = FairyEditor.App.activeDoc.GetSelection();
+        let targets = CS.FairyEditor.App.activeDoc.GetSelection();
         this.relationFirst = null;
         this.relationSecond = null;
         let count: number = targets.Count;
@@ -72,7 +71,7 @@ export class MenuDoc_CreateRelation extends MenuBase_Doc {
             text = "无关联对象";
         } else if (count == 1) {
             this.relationFirst = targets.get_Item(0);
-            this.relationSecond = FairyEditor.App.activeDoc.content;
+            this.relationSecond = CS.FairyEditor.App.activeDoc.content;
             text = `${ this.relationFirst.name } 关联 容器`;
         } else {
             this.relationFirst = targets.get_Item(0);

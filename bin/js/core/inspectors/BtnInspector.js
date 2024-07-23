@@ -7,11 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BtnInspector = void 0;
-const csharp_1 = require("csharp");
 const Tip_1 = require("../common/Tip");
 const Decorators_1 = require("../utils/Decorators");
 const BaseInspector_1 = require("./BaseInspector");
-const App = csharp_1.FairyEditor.App;
+const App = CS.FairyEditor.App;
 class BtnInspector extends BaseInspector_1.BaseInspector {
     OnCreate() {
         this.panel.GetController("c1").selectedIndex = 0;

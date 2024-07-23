@@ -1,9 +1,8 @@
-import { FairyEditor, System } from "csharp";
 import { ProgressView } from "../../common/ProgressView";
 import { MenuBase_Main } from "../MenuBase_Main";
 
 export class MenuMain_ImageReference extends MenuBase_Main {
-    private _query: FairyEditor.DependencyQuery;
+    private _query: CS.FairyEditor.DependencyQuery;
     protected InitMenuData(): void {
         const menuData = this.menuData;
         menuData.text = "查找图片引用";
@@ -17,7 +16,7 @@ export class MenuMain_ImageReference extends MenuBase_Main {
     }
 
     protected OnCreate(): void {
-        this._query = new FairyEditor.DependencyQuery();
+        this._query = new CS.FairyEditor.DependencyQuery();
     }
 
     protected OnDestroy(): void {
@@ -25,11 +24,11 @@ export class MenuMain_ImageReference extends MenuBase_Main {
     }
 
     private OnSelected() {
-        const project = FairyEditor.App.project;
-        const allPng: FairyEditor.FPackageItem[] = [];
+        const project = CS.FairyEditor.App.project;
+        const allPng: CS.FairyEditor.FPackageItem[] = [];
         project.allPackages.ForEach(pkg => {
             pkg.items.ForEach(item => {
-                if (item.type == FairyEditor.FPackageItemType.IMAGE) {
+                if (item.type == CS.FairyEditor.FPackageItemType.IMAGE) {
                     allPng.push(item);
                 }
             });
@@ -45,7 +44,7 @@ export class MenuMain_ImageReference extends MenuBase_Main {
             }
         };
         const query = this._query;
-        const assetsPath = FairyEditor.App.project.assetsPath;
+        const assetsPath = CS.FairyEditor.App.project.assetsPath;
         const data = {};
         const count = allPng.length;
         let index = -1;
@@ -66,10 +65,10 @@ export class MenuMain_ImageReference extends MenuBase_Main {
             } else {
                 clearInterval(intervalId);
                 ProgressView.Inst.RefreshProgress(count, count);
-                const targetPath = FairyEditor.App.project.basePath + "\\image_references.json";
+                const targetPath = CS.FairyEditor.App.project.basePath + "\\image_references.json";
                 let tip = `查找完毕！用时:[color=#00ff00]${ Date.now() - startTime }ms[/color]\n引用文件已保存至：${ targetPath }`;
                 ProgressView.Inst.SetTip(tip);
-                System.IO.File.WriteAllText(targetPath, JSON.stringify(data, null, "\t"));
+                CS.System.IO.File.WriteAllText(targetPath, JSON.stringify(data, null, "\t"));
             }
         }, 1);
         ProgressView.Inst.Show(() => {

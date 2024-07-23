@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tip = void 0;
-const csharp_1 = require("csharp");
 const BaseClass_1 = require("../libs/BaseClass");
 const Const_1 = require("./Const");
 /** 弹窗提示 */
@@ -50,12 +49,12 @@ class Tip extends BaseClass_1.BaseClass {
     }
     InitComp() {
         if (!this.label) {
-            this.label = csharp_1.FairyGUI.UIPackage.CreateObject(Const_1.PkgCustom, Const_1.PkgCustom_Tip).asLabel;
-            const main = csharp_1.FairyEditor.App.mainView.panel;
+            this.label = CS.FairyGUI.UIPackage.CreateObject(Const_1.PkgCustom, Const_1.PkgCustom_Tip).asLabel;
+            const main = CS.FairyEditor.App.mainView.panel;
             main.AddChildAt(this.label, 5);
             this.label.touchable = false;
             this.label.SetXY(main.width / 2, -28);
-            this.label.AddRelation(main, csharp_1.FairyGUI.RelationType.Center_Center);
+            this.label.AddRelation(main, CS.FairyGUI.RelationType.Center_Center);
         }
     }
 }

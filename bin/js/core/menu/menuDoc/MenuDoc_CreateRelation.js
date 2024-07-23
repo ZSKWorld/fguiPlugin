@@ -1,27 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuDoc_CreateRelation = void 0;
-const csharp_1 = require("csharp");
 const MenuBase_Doc_1 = require("../MenuBase_Doc");
 class MenuDoc_CreateRelation extends MenuBase_Doc_1.MenuBase_Doc {
     InitMenuData() {
         const menuData = this.menuData;
         menuData.text = "关联";
         menuData.isSubMenu = true;
-        menuData.subMenuData = Object.keys(csharp_1.FairyEditor.FRelationType).slice(0, 25).map(v => ({
+        menuData.subMenuData = Object.keys(CS.FairyEditor.FRelationType).slice(0, 25).map(v => ({
             name: v,
             text: this.GetRelationText(v),
             onSelected: (name) => this.OnSelected(name)
         }));
     }
     OnCreate() {
-        this.rightClickCallback = new csharp_1.FairyGUI.EventCallback0(() => this.OnRightClick());
-        csharp_1.FairyEditor.App.docView.docContainer.onRightClick.Add(this.rightClickCallback);
-        csharp_1.FairyEditor.App.viewManager.GetView("fairygui.HierarchyView" /* ViewID.HierarchyView */).onRightClick.Add(this.rightClickCallback);
+        this.rightClickCallback = new CS.FairyGUI.EventCallback0(() => this.OnRightClick());
+        CS.FairyEditor.App.docView.docContainer.onRightClick.Add(this.rightClickCallback);
+        CS.FairyEditor.App.viewManager.GetView("fairygui.HierarchyView" /* ViewID.HierarchyView */).onRightClick.Add(this.rightClickCallback);
     }
     OnDestroy() {
-        csharp_1.FairyEditor.App.docView.docContainer.onRightClick.Remove(this.rightClickCallback);
-        csharp_1.FairyEditor.App.viewManager.GetView("fairygui.HierarchyView" /* ViewID.HierarchyView */).onRightClick.Remove(this.rightClickCallback);
+        CS.FairyEditor.App.docView.docContainer.onRightClick.Remove(this.rightClickCallback);
+        CS.FairyEditor.App.viewManager.GetView("fairygui.HierarchyView" /* ViewID.HierarchyView */).onRightClick.Remove(this.rightClickCallback);
         this.relationFirst = null;
         this.relationSecond = null;
         this.rightClickCallback = null;
@@ -47,13 +46,13 @@ class MenuDoc_CreateRelation extends MenuBase_Doc_1.MenuBase_Doc {
     }
     OnSelected(name) {
         if (this.relationFirst && this.relationSecond) {
-            this.relationFirst.relations.AddItem(this.relationSecond, csharp_1.FairyEditor.FRelationType[name]);
-            csharp_1.FairyEditor.App.inspectorView.GetInspector("relation" /* InspectorName.Relation */).UpdateUI();
-            csharp_1.FairyEditor.App.activeDoc.SetModified(true);
+            this.relationFirst.relations.AddItem(this.relationSecond, CS.FairyEditor.FRelationType[name]);
+            CS.FairyEditor.App.inspectorView.GetInspector("relation" /* InspectorName.Relation */).UpdateUI();
+            CS.FairyEditor.App.activeDoc.SetModified(true);
         }
     }
     OnRightClick() {
-        let targets = csharp_1.FairyEditor.App.activeDoc.GetSelection();
+        let targets = CS.FairyEditor.App.activeDoc.GetSelection();
         this.relationFirst = null;
         this.relationSecond = null;
         let count = targets.Count;
@@ -63,7 +62,7 @@ class MenuDoc_CreateRelation extends MenuBase_Doc_1.MenuBase_Doc {
         }
         else if (count == 1) {
             this.relationFirst = targets.get_Item(0);
-            this.relationSecond = csharp_1.FairyEditor.App.activeDoc.content;
+            this.relationSecond = CS.FairyEditor.App.activeDoc.content;
             text = `${this.relationFirst.name} 关联 容器`;
         }
         else {

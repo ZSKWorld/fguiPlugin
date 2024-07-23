@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.genCode_TS = genCode_TS;
-const csharp_1 = require("csharp");
 const CodeWriter_1 = require("./CodeWriter");
 function genCode_TS(handler) {
     let settings = handler.project.GetSettings("Publish").codeGeneration;
@@ -9,7 +8,7 @@ function genCode_TS(handler) {
     let exportCodePath = handler.exportCodePath + '/' + codePkgName;
     let namespaceName = codePkgName;
     let ns = "fgui";
-    let isThree = handler.project.type == csharp_1.FairyEditor.ProjectType.ThreeJS;
+    let isThree = handler.project.type == CS.FairyEditor.ProjectType.ThreeJS;
     if (settings.packageName)
         namespaceName = settings.packageName + '.' + namespaceName;
     //CollectClasses(stripeMemeber, stripeClass, fguiNamespace)

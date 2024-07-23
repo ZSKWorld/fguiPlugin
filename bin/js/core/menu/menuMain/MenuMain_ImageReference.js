@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuMain_ImageReference = void 0;
-const csharp_1 = require("csharp");
 const ProgressView_1 = require("../../common/ProgressView");
 const MenuBase_Main_1 = require("../MenuBase_Main");
 class MenuMain_ImageReference extends MenuBase_Main_1.MenuBase_Main {
@@ -17,16 +16,16 @@ class MenuMain_ImageReference extends MenuBase_Main_1.MenuBase_Main {
         ];
     }
     OnCreate() {
-        this._query = new csharp_1.FairyEditor.DependencyQuery();
+        this._query = new CS.FairyEditor.DependencyQuery();
     }
     OnDestroy() {
     }
     OnSelected() {
-        const project = csharp_1.FairyEditor.App.project;
+        const project = CS.FairyEditor.App.project;
         const allPng = [];
         project.allPackages.ForEach(pkg => {
             pkg.items.ForEach(item => {
-                if (item.type == csharp_1.FairyEditor.FPackageItemType.IMAGE) {
+                if (item.type == CS.FairyEditor.FPackageItemType.IMAGE) {
                     allPng.push(item);
                 }
             });
@@ -42,7 +41,7 @@ class MenuMain_ImageReference extends MenuBase_Main_1.MenuBase_Main {
             }
         };
         const query = this._query;
-        const assetsPath = csharp_1.FairyEditor.App.project.assetsPath;
+        const assetsPath = CS.FairyEditor.App.project.assetsPath;
         const data = {};
         const count = allPng.length;
         let index = -1;
@@ -64,10 +63,10 @@ class MenuMain_ImageReference extends MenuBase_Main_1.MenuBase_Main {
             else {
                 clearInterval(intervalId);
                 ProgressView_1.ProgressView.Inst.RefreshProgress(count, count);
-                const targetPath = csharp_1.FairyEditor.App.project.basePath + "\\image_references.json";
+                const targetPath = CS.FairyEditor.App.project.basePath + "\\image_references.json";
                 let tip = `查找完毕！用时:[color=#00ff00]${Date.now() - startTime}ms[/color]\n引用文件已保存至：${targetPath}`;
                 ProgressView_1.ProgressView.Inst.SetTip(tip);
-                csharp_1.System.IO.File.WriteAllText(targetPath, JSON.stringify(data, null, "\t"));
+                CS.System.IO.File.WriteAllText(targetPath, JSON.stringify(data, null, "\t"));
             }
         }, 1);
         ProgressView_1.ProgressView.Inst.Show(() => {

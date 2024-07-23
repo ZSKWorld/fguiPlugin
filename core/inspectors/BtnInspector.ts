@@ -1,23 +1,22 @@
-import { FairyEditor, FairyGUI } from "csharp";
 import { Tip } from "../common/Tip";
 import { IComponentCustomData, InspectorName } from "../common/Types";
 import { ViewChild } from "../utils/Decorators";
 import { BaseInspector } from "./BaseInspector";
-const App = FairyEditor.App;
+const App = CS.FairyEditor.App;
 
 export class BtnInspector extends BaseInspector {
     @ViewChild("BtnFunc")
-    private btnFunc: FairyGUI.GButton;
+    private btnFunc: CS.FairyGUI.GButton;
     @ViewChild("InputFunc")
-    private inputFunc: FairyGUI.GLabel;
+    private inputFunc: CS.FairyGUI.GLabel;
     @ViewChild("BtnTip")
-    private btnTip: FairyGUI.GButton;
+    private btnTip: CS.FairyGUI.GButton;
     @ViewChild("InputTip")
-    private inputTip: FairyGUI.GLabel;
+    private inputTip: CS.FairyGUI.GLabel;
     @ViewChild("BtnHoldPress")
-    private btnHoldPress: FairyGUI.GButton;
+    private btnHoldPress: CS.FairyGUI.GButton;
     @ViewChild("InputHoldPress")
-    private inputHoldPress: FairyGUI.GLabel;
+    private inputHoldPress: CS.FairyGUI.GLabel;
 
     /**自定义的json数据 */
     private customJsonData: IComponentCustomData;
@@ -47,7 +46,7 @@ export class BtnInspector extends BaseInspector {
         this.inputHoldPress = null;
     }
 
-    private OnBtnFuncClick(context: FairyGUI.EventContext) {
+    private OnBtnFuncClick(context: CS.FairyGUI.EventContext) {
         if (this.inputFunc.title) {
             let funcId = Number(this.inputFunc.title);
             if (isNaN(funcId)) return Tip.Inst.Show("必须纯数字");
@@ -60,7 +59,7 @@ export class BtnInspector extends BaseInspector {
         this.SetCustomData();
     }
 
-    private OnBtnTipClick(context: FairyGUI.EventContext) {
+    private OnBtnTipClick(context: CS.FairyGUI.EventContext) {
         if (this.inputTip.title) {
             this.customJsonData = this.customJsonData || {};
             this.customJsonData.tipType = this.inputTip.title;
@@ -71,7 +70,7 @@ export class BtnInspector extends BaseInspector {
         this.SetCustomData();
     }
 
-    private OnBtnHoldPressClick(context: FairyGUI.EventContext) {
+    private OnBtnHoldPressClick(context: CS.FairyGUI.EventContext) {
         let text = Number(this.inputHoldPress.title)
         if (text) {
             this.customJsonData = this.customJsonData || {};

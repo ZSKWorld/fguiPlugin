@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProgressView = void 0;
-const csharp_1 = require("csharp");
 const BaseClass_1 = require("../libs/BaseClass");
 const Const_1 = require("./Const");
 class ProgressView extends BaseClass_1.BaseClass {
@@ -18,7 +17,7 @@ class ProgressView extends BaseClass_1.BaseClass {
         this._btnSubmit.visible = false;
         this._btnCancel.visible = !!onCancel;
         this.RefreshProgress(0, 1);
-        csharp_1.FairyEditor.App.mainView.panel.AddChild(this._panel);
+        CS.FairyEditor.App.mainView.panel.AddChild(this._panel);
     }
     SetTip(tip) {
         this._txtTip.text = tip;
@@ -49,10 +48,10 @@ class ProgressView extends BaseClass_1.BaseClass {
     }
     InitComp() {
         if (!this._panel) {
-            this._panel = csharp_1.FairyGUI.UIPackage.CreateObject(Const_1.PkgCustom, Const_1.PkgCustom_Progress).asCom;
-            const main = csharp_1.FairyEditor.App.mainView.panel;
+            this._panel = CS.FairyGUI.UIPackage.CreateObject(Const_1.PkgCustom, Const_1.PkgCustom_Progress).asCom;
+            const main = CS.FairyEditor.App.mainView.panel;
             this._panel.SetSize(main.width, main.height);
-            this._panel.AddRelation(main, csharp_1.FairyGUI.RelationType.Size);
+            this._panel.AddRelation(main, CS.FairyGUI.RelationType.Size);
             this._progress = this._panel.GetChild("progress").asProgress;
             this._btnSubmit = this._panel.GetChild("submit").asButton;
             this._btnCancel = this._panel.GetChild("cancel").asButton;

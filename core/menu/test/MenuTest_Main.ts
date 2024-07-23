@@ -1,4 +1,3 @@
-import { FairyEditor, FairyGUI } from "csharp";
 import { MenuBase_Main } from "../MenuBase_Main";
 import { EditorUtils } from "../../utils/EditorUtils";
 

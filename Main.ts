@@ -1,4 +1,3 @@
-import { FairyEditor, System } from 'csharp';
 import { DestroyInstanceMethodName, PkgCustom, PkgCustom_Btn, PkgCustom_Text } from './core/common/Const';
 import { CustomSetting } from './core/common/CustomSetting';
 import { InspectorName, ShowObjectType } from './core/common/Types';
@@ -24,7 +23,7 @@ import { MenuBase_Doc } from './core/menu/MenuBase_Doc';
 import { MenuBase_Lib } from './core/menu/MenuBase_Lib';
 
 /** 加载插件UI包 */
-FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils.GetPackagePath(PkgCustom));
+CS.FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils.GetPackagePath(PkgCustom));
 CustomSetting.Init();
 [
     //编辑区菜单
@@ -54,19 +53,19 @@ CustomSetting.Init();
 MenuBase_Doc.AddSeperator();
 MenuBase_Lib.AddSeperator();
 
-export function onPublishStart(pkgs: System.Array$1<FairyEditor.FPackage>) {
+export function onPublishStart(pkgs: CS.System.Array$1<CS.FairyEditor.FPackage>) {
     console.log("[color=#00ff00]on publish start[/color]", pkgs.Length);
 }
 
 //自定义发布代码
-export function onPublish(handler: FairyEditor.PublishHandler) {
+export function onPublish(handler: CS.FairyEditor.PublishHandler) {
     if (!handler.genCode) return;
     console.log("[color=#ffff00]on publish code[/color] => [u][b]" + handler.pkg.name + "[/b][/u]");
     handler.genCode = false; //prevent default output
     genCode_TS_XiaoYanDemo(handler); //do it myself
 }
 
-export function onPublishEnd(pkgs: System.Array$1<FairyEditor.FPackage>) {
+export function onPublishEnd(pkgs: CS.System.Array$1<CS.FairyEditor.FPackage>) {
     console.log("[color=#00ff00]on publish end[/color]", pkgs.Length);
 }
 

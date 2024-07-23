@@ -1,14 +1,13 @@
-import { FairyEditor, FairyGUI } from "csharp";
 import { InspectorName, ShowObjectType } from "../common/Types";
 import { ViewChild } from "../utils/Decorators";
 import {BaseInspector} from "./BaseInspector";
-const { App, FRelationType } = FairyEditor;
+const { App, FRelationType } = CS.FairyEditor;
 
 export class TextLayoutInspector extends BaseInspector {
     @ViewChild("TextArea")
-    private textArea: FairyGUI.GLabel;
+    private textArea: CS.FairyGUI.GLabel;
     @ViewChild("BtnSubmit")
-    private btnSubmit: FairyGUI.GButton;
+    private btnSubmit: CS.FairyGUI.GButton;
 
     protected OnCreate(): void {
         this.btnSubmit.onClick.Add(() => this.OnBtnSubmitClick());

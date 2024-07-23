@@ -1,4 +1,3 @@
-import { FairyEditor } from "csharp";
 import { MenuBase_Doc } from "../MenuBase_Doc";
 interface Type2Type {
     type: string;
@@ -37,7 +36,7 @@ export class MenuDoc_CreateLayaName extends MenuBase_Doc {
     protected OnDestroy(): void { }
 
     private OnSelected() {
-        const { children, controllers, transitions } = FairyEditor.App.activeDoc.content;
+        const { children, controllers, transitions } = CS.FairyEditor.App.activeDoc.content;
         const childCount = children.Count;
         const ctrlCount = controllers.Count;
         const transCount = transitions.items.Count;
@@ -47,7 +46,7 @@ export class MenuDoc_CreateLayaName extends MenuBase_Doc {
             const child = children.get_Item(i);
             if (/^n[0-9]+$/g.test(child.name)) continue;
             let type = LayaType2Type[child._objectType];
-            if (child instanceof FairyEditor.FComponent) {
+            if (child instanceof CS.FairyEditor.FComponent) {
                 if (LayaType2Type[child.extention?._type])
                     type = LayaType2Type[child.extention?._type];
             }
@@ -72,7 +71,7 @@ export class MenuDoc_CreateLayaName extends MenuBase_Doc {
         if (getStr) {
             defineStr = "\t\t//#region 节点\n" + defineStr + "\t\t//#endregion\n";
             getStr = "\t\t\t//#region 节点获取\n\t\t\tconst me = this.me;\n" + getStr + "\t\t\t//#endregion\n";
-            FairyEditor.Clipboard.SetText(defineStr + getStr);
+            CS.FairyEditor.Clipboard.SetText(defineStr + getStr);
         }
     }
 }

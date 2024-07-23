@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EditorUtils = void 0;
-const csharp_1 = require("csharp");
 class EditorUtils {
     /**
      * @description: 创建菜单目录
@@ -15,7 +14,7 @@ class EditorUtils {
             for (let i = data.subMenuData.length - 1; i >= 0; i--) {
                 const name = data.subMenuData[i].name;
                 if (nameCheckArr.indexOf(name) != -1)
-                    return csharp_1.FairyEditor.App.Alert("菜单目录有重名：" + name);
+                    return CS.FairyEditor.App.Alert("菜单目录有重名：" + name);
                 else
                     nameCheckArr.push(name);
             }
@@ -38,7 +37,7 @@ class EditorUtils {
      * @returns
      */
     static CreateControllerXML(name, pageNames, exported) {
-        const xml = csharp_1.FairyGUI.Utils.XML.Create("");
+        const xml = CS.FairyGUI.Utils.XML.Create("");
         xml.SetAttribute("name", name);
         // xml.SetAttribute("alias","asdfas");  //备注名
         // xml.SetAttribute("autoRadioGroupDepth",true);    //自动调整单选组对象层次
@@ -59,16 +58,16 @@ class EditorUtils {
      * @param url 组件URL
      */
     static AddComponent(url) {
-        if (!csharp_1.FairyEditor.App.activeDoc)
+        if (!CS.FairyEditor.App.activeDoc)
             return;
         if (url.startsWith("ui://") == false)
-            return csharp_1.FairyEditor.App.Alert(`错误的组件URL---${url}\nURL必须以 ui:// 开头`);
-        csharp_1.FairyEditor.App.activeDoc.UnselectAll();
-        csharp_1.FairyEditor.App.activeDoc.InsertObject(url);
+            return CS.FairyEditor.App.Alert(`错误的组件URL---${url}\nURL必须以 ui:// 开头`);
+        CS.FairyEditor.App.activeDoc.UnselectAll();
+        CS.FairyEditor.App.activeDoc.InsertObject(url);
     }
     /** 获取插件根目录 */
     static GetPluginRootDir() {
-        return csharp_1.FairyEditor.App.pluginManager.projectPluginFolder + "/" + eval("__dirname").split("/")[0];
+        return CS.FairyEditor.App.pluginManager.projectPluginFolder + "/" + eval("__dirname").split("/")[0];
     }
     /**
      * 获取包地址
@@ -85,9 +84,9 @@ class EditorUtils {
     /**获取config目录下的配置数据 */
     static GetConfig(type, fileName) {
         const cfgPath = this.GetConfigPath(type, fileName);
-        if (csharp_1.System.IO.File.Exists(cfgPath) == false)
+        if (CS.System.IO.File.Exists(cfgPath) == false)
             return console.warn("文件不存在" + cfgPath);
-        const cfgJsonStr = csharp_1.System.IO.File.ReadAllText(cfgPath);
+        const cfgJsonStr = CS.System.IO.File.ReadAllText(cfgPath);
         if (!cfgJsonStr)
             return console.warn("文件内容为空" + cfgPath);
         try {
@@ -100,10 +99,10 @@ class EditorUtils {
     static GetFields(obj) {
         if (!obj)
             return null;
-        return obj.GetType().GetFields(csharp_1.System.Reflection.BindingFlags.Public
-            | csharp_1.System.Reflection.BindingFlags.Instance
-            | csharp_1.System.Reflection.BindingFlags.Static
-            | csharp_1.System.Reflection.BindingFlags.NonPublic);
+        return obj.GetType().GetFields(CS.System.Reflection.BindingFlags.Public
+            | CS.System.Reflection.BindingFlags.Instance
+            | CS.System.Reflection.BindingFlags.Static
+            | CS.System.Reflection.BindingFlags.NonPublic);
     }
 }
 exports.EditorUtils = EditorUtils;

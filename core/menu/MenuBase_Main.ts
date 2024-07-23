@@ -1,4 +1,3 @@
-import { FairyEditor } from "csharp";
 import { MainMenuType } from "../common/Types";
 import { MenuBase } from "./MenuBase";
 
@@ -9,11 +8,11 @@ import { MenuBase } from "./MenuBase";
 export abstract class MenuBase_Main extends MenuBase {
     
     constructor() {
-        super(FairyEditor.App.menu);
+        super(CS.FairyEditor.App.menu);
         this.menuData.isSubMenu = true;
     }
 
     protected mainSubMenu(name: MainMenuType) {
-        return FairyEditor.App.menu.GetSubMenu(name);
+        return CS.FairyEditor.App.menu.GetSubMenu(name);
     }
 }

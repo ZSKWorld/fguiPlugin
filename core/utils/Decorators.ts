@@ -1,4 +1,3 @@
-import { FairyEditor } from "csharp";
 import { DestroyInstanceMethodName } from "../common/Const";
 
 /**
@@ -7,14 +6,14 @@ import { DestroyInstanceMethodName } from "../common/Const";
  */
 export function ViewChild(childName: string) {
     if (!childName) return;
-    return function (target: FairyEditor.View.PluginInspector & { __childMap?: any }, propertyKey: string) {
+    return function (target: CS.FairyEditor.View.PluginInspector & { __childMap?: any }, propertyKey: string) {
         target.__childMap ||= {};
         let childMap = target.__childMap;
         childMap[ propertyKey ] = childName;
     }
 }
 
-export function ViewChildInit(target: FairyEditor.View.PluginInspector & { __childMap?: any }) {
+export function ViewChildInit(target: CS.FairyEditor.View.PluginInspector & { __childMap?: any }) {
     if (target && target.__childMap) {
         const childMap = target.__childMap;
         for (const key in childMap) {

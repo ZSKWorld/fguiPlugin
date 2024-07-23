@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuMain_Publish = void 0;
-const csharp_1 = require("csharp");
 const CustomSetting_1 = require("../../common/CustomSetting");
 const Tip_1 = require("../../common/Tip");
 const EditorUtils_1 = require("../../utils/EditorUtils");
@@ -13,7 +12,7 @@ class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
             this.platformKeys = Object.keys(this.platformCfg).filter(v => !!this.platformCfg[v].enable && this.platformCfg[v].configFiles.length > 0);
             this.InitSettings();
             const menuData = this.menuData;
-            menuData.text = `当前发布到 [color=#ff0000]${csharp_1.FairyEditor.App.project.type}[/color]`;
+            menuData.text = `当前发布到 [color=#ff0000]${CS.FairyEditor.App.project.type}[/color]`;
             menuData.subMenuData = this.platformKeys.map(key => {
                 const configFiles = this.platformCfg[key].configFiles;
                 const isSubMenu = configFiles.length > 1;
@@ -34,10 +33,10 @@ class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
         }
     }
     OnCreate() {
-        const list = csharp_1.FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
+        const list = CS.FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
         this.menuBtn = list.GetChildAt(list.numChildren - 1).asButton;
         this.menuBtn.GetChild('title').asTextField.UBBEnabled = true;
-        this.selectedPlatform = csharp_1.FairyEditor.App.project.type;
+        this.selectedPlatform = CS.FairyEditor.App.project.type;
         this.selectedIndex = 0;
         if (this.settingsMap[this.selectedPlatform]) {
             let cfgIndex = CustomSetting_1.CustomSetting.PublishSelectedCfgIndex;
@@ -61,7 +60,7 @@ class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
                 !setting && (errStr += `${key} 平台 ${cfgFileName} 配置错误\n`);
             });
         });
-        errStr && csharp_1.FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在或配置数据是否正确！！！");
+        errStr && CS.FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在或配置数据是否正确！！！");
     }
     CopySetting(target, source) {
         //C#只读字段，不能更改
@@ -94,7 +93,7 @@ class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
             else {
                 this.RefreshMenuChecked();
                 const cfgName = this.platformCfg[platform].configFiles[cfgIndex];
-                csharp_1.FairyEditor.App.Alert(`${platform} 平台 ${cfgName} 配置错误\n请检查该配置文件是否存在或配置数据是否正确！！！`);
+                CS.FairyEditor.App.Alert(`${platform} 平台 ${cfgName} 配置错误\n请检查该配置文件是否存在或配置数据是否正确！！！`);
             }
         }
     }
@@ -102,20 +101,20 @@ class MenuMain_Publish extends MenuBase_Main_1.MenuBase_Main {
     RefreshPublishPlatform(showTip = true) {
         const newSetting = this.settingsMap[this.selectedPlatform][this.selectedIndex];
         //设置全局设置并保存
-        const globalSetting = csharp_1.FairyEditor.App.project.GetSettings("Publish" /* SettingName.Publish */);
+        const globalSetting = CS.FairyEditor.App.project.GetSettings("Publish" /* SettingName.Publish */);
         this.CopySetting(globalSetting, newSetting);
         globalSetting.Save();
         //设置项目类型并保存
-        csharp_1.FairyEditor.App.project.type = this.selectedPlatform;
-        csharp_1.FairyEditor.App.project.Save();
+        CS.FairyEditor.App.project.type = this.selectedPlatform;
+        CS.FairyEditor.App.project.Save();
         //设置选择索引并保存
         CustomSetting_1.CustomSetting.PublishSelectedCfgIndex = this.selectedIndex;
         CustomSetting_1.CustomSetting.Save();
         //刷新package包发布设置。包设置居然是一开始就设置好的，不是发布时候才使用全局进行配置的，所以要刷新一下
         //没找到刷新包设置的API，只有Open才能刷新，Open刷新的时候编辑区会闪一下，问题不大
-        csharp_1.FairyEditor.App.project.allPackages.ForEach(v => v.Open());
+        CS.FairyEditor.App.project.allPackages.ForEach(v => v.Open());
         this.RefreshMenuChecked();
-        let cfgStr = `[color=#ff0000]${csharp_1.FairyEditor.App.project.type}[/color]`;
+        let cfgStr = `[color=#ff0000]${CS.FairyEditor.App.project.type}[/color]`;
         const platformCfg = this.platformCfg[this.selectedPlatform];
         if (platformCfg.configFiles.length > 1)
             cfgStr += ` [color=#0000ff]${platformCfg.configFiles[this.selectedIndex]}[/color]`;

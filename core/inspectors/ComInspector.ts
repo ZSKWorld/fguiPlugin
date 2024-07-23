@@ -1,19 +1,18 @@
-import { FairyEditor, FairyGUI } from "csharp";
 import { IComponentCustomData, InspectorName } from "../common/Types";
 import { ViewChild } from "../utils/Decorators";
 import {BaseInspector} from "./BaseInspector";
-const App = FairyEditor.App;
+const App = CS.FairyEditor.App;
 
 export class ComInspector extends BaseInspector {
 
     @ViewChild("BtnEffectAdd")
-    private btnEffectAdd: FairyGUI.GButton;
+    private btnEffectAdd: CS.FairyGUI.GButton;
     @ViewChild("BtnEffectRemove")
-    private btnEffectRemove: FairyGUI.GButton;
+    private btnEffectRemove: CS.FairyGUI.GButton;
     @ViewChild("InputEffectKey")
-    private inputEffectKey: FairyGUI.GLabel;
+    private inputEffectKey: CS.FairyGUI.GLabel;
     @ViewChild("InputEffectValue")
-    private inputEffectValue: FairyGUI.GLabel;
+    private inputEffectValue: CS.FairyGUI.GLabel;
     /**自定义的json数据 */
     private customJsonData: IComponentCustomData;
 
@@ -50,7 +49,7 @@ export class ComInspector extends BaseInspector {
         this.inputEffectValue = null;
     }
 
-    private OnBtnEffectAddClick(context: FairyGUI.EventContext) {
+    private OnBtnEffectAddClick(context: CS.FairyGUI.EventContext) {
         let key = this.inputEffectKey.title.trim();
         let value = this.inputEffectValue.title.trim();
         if (!key || !value) return;
@@ -59,7 +58,7 @@ export class ComInspector extends BaseInspector {
         this.customJsonData.effect[ key ] = value;
         this.SetCustomData();
     }
-    private OnBtnEffectRemoveClick(context: FairyGUI.EventContext) {
+    private OnBtnEffectRemoveClick(context: CS.FairyGUI.EventContext) {
         if (!this.customJsonData.effect) return;
         let key = this.inputEffectKey.title.trim();
         delete this.customJsonData.effect[ key ];

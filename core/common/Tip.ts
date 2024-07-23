@@ -1,4 +1,3 @@
-import { FairyEditor, FairyGUI } from "csharp";
 import { BaseClass } from "../libs/BaseClass";
 import { PkgCustom, PkgCustom_Tip } from "./Const";
 /** 弹窗提示 */
@@ -7,7 +6,7 @@ export class Tip extends BaseClass {
     public static get Inst() { return this._inst || (this._inst = new Tip()); }
     private readonly targetY = 20;
     private readonly duration: number = 150;
-    private label: FairyGUI.GLabel;
+    private label: CS.FairyGUI.GLabel;
     private intervalId: number;
     private startTime: number;
     private stayTime: number;
@@ -58,14 +57,14 @@ export class Tip extends BaseClass {
 
     private InitComp() {
         if (!this.label) {
-            this.label = FairyGUI.UIPackage.CreateObject(PkgCustom, PkgCustom_Tip).asLabel;
+            this.label = CS.FairyGUI.UIPackage.CreateObject(PkgCustom, PkgCustom_Tip).asLabel;
 
-            const main = FairyEditor.App.mainView.panel;
+            const main = CS.FairyEditor.App.mainView.panel;
             main.AddChildAt(this.label, 5);
 
             this.label.touchable = false;
             this.label.SetXY(main.width / 2, -28);
-            this.label.AddRelation(main, FairyGUI.RelationType.Center_Center);
+            this.label.AddRelation(main, CS.FairyGUI.RelationType.Center_Center);
         }
     }
 

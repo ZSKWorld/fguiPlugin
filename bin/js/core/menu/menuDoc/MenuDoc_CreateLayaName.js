@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuDoc_CreateLayaName = void 0;
-const csharp_1 = require("csharp");
 const MenuBase_Doc_1 = require("../MenuBase_Doc");
 const LayaType2Type = {
     Button: { type: "fairygui.GButton", asType: "asButton", ext: "btn_" },
@@ -32,7 +31,7 @@ class MenuDoc_CreateLayaName extends MenuBase_Doc_1.MenuBase_Doc {
     OnDestroy() { }
     OnSelected() {
         var _a, _b;
-        const { children, controllers, transitions } = csharp_1.FairyEditor.App.activeDoc.content;
+        const { children, controllers, transitions } = CS.FairyEditor.App.activeDoc.content;
         const childCount = children.Count;
         const ctrlCount = controllers.Count;
         const transCount = transitions.items.Count;
@@ -43,7 +42,7 @@ class MenuDoc_CreateLayaName extends MenuBase_Doc_1.MenuBase_Doc {
             if (/^n[0-9]+$/g.test(child.name))
                 continue;
             let type = LayaType2Type[child._objectType];
-            if (child instanceof csharp_1.FairyEditor.FComponent) {
+            if (child instanceof CS.FairyEditor.FComponent) {
                 if (LayaType2Type[(_a = child.extention) === null || _a === void 0 ? void 0 : _a._type])
                     type = LayaType2Type[(_b = child.extention) === null || _b === void 0 ? void 0 : _b._type];
             }
@@ -67,7 +66,7 @@ class MenuDoc_CreateLayaName extends MenuBase_Doc_1.MenuBase_Doc {
         if (getStr) {
             defineStr = "\t\t//#region 节点\n" + defineStr + "\t\t//#endregion\n";
             getStr = "\t\t\t//#region 节点获取\n\t\t\tconst me = this.me;\n" + getStr + "\t\t\t//#endregion\n";
-            csharp_1.FairyEditor.Clipboard.SetText(defineStr + getStr);
+            CS.FairyEditor.Clipboard.SetText(defineStr + getStr);
         }
     }
 }

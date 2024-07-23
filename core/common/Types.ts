@@ -1,5 +1,3 @@
-import { System } from "csharp";
-
 /** 菜单项创建数据 */
 export interface IMenuData {
     /**菜单名 */
@@ -15,7 +13,7 @@ export interface IMenuData {
     /** 子菜单数据 */
     subMenuData?: IMenuData[];
     /** 点击回调 */
-    onSelected?: System.Action$1<string>;
+    onSelected?: CS.System.Action$1<string>;
 };
 
 /** 自定义数据类型 */

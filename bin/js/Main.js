@@ -4,7 +4,6 @@ exports.onPublishStart = onPublishStart;
 exports.onPublish = onPublish;
 exports.onPublishEnd = onPublishEnd;
 exports.onDestroy = onDestroy;
-const csharp_1 = require("csharp");
 const Const_1 = require("./core/common/Const");
 const CustomSetting_1 = require("./core/common/CustomSetting");
 const BaseInspector_1 = require("./core/inspectors/BaseInspector");
@@ -28,7 +27,7 @@ const EditorUtils_1 = require("./core/utils/EditorUtils");
 const MenuBase_Doc_1 = require("./core/menu/MenuBase_Doc");
 const MenuBase_Lib_1 = require("./core/menu/MenuBase_Lib");
 /** 加载插件UI包 */
-csharp_1.FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils_1.EditorUtils.GetPackagePath(Const_1.PkgCustom));
+CS.FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils_1.EditorUtils.GetPackagePath(Const_1.PkgCustom));
 CustomSetting_1.CustomSetting.Init();
 [
     //编辑区菜单

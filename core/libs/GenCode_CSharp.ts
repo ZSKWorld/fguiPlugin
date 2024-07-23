@@ -1,12 +1,11 @@
-import { FairyEditor } from 'csharp';
 import CodeWriter from './CodeWriter';
 
-export function genCode_CSharp(handler: FairyEditor.PublishHandler) {
-    let settings = (<FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;
+export function genCode_CSharp(handler: CS.FairyEditor.PublishHandler) {
+    let settings = (<CS.FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;
     let codePkgName = handler.ToFilename(handler.pkg.name); //convert chinese to pinyin, remove special chars etc.
     let exportCodePath = handler.exportCodePath + '/' + codePkgName;
     let namespaceName = codePkgName;
-    let isMonoGame = handler.project.type == FairyEditor.ProjectType.MonoGame;
+    let isMonoGame = handler.project.type == CS.FairyEditor.ProjectType.MonoGame;
 
     if (settings.packageName)
         namespaceName = settings.packageName + '.' + namespaceName;

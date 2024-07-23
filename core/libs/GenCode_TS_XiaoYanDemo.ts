@@ -1,10 +1,9 @@
-import { FairyEditor, System } from 'csharp';
 import CodeWriter from './CodeWriter';
 
-const signArr = [ "UI", "Com", "Btn", "Render" ];
-const viewDirs = [ "", "coms/", "btns/", "renders/" ];
+const signArr = ["UI", "Com", "Btn", "Render"];
+const viewDirs = ["", "coms/", "btns/", "renders/"];
 
-function setMemberTypeName(info: FairyEditor.PublishHandler.MemberInfo, clsInfo: FairyEditor.PublishHandler.ClassInfo) {
+function setMemberTypeName(info: CS.FairyEditor.PublishHandler.MemberInfo, clsInfo: CS.FairyEditor.PublishHandler.ClassInfo) {
     if (!info.res) return;
     const resName = info.res.name;
     const viewIndex = signArr.findIndex(v => resName.startsWith(v));
@@ -17,7 +16,7 @@ function setMemberTypeName(info: FairyEditor.PublishHandler.MemberInfo, clsInfo:
                 break;
             }
         }
-        const ref = `/../view/${ info.res.owner.name }/view/${ viewDirs[ viewIndex ] }${ info.type }`;
+        const ref = `/../view/${ info.res.owner.name }/view/${ viewDirs[viewIndex] }${ info.type }`;
         if (infoRefIndex >= 0) clsInfo.references.set_Item(infoRefIndex, ref);
         else clsInfo.references.Contains(ref) == false && clsInfo.references.Add(ref);
         return true;
@@ -27,7 +26,7 @@ function setMemberTypeName(info: FairyEditor.PublishHandler.MemberInfo, clsInfo:
 
 /** 加入不同包的资源引入路径 */
 function CollectClasses(
-    handler: FairyEditor.PublishHandler,
+    handler: CS.FairyEditor.PublishHandler,
     stripMember: boolean,
     ns: string,
 ) {
@@ -85,7 +84,7 @@ function CollectClasses(
     return classes;
 }
 
-function genReferenceExt(writer: CodeWriter, references: System.Collections.Generic.List$1<string>) {
+function genReferenceExt(writer: CodeWriter, references: CS.System.Collections.Generic.List$1<string>) {
     let refCount = references.Count;
     if (refCount > 0) {
         for (let j: number = 0; j < refCount; j++) {
@@ -93,9 +92,9 @@ function genReferenceExt(writer: CodeWriter, references: System.Collections.Gene
             if (ref.startsWith("/")) {
                 let tempArr = ref.split("/");
                 if (ref.startsWith("//")) {
-                    writer.writeln('import %s from "..%s";', tempArr[ tempArr.length - 1 ], ref.substring(1));
+                    writer.writeln('import %s from "..%s";', tempArr[tempArr.length - 1], ref.substring(1));
                 } else {
-                    writer.writeln('import { %s } from "..%s";', tempArr[ tempArr.length - 1 ], ref);
+                    writer.writeln('import { %s } from "..%s";', tempArr[tempArr.length - 1], ref);
                 }
             }
             else writer.writeln('import %s from "./%s";', ref, ref);
@@ -104,13 +103,13 @@ function genReferenceExt(writer: CodeWriter, references: System.Collections.Gene
     }
 }
 
-export function genCode_TS_XiaoYanDemo(handler: FairyEditor.PublishHandler) {
-    let settings = (<FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;
+export function genCode_TS_XiaoYanDemo(handler: CS.FairyEditor.PublishHandler) {
+    let settings = (<CS.FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;
     let codePkgName = handler.ToFilename(handler.pkg.name); //convert chinese to pinyin, remove special chars etc.
     let exportCodePath = handler.exportCodePath + '/' + codePkgName;
     let namespaceName = codePkgName;
     let ns = "fgui";
-    let isThree = handler.project.type == FairyEditor.ProjectType.ThreeJS;
+    let isThree = handler.project.type == CS.FairyEditor.ProjectType.ThreeJS;
 
     if (settings.packageName)
         namespaceName = settings.packageName + '.' + namespaceName;
@@ -197,7 +196,7 @@ export function genCode_TS_XiaoYanDemo(handler: FairyEditor.PublishHandler) {
         writer.writeln('import %s from "./%s";', classInfo.className, classInfo.className);
         const viewIndex = signArr.findIndex(v => classInfo.className.startsWith(v));
         if (viewIndex >= 0)
-            writer.writeln('import { %sView } from "../../view/%s/view/%s%sView";', classInfo.className, classInfo.res.owner.name, viewDirs[ viewIndex ], classInfo.className);
+            writer.writeln('import { %sView } from "../../view/%s/view/%s%sView";', classInfo.className, classInfo.res.owner.name, viewDirs[viewIndex], classInfo.className);
         // import { ComZhiZuoView } from "../../view/PkgMain/view/coms/ComZhiZuoView";
         // const ref = `/../view/${ info.res.owner.name }/view/${ viewDirs[ viewIndex ] }${ info.type }`;
     }

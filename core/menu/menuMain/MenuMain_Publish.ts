@@ -1,4 +1,3 @@
-import { FairyEditor, FairyGUI } from "csharp";
 import { CustomSetting } from "../../common/CustomSetting";
 import { Tip } from "../../common/Tip";
 import { ConfigType, SettingName } from "../../common/Types";
@@ -10,12 +9,12 @@ type PlatformConfig = { [key: string]: { enable: boolean, configFiles: string[] 
 
 export class MenuMain_Publish extends MenuBase_Main {
     /** 主菜单按钮 */
-    private menuBtn: FairyGUI.GButton;
+    private menuBtn: CS.FairyGUI.GButton;
     private platformKeys: string[];
     /** 平台配置文件 */
     private platformCfg: PlatformConfig;
     /** 平台发布设置 */
-    private settingsMap: { [key: string]: Partial<FairyEditor.GlobalPublishSettings>[] };
+    private settingsMap: { [key: string]: Partial<CS.FairyEditor.GlobalPublishSettings>[] };
     /** 选中的平台 */
     private selectedPlatform: string;
     private selectedIndex: number;
@@ -27,7 +26,7 @@ export class MenuMain_Publish extends MenuBase_Main {
                 !!this.platformCfg[v].enable && this.platformCfg[v].configFiles.length > 0);
             this.InitSettings();
             const menuData = this.menuData;
-            menuData.text = `当前发布到 [color=#ff0000]${ FairyEditor.App.project.type }[/color]`;
+            menuData.text = `当前发布到 [color=#ff0000]${ CS.FairyEditor.App.project.type }[/color]`;
             menuData.subMenuData = this.platformKeys.map(key => {
                 const configFiles = this.platformCfg[key].configFiles;
                 const isSubMenu = configFiles.length > 1;
@@ -49,10 +48,10 @@ export class MenuMain_Publish extends MenuBase_Main {
     }
 
     protected OnCreate(): void {
-        const list = FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
+        const list = CS.FairyEditor.App.mainView.panel.GetChild('menuBar').asCom.GetChild('list').asList;
         this.menuBtn = list.GetChildAt(list.numChildren - 1).asButton;
         this.menuBtn.GetChild('title').asTextField.UBBEnabled = true;
-        this.selectedPlatform = FairyEditor.App.project.type;
+        this.selectedPlatform = CS.FairyEditor.App.project.type;
         this.selectedIndex = 0;
 
         if (this.settingsMap[this.selectedPlatform]) {
@@ -78,7 +77,7 @@ export class MenuMain_Publish extends MenuBase_Main {
                 !setting && (errStr += `${ key } 平台 ${ cfgFileName } 配置错误\n`);
             });
         });
-        errStr && FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在或配置数据是否正确！！！");
+        errStr && CS.FairyEditor.App.Alert(errStr + "请检查上述配置文件是否存在或配置数据是否正确！！！");
     }
 
     private CopySetting(target: any, source: any) {
@@ -108,7 +107,7 @@ export class MenuMain_Publish extends MenuBase_Main {
             } else {
                 this.RefreshMenuChecked();
                 const cfgName = this.platformCfg[platform].configFiles[cfgIndex];
-                FairyEditor.App.Alert(`${ platform } 平台 ${ cfgName } 配置错误\n请检查该配置文件是否存在或配置数据是否正确！！！`);
+                CS.FairyEditor.App.Alert(`${ platform } 平台 ${ cfgName } 配置错误\n请检查该配置文件是否存在或配置数据是否正确！！！`);
             }
         }
     }
@@ -118,13 +117,13 @@ export class MenuMain_Publish extends MenuBase_Main {
         const newSetting = this.settingsMap[this.selectedPlatform][this.selectedIndex];
 
         //设置全局设置并保存
-        const globalSetting = FairyEditor.App.project.GetSettings(SettingName.Publish) as FairyEditor.GlobalPublishSettings;
+        const globalSetting = CS.FairyEditor.App.project.GetSettings(SettingName.Publish) as CS.FairyEditor.GlobalPublishSettings;
         this.CopySetting(globalSetting, newSetting);
         globalSetting.Save();
 
         //设置项目类型并保存
-        FairyEditor.App.project.type = this.selectedPlatform;
-        FairyEditor.App.project.Save();
+        CS.FairyEditor.App.project.type = this.selectedPlatform;
+        CS.FairyEditor.App.project.Save();
 
         //设置选择索引并保存
         CustomSetting.PublishSelectedCfgIndex = this.selectedIndex;
@@ -132,10 +131,10 @@ export class MenuMain_Publish extends MenuBase_Main {
 
         //刷新package包发布设置。包设置居然是一开始就设置好的，不是发布时候才使用全局进行配置的，所以要刷新一下
         //没找到刷新包设置的API，只有Open才能刷新，Open刷新的时候编辑区会闪一下，问题不大
-        FairyEditor.App.project.allPackages.ForEach(v => v.Open());
+        CS.FairyEditor.App.project.allPackages.ForEach(v => v.Open());
         this.RefreshMenuChecked();
 
-        let cfgStr = `[color=#ff0000]${ FairyEditor.App.project.type }[/color]`;
+        let cfgStr = `[color=#ff0000]${ CS.FairyEditor.App.project.type }[/color]`;
         const platformCfg = this.platformCfg[this.selectedPlatform];
         if (platformCfg.configFiles.length > 1)
             cfgStr += ` [color=#0000ff]${ platformCfg.configFiles[this.selectedIndex] }[/color]`;

@@ -7,10 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextLayoutInspector = void 0;
-const csharp_1 = require("csharp");
 const Decorators_1 = require("../utils/Decorators");
 const BaseInspector_1 = require("./BaseInspector");
-const { App, FRelationType } = csharp_1.FairyEditor;
+const { App, FRelationType } = CS.FairyEditor;
 class TextLayoutInspector extends BaseInspector_1.BaseInspector {
     OnCreate() {
         this.btnSubmit.onClick.Add(() => this.OnBtnSubmitClick());

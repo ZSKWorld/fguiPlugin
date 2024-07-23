@@ -1,16 +1,15 @@
-import { FairyEditor, FairyGUI } from "csharp";
 import { BaseClass } from "../libs/BaseClass";
 import { PkgCustom, PkgCustom_Progress } from "./Const";
 
 export class ProgressView extends BaseClass {
     private static _inst: ProgressView;
     public static get Inst() { return this._inst || (this._inst = new ProgressView()); }
-    private _panel: FairyGUI.GComponent;
-    private _progress: FairyGUI.GProgressBar;
-    private _btnSubmit: FairyGUI.GButton;
-    private _btnCancel: FairyGUI.GButton;
-    private _txtPro: FairyGUI.GTextField;
-    private _txtTip: FairyGUI.GTextField;
+    private _panel: CS.FairyGUI.GComponent;
+    private _progress: CS.FairyGUI.GProgressBar;
+    private _btnSubmit: CS.FairyGUI.GButton;
+    private _btnCancel: CS.FairyGUI.GButton;
+    private _txtPro: CS.FairyGUI.GTextField;
+    private _txtTip: CS.FairyGUI.GTextField;
     private _onCancel: Function;
 
     private constructor() {
@@ -26,7 +25,7 @@ export class ProgressView extends BaseClass {
         this._btnSubmit.visible = false;
         this._btnCancel.visible = !!onCancel;
         this.RefreshProgress(0, 1);
-        FairyEditor.App.mainView.panel.AddChild(this._panel);
+        CS.FairyEditor.App.mainView.panel.AddChild(this._panel);
     }
 
     SetTip(tip: string) {
@@ -62,12 +61,12 @@ export class ProgressView extends BaseClass {
 
     private InitComp() {
         if (!this._panel) {
-            this._panel = FairyGUI.UIPackage.CreateObject(PkgCustom, PkgCustom_Progress).asCom;
+            this._panel = CS.FairyGUI.UIPackage.CreateObject(PkgCustom, PkgCustom_Progress).asCom;
 
-            const main = FairyEditor.App.mainView.panel;
+            const main = CS.FairyEditor.App.mainView.panel;
 
             this._panel.SetSize(main.width, main.height);
-            this._panel.AddRelation(main, FairyGUI.RelationType.Size);
+            this._panel.AddRelation(main, CS.FairyGUI.RelationType.Size);
 
             this._progress = this._panel.GetChild("progress").asProgress;
             this._btnSubmit = this._panel.GetChild("submit").asButton;
