@@ -463,6 +463,7 @@ declare namespace CS {
         }
         class ArraySegment$1<T> extends System.ValueType implements System.Collections.Generic.IReadOnlyList$1<T>, System.Collections.Generic.IEnumerable$1<T>, System.Collections.IEnumerable, System.Collections.Generic.IList$1<T>, System.Collections.Generic.IReadOnlyCollection$1<T>, System.Collections.Generic.ICollection$1<T> {
             protected [__keep_incompatibility]: never;
+            public get Count(): number;
             public get_Item($index: number): T
             public set_Item($index: number, $value: T): void
             public IndexOf($item: T): number
@@ -484,6 +485,7 @@ declare namespace CS {
     }
     namespace System.Collections.Generic {
         interface IList$1<T> extends System.Collections.Generic.IEnumerable$1<T>, System.Collections.IEnumerable, System.Collections.Generic.ICollection$1<T> {
+            get Count(): number;
             get_Item($index: number): T
             set_Item($index: number, $value: T): void
             IndexOf($item: T): number
@@ -648,6 +650,7 @@ declare namespace CS {
     namespace System.Collections.ObjectModel {
         class ReadOnlyCollection$1<T> extends System.Object implements System.Collections.Generic.IReadOnlyList$1<T>, System.Collections.ICollection, System.Collections.Generic.IEnumerable$1<T>, System.Collections.IEnumerable, System.Collections.Generic.IList$1<T>, System.Collections.Generic.IReadOnlyCollection$1<T>, System.Collections.IList, System.Collections.Generic.ICollection$1<T> {
             protected [__keep_incompatibility]: never;
+            public get Count(): number;
             public get_Item($index: number): T
             public set_Item($index: number, $value: T): void
             public IndexOf($item: T): number
