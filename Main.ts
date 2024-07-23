@@ -1,4 +1,4 @@
-import { FairyEditor } from 'csharp';
+import { FairyEditor, System } from 'csharp';
 import { DestroyInstanceMethodName, PkgCustom, PkgCustom_Btn, PkgCustom_Text } from './core/common/Const';
 import { CustomSetting } from './core/common/CustomSetting';
 import { InspectorName, ShowObjectType } from './core/common/Types';
@@ -54,8 +54,8 @@ CustomSetting.Init();
 MenuBase_Doc.AddSeperator();
 MenuBase_Lib.AddSeperator();
 
-export function onPublishStart() {
-    console.log("[color=#00ff00]on publish start[/color]");
+export function onPublishStart(pkgs: System.Array$1<FairyEditor.FPackage>) {
+    console.log("[color=#00ff00]on publish start[/color]", pkgs.Length);
 }
 
 //自定义发布代码
@@ -66,8 +66,8 @@ export function onPublish(handler: FairyEditor.PublishHandler) {
     genCode_TS_XiaoYanDemo(handler); //do it myself
 }
 
-export function onPublishEnd() {
-    console.log("[color=#00ff00]on publish end[/color]");
+export function onPublishEnd(pkgs: System.Array$1<FairyEditor.FPackage>) {
+    console.log("[color=#00ff00]on publish end[/color]", pkgs.Length);
 }
 
 export function onDestroy() {

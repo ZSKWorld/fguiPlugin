@@ -52,8 +52,8 @@ CustomSetting_1.CustomSetting.Init();
 ].forEach(v => v.Create());
 MenuBase_Doc_1.MenuBase_Doc.AddSeperator();
 MenuBase_Lib_1.MenuBase_Lib.AddSeperator();
-function onPublishStart() {
-    console.log("[color=#00ff00]on publish start[/color]");
+function onPublishStart(pkgs) {
+    console.log("[color=#00ff00]on publish start[/color]", pkgs.Length);
 }
 //自定义发布代码
 function onPublish(handler) {
@@ -63,8 +63,8 @@ function onPublish(handler) {
     handler.genCode = false; //prevent default output
     (0, GenCode_TS_XiaoYanDemo_1.genCode_TS_XiaoYanDemo)(handler); //do it myself
 }
-function onPublishEnd() {
-    console.log("[color=#00ff00]on publish end[/color]");
+function onPublishEnd(pkgs) {
+    console.log("[color=#00ff00]on publish end[/color]", pkgs.Length);
 }
 function onDestroy() {
     BaseClass_1.BaseClass[Const_1.DestroyInstanceMethodName]();
