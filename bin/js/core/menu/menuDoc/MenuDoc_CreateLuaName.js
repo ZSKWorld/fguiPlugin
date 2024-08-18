@@ -3,21 +3,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuDoc_CreateLuaName = void 0;
 const MenuBase_Doc_1 = require("../MenuBase_Doc");
 const LuaType2Type = {
+    component: { type: "FairyGUI.GComponent", asType: "asCom", ext: "com_" },
     Button: { type: "FairyGUI.GButton", asType: "asButton", ext: "btn_" },
+    ComboBox: { type: "FairyGUI.GComboBox", asType: "asComboBox", ext: "cmb_" },
+    Label: { type: "FairyGUI.GLabel", asType: "asLabel", ext: "label_" },
+    ProgressBar: { type: "FairyGUI.GProgressBar", asType: "asProgress", ext: "pb_" },
+    ScrollBar: { type: "FairyGUI.GScrollBar", asType: "", ext: "sb_" },
+    Slider: { type: "FairyGUI.GSlider", asType: "asSlider", ext: "slider_" },
     text: { type: "FairyGUI.GTextField", asType: "asTextField", ext: "txt_" },
     richtext: { type: "FairyGUI.GRichTextField", asType: "asRichTextField", ext: "rtxt_" },
     inputtext: { type: "FairyGUI.GTextInput", asType: "asTextInput", ext: "itxt_" },
     graph: { type: "FairyGUI.GGraph", asType: "asGraph", ext: "graph_" },
     list: { type: "FairyGUI.GList", asType: "asList", ext: "list_" },
     loader: { type: "FairyGUI.GLoader", asType: "asLoader", ext: "loader_" },
-    loader3D: { type: "FairyGUI.GLoader3D", asType: "", ext: "loader3d_" },
-    Slider: { type: "FairyGUI.GSlider", asType: "asSlider", ext: "slider_" },
-    component: { type: "FairyGUI.GComponent", asType: "asCom", ext: "com_" },
-    image: { type: "FairyGUI.GImage", asType: "asImage", ext: "img_" },
     group: { type: "FairyGUI.GGroup", asType: "asGroup", ext: "group_" },
-    ComboBox: { type: "FairyGUI.GComboBox", asType: "asComboBox", ext: "cmb_" },
-    ProgressBar: { type: "FairyGUI.GProgressBar", asType: "asProgress", ext: "pb_" },
-    ScrollBar: { type: "FairyGUI.GScrollBar", asType: "", ext: "sb_" },
+    loader3D: { type: "FairyGUI.GLoader3D", asType: "", ext: "loader3d_" },
+    image: { type: "FairyGUI.GImage", asType: "asImage", ext: "img_" },
     Controller: { type: "FairyGUI.Controller", asType: "", ext: "ctrl_" },
     Transition: { type: "FairyGUI.Transition", asType: "", ext: "trans_" },
 };
@@ -40,7 +41,7 @@ class MenuDoc_CreateLuaName extends MenuBase_Doc_1.MenuBase_Doc {
             const child = children.get_Item(i);
             if (/^n[0-9]+$/g.test(child.name))
                 continue;
-            let type = LuaType2Type[child._objectType];
+            let type = LuaType2Type[child.objectType];
             if (child instanceof CS.FairyEditor.FComponent) {
                 if (LuaType2Type[(_a = child.extention) === null || _a === void 0 ? void 0 : _a._type])
                     type = LuaType2Type[(_b = child.extention) === null || _b === void 0 ? void 0 : _b._type];

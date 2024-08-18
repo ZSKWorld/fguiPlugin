@@ -5,21 +5,22 @@ interface Type2Type {
     ext: string;
 }
 const LayaType2Type: { [key: string]: Type2Type } = {
+    component: { type: "fairygui.GComponent", asType: "asCom", ext: "com_" },
     Button: { type: "fairygui.GButton", asType: "asButton", ext: "btn_" },
+    ComboBox: { type: "fairygui.GComboBox", asType: "asComboBox", ext: "cmb_" },
+    Label: { type: "fairygui.GLabel", asType: "asLabel", ext: "label_" },
+    ProgressBar: { type: "fairygui.GProgressBar", asType: "asProgress", ext: "pb_" },
+    ScrollBar: { type: "fairygui.GScrollBar", asType: "", ext: "sb_" },
+    Slider: { type: "fairygui.GSlider", asType: "asSlider", ext: "slider_" },
     text: { type: "fairygui.GTextField", asType: "asTextField", ext: "txt_" },
     richtext: { type: "fairygui.GRichTextField", asType: "asRichTextField", ext: "rtxt_" },
     inputtext: { type: "fairygui.GTextInput", asType: "asTextInput", ext: "itxt_" },
     graph: { type: "fairygui.GGraph", asType: "asGraph", ext: "graph_" },
     list: { type: "fairygui.GList", asType: "asList", ext: "list_" },
     loader: { type: "fairygui.GLoader", asType: "asLoader", ext: "loader_" },
-    loader3D: { type: "fairygui.GLoader3D", asType: "", ext: "loader3d_" },
-    Slider: { type: "fairygui.GSlider", asType: "asSlider", ext: "slider_" },
-    component: { type: "fairygui.GComponent", asType: "asCom", ext: "com_" },
-    image: { type: "fairygui.GImage", asType: "asImage", ext: "img_" },
     group: { type: "fairygui.GGroup", asType: "asGroup", ext: "group_" },
-    ComboBox: { type: "fairygui.GComboBox", asType: "asComboBox", ext: "cmb_" },
-    ProgressBar: { type: "fairygui.GProgressBar", asType: "asProgress", ext: "pb_" },
-    ScrollBar: { type: "fairygui.GScrollBar", asType: "", ext: "sb_" },
+    loader3D: { type: "fairygui.GLoader3D", asType: "", ext: "loader3d_" },
+    image: { type: "fairygui.GImage", asType: "asImage", ext: "img_" },
     Controller: { type: "fairygui.Controller", asType: "", ext: "ctrl_" },
     Transition: { type: "fairygui.Transition", asType: "", ext: "trans_" },
 };
@@ -45,7 +46,7 @@ export class MenuDoc_CreateLayaName extends MenuBase_Doc {
         for (let i = 0; i < childCount; i++) {
             const child = children.get_Item(i);
             if (/^n[0-9]+$/g.test(child.name)) continue;
-            let type = LayaType2Type[child._objectType];
+            let type = LayaType2Type[child.objectType];
             if (child instanceof CS.FairyEditor.FComponent) {
                 if (LayaType2Type[child.extention?._type])
                     type = LayaType2Type[child.extention?._type];
