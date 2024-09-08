@@ -41,7 +41,8 @@ function CollectClasses(
                         handler.items.Add(memberInfo.res);
                     }
                 }
-                setMemberTypeName(memberInfo, clsInfo);
+                const existRes = classes.Find(v => v.res == memberInfo.res) != null;
+                existRes && setMemberTypeName(memberInfo, clsInfo);
             }
         });
     });
@@ -52,15 +53,7 @@ function CollectClasses(
                 clsInfo.members.ForEach(memberInfo => {
                     if (memberInfo.res) {
                         // if (memberInfo.res.owner.name != handler.pkg.name) {
-                        let existRes = false;
-                        let tempClsCnt = classes.Count;
-                        for (let k = 0; k < tempClsCnt; k++) {
-                            if (classes.get_Item(k).res == memberInfo.res) {
-                                existRes = true;
-                                break;
-                            }
-                        }
-
+                        const existRes = classes.Find(v => v.res == memberInfo.res) != null;
                         if (existRes && !setMemberTypeName(memberInfo, clsInfo) && memberInfo.res.owner.name != handler.pkg.name) {
                             memberInfo.type = memberInfo.res.name;
                             const ref = `//${ memberInfo.res.owner.name }/${ memberInfo.res.name }`;
