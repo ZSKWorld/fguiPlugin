@@ -7,7 +7,9 @@ import { ComInspector } from './core/inspectors/ComInspector';
 import { InspectorData } from './core/inspectors/InspectorData';
 import { TextLayoutInspector } from './core/inspectors/TextLayoutInspector';
 import { BaseClass } from './core/libs/BaseClass';
-import { genCode_TS_XiaoYanDemo } from './core/libs/GenCode_TS_XiaoYanDemo';
+import { GenCode_TS_Self } from './core/libs/GenCode_TS_Self';
+import { MenuBase_Doc } from './core/menu/MenuBase_Doc';
+import { MenuBase_Lib } from './core/menu/MenuBase_Lib';
 import { MenuDoc_CreateComponent } from './core/menu/menuDoc/MenuDoc_CreateComponent';
 import { MenuDoc_CreateLayaName } from './core/menu/menuDoc/MenuDoc_CreateLayaName';
 import { MenuDoc_CreateLuaName } from './core/menu/menuDoc/MenuDoc_CreateLuaName';
@@ -19,8 +21,6 @@ import { MenuTest_Doc } from './core/menu/test/MenuTest_Doc';
 import { MenuTest_Lib } from './core/menu/test/MenuTest_Lib';
 import { MenuTest_Main } from './core/menu/test/MenuTest_Main';
 import { EditorUtils } from './core/utils/EditorUtils';
-import { MenuBase_Doc } from './core/menu/MenuBase_Doc';
-import { MenuBase_Lib } from './core/menu/MenuBase_Lib';
 
 /** 加载插件UI包 */
 CS.FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils.GetPackagePath(PkgCustom));
@@ -62,7 +62,7 @@ export function onPublish(handler: CS.FairyEditor.PublishHandler) {
     if (!handler.genCode) return;
     console.log("[color=#ffff00]on publish code[/color] => [u][b]" + handler.pkg.name + "[/b][/u]");
     handler.genCode = false; //prevent default output
-    genCode_TS_XiaoYanDemo(handler); //do it myself
+    GenCode_TS_Self(handler); //do it myself
 }
 
 export function onPublishEnd(pkgs: CS.System.Array$1<CS.FairyEditor.FPackage>) {

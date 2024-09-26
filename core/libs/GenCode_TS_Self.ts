@@ -96,7 +96,7 @@ function genReferenceExt(writer: CodeWriter, references: CS.System.Collections.G
     }
 }
 
-export function genCode_TS_XiaoYanDemo(handler: CS.FairyEditor.PublishHandler) {
+export function GenCode_TS_Self(handler: CS.FairyEditor.PublishHandler) {
     let settings = (<CS.FairyEditor.GlobalPublishSettings>handler.project.GetSettings("Publish")).codeGeneration;
     let codePkgName = handler.ToFilename(handler.pkg.name); //convert chinese to pinyin, remove special chars etc.
     let exportCodePath = handler.exportCodePath + '/' + codePkgName;
