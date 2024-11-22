@@ -141,7 +141,7 @@ export function GenCode_TS_Self(handler: CS.FairyEditor.PublishHandler) {
             let memberInfo = members.get_Item(j);
             writer.writeln('public %s: %s;', memberInfo.varName, memberInfo.type);
         }
-        writer.writeln('public static URL: string = "ui://%s%s";', handler.pkg.id, classInfo.resId);
+        writer.writeln('public static url: string = "ui://%s%s";', handler.pkg.id, classInfo.resId);
         writer.writeln();
 
         writer.writeln('public static createInstance(): %s', classInfo.className);
@@ -209,9 +209,9 @@ export function GenCode_TS_Self(handler: CS.FairyEditor.PublishHandler) {
         let classInfo = classes.get_Item(i);
         const viewIndex = signArr.findIndex(v => classInfo.className.startsWith(v));
         if (viewIndex == -1)
-            writer.writeln('%s.UIObjectFactory.setExtension(%s.URL, %s);', ns, classInfo.className, classInfo.className);
+            writer.writeln('%s.UIObjectFactory.setExtension(%s.url, %s);', ns, classInfo.className, classInfo.className);
         else
-            writer.writeln('%s.UIObjectFactory.setExtension(%s.URL, %sView);', ns, classInfo.className, classInfo.className);
+            writer.writeln('%s.UIObjectFactory.setExtension(%s.url, %sView);', ns, classInfo.className, classInfo.className);
     }
     writer.endBlock(); //bindall
 
