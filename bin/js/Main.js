@@ -12,7 +12,9 @@ const ComInspector_1 = require("./core/inspectors/ComInspector");
 const InspectorData_1 = require("./core/inspectors/InspectorData");
 const TextLayoutInspector_1 = require("./core/inspectors/TextLayoutInspector");
 const BaseClass_1 = require("./core/libs/BaseClass");
-const GenCode_TS_XiaoYanDemo_1 = require("./core/libs/GenCode_TS_XiaoYanDemo");
+const GenCode_TS_Self_1 = require("./core/libs/GenCode_TS_Self");
+const MenuBase_Doc_1 = require("./core/menu/MenuBase_Doc");
+const MenuBase_Lib_1 = require("./core/menu/MenuBase_Lib");
 const MenuDoc_CreateComponent_1 = require("./core/menu/menuDoc/MenuDoc_CreateComponent");
 const MenuDoc_CreateLayaName_1 = require("./core/menu/menuDoc/MenuDoc_CreateLayaName");
 const MenuDoc_CreateLuaName_1 = require("./core/menu/menuDoc/MenuDoc_CreateLuaName");
@@ -24,8 +26,6 @@ const MenuTest_Doc_1 = require("./core/menu/test/MenuTest_Doc");
 const MenuTest_Lib_1 = require("./core/menu/test/MenuTest_Lib");
 const MenuTest_Main_1 = require("./core/menu/test/MenuTest_Main");
 const EditorUtils_1 = require("./core/utils/EditorUtils");
-const MenuBase_Doc_1 = require("./core/menu/MenuBase_Doc");
-const MenuBase_Lib_1 = require("./core/menu/MenuBase_Lib");
 /** 加载插件UI包 */
 CS.FairyEditor.App.pluginManager.LoadUIPackage(EditorUtils_1.EditorUtils.GetPackagePath(Const_1.PkgCustom));
 CustomSetting_1.CustomSetting.Init();
@@ -60,7 +60,7 @@ function onPublish(handler) {
         return;
     console.log("[color=#ffff00]on publish code[/color] => [u][b]" + handler.pkg.name + "[/b][/u]");
     handler.genCode = false; //prevent default output
-    (0, GenCode_TS_XiaoYanDemo_1.genCode_TS_XiaoYanDemo)(handler); //do it myself
+    (0, GenCode_TS_Self_1.GenCode_TS_Self)(handler); //do it myself
 }
 function onPublishEnd(pkgs) {
     console.log("[color=#00ff00]on publish end[/color]", pkgs.Length);

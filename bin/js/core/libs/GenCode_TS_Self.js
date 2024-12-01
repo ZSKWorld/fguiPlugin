@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.genCode_TS_XiaoYanDemo = genCode_TS_XiaoYanDemo;
+exports.GenCode_TS_Self = GenCode_TS_Self;
 const CodeWriter_1 = require("./CodeWriter");
 const signArr = ["UI", "Com", "Btn", "Render"];
 const viewDirs = ["", "coms/", "btns/", "renders/"];
@@ -95,7 +95,7 @@ function genReferenceExt(writer, references) {
         writer.writeln();
     }
 }
-function genCode_TS_XiaoYanDemo(handler) {
+function GenCode_TS_Self(handler) {
     let settings = handler.project.GetSettings("Publish").codeGeneration;
     let codePkgName = handler.ToFilename(handler.pkg.name); //convert chinese to pinyin, remove special chars etc.
     let exportCodePath = handler.exportCodePath + '/' + codePkgName;
